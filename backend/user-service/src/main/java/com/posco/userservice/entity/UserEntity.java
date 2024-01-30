@@ -30,6 +30,12 @@ public class UserEntity{
     @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
+    private String email;
+
+    @Column
+    private String office;
+
     @Column(updatable = false)
     @CreatedDate
     private LocalDateTime startDate;
