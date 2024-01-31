@@ -2,13 +2,20 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
+import { StyledEngineProvider } from '@mui/styled-engine';
+import { ThemeProvider } from '@mui/material/styles';
+import { theme } from './components/global/GlobalStyles';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <App />
+    <StyledEngineProvider injectFirst>
+      <ThemeProvider theme={{ ...theme }}>
+        <App />
+      </ThemeProvider>
+    </StyledEngineProvider>
   </React.StrictMode>
 );
 
