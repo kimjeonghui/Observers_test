@@ -41,24 +41,23 @@ public class JwtTokenProvider {
         String accessToken = Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setExpiration(accessTokenExpire)
-                .claim("id", userEntity.getId())
-                .claim("userId", userEntity.getUserId())
+                .claim("name", userEntity.getName())
+                .claim("description", userEntity.getDescription())
                 .signWith(KEY, SignatureAlgorithm.HS256)
                 .compact();
         return accessToken;
     }
 
     // refreshToken 생성
-    public String createRefreshToken(Long id) {
+    public String createRefreshToken(String name) {
         long now = (new Date()).getTime();
         Date refreshTokenExpire = new Date(now + REFRESHTOKEN_EXPIRED_PERIOD);
-        String refreshToken = Jwts.builder()
+        return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setExpiration(refreshTokenExpire)
-                .claim("id", id)
+                .claim("name", name)
                 .signWith(KEY, SignatureAlgorithm.HS256)
                 .compact();
-        return refreshToken;
     }
 
     // JWT Token 복호화
