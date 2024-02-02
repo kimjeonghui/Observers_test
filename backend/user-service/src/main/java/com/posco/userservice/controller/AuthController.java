@@ -1,6 +1,7 @@
 package com.posco.userservice.controller;
 
 import com.posco.userservice.dto.request.LoginDTO;
+import com.posco.userservice.dto.response.TokenDTO;
 import com.posco.userservice.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -29,9 +30,23 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity login(@Valid @RequestBody LoginDTO loginDTO){
         Map<String, Object> resultMap = new HashMap<>();
-        userService.loginUser(loginDTO);
-
-
+        // 사용자 ID 존재 여부 확인
+        if(!userService.checkExistName(loginDTO.getName())){
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "유효하지 않은 사용자입니다.");
+            return ResponseEntity.badRequest().body(resultMap);
+        }
+        // 사용자 ID, PASSWORD 일치 (로그인) 확인
+        TokenDTO tokenDTO = userService.loginUser(loginDTO);
+        if(tokenDTO==null){
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "로그인 실패");
+            return ResponseEntity.badRequest().body(resultMap);
+        }
+        resultMap.put("result", SUCCESS);
+        resultMap.put("msg", "로그인 성공");
+        resultMap.put("accessToken", tokenDTO.getAccessToken());
+        resultMap.put("refreshToken", tokenDTO.getRefreshToken());
         return ResponseEntity.ok().body(resultMap);
     }
 }

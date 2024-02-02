@@ -6,6 +6,6 @@ import com.posco.userservice.dto.response.TokenDTO;
 
 public interface UserService {
     TokenDTO registerUser(RegisterDTO registerDTO);
-
     TokenDTO loginUser(LoginDTO loginDTO);
+    boolean checkExistName(String name);
 }

@@ -12,11 +12,11 @@ import org.springframework.stereotype.Repository;
 public class UserRepositoryImpl implements UserRepositoryCustom{
     private final JPAQueryFactory queryFactory;
     @Override
-    public Long updateUserIdById(Long id, String userId) {
+    public Long updateDescriptionByName(String name, String description) {
         QUserEntity qUser = QUserEntity.userEntity;
         Long updateCnt = queryFactory.update(qUser)
-                .set(qUser.userId, userId)
-                .where(qUser.id.eq(id))
+                .set(qUser.name, name)
+                .where(qUser.description.eq(description))
                 .execute();
         return updateCnt;
     }

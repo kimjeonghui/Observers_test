@@ -38,14 +38,13 @@ public class JwtTokenProvider {
     public String createAccessToken(UserEntity userEntity){
         long now = (new Date()).getTime();
         Date accessTokenExpire = new Date(now + ACCESSTOKEN_EXPIRED_PERIOD);
-        String accessToken = Jwts.builder()
+        return Jwts.builder()
                 .setHeaderParam(Header.TYPE, Header.JWT_TYPE)
                 .setExpiration(accessTokenExpire)
                 .claim("name", userEntity.getName())
                 .claim("description", userEntity.getDescription())
                 .signWith(KEY, SignatureAlgorithm.HS256)
                 .compact();
-        return accessToken;
     }
 
     // refreshToken 생성
@@ -64,16 +63,16 @@ public class JwtTokenProvider {
     public Authentication getAuthentication(String accessToken){
         Claims claims = parseClaims(accessToken);
 
-        if(claims.get("id")==null){
+        if(claims.get("name")==null){
             throw new RuntimeException("정보가 없는 토큰입니다.");
         }
 
-        Integer integerId = (Integer) claims.get("id");
-        Long id = Long.valueOf(integerId);
+        String name = (String) claims.get("name");
+//        Long id = Long.valueOf(integerId);
 
         UserDTO userDTO = UserDTO.builder()
-                .id(id)
-                .userId((String)claims.get("userId"))
+                .name(name)
+                .description((String)claims.get("description"))
                 .build();
 
         return new UsernamePasswordAuthenticationToken(userDTO, "", new ArrayList<>());
