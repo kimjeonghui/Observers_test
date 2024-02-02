@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-
 import { Box } from '@mui/system';
+
+import requests from '../api/config';
+import { defaultApi } from '../api/axios';
 
 import LoginBgImg from '../assets/loginBg.png';
 import Container from '../components/global/Container';
@@ -18,6 +20,17 @@ const LoginBg = styled.div`
 `;
 
 export default function Login(props) {
+  const handleLogin = async () => {
+    try {
+      const response = await defaultApi.post(requests.POST_LOGIN(), {
+        name: '',
+        password: '',
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <div>
       <LoginBg>
