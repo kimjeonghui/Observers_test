@@ -1,5 +1,6 @@
 package com.posco.userservice.controller;
 
+import com.posco.userservice.dto.request.LoginDTO;
 import com.posco.userservice.dto.request.RegisterDTO;
 import com.posco.userservice.dto.response.TokenDTO;
 import com.posco.userservice.service.UserService;
@@ -19,7 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/user")
+@RequestMapping("/users")
 @Tag(name = "[USER] User API")
 @Slf4j
 public class UserController {
@@ -41,9 +42,34 @@ public class UserController {
         }
 
         // 회원 등록 성공
-        resultMap.put("accessToken", tokenDTO.getAccessToken());
         resultMap.put("result", SUCCESS);
         resultMap.put("msg", "회원등록을 성공하였습니다.");
+        resultMap.put("accessToken", tokenDTO.getAccessToken());
+        resultMap.put("refreshToken", tokenDTO.getRefreshToken());
+        return ResponseEntity.ok().body(resultMap);
+    }
+
+    @PostMapping("/login")
+    @Operation(summary = "Login user", description = "")
+    public ResponseEntity login(@Valid @RequestBody LoginDTO loginDTO){
+        Map<String, Object> resultMap = new HashMap<>();
+        // 사용자 ID 존재 여부 확인
+        if(!userService.checkExistName(loginDTO.getName())){
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "유효하지 않은 사용자입니다.");
+            return ResponseEntity.badRequest().body(resultMap);
+        }
+        // 사용자 ID, PASSWORD 일치 (로그인) 확인
+        TokenDTO tokenDTO = userService.loginUser(loginDTO);
+        if(tokenDTO==null){
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "로그인 실패");
+            return ResponseEntity.badRequest().body(resultMap);
+        }
+        resultMap.put("result", SUCCESS);
+        resultMap.put("msg", "로그인 성공");
+        resultMap.put("accessToken", tokenDTO.getAccessToken());
+        resultMap.put("refreshToken", tokenDTO.getRefreshToken());
         return ResponseEntity.ok().body(resultMap);
     }
 }

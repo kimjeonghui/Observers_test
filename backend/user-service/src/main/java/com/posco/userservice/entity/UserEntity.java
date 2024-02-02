@@ -16,31 +16,30 @@ import java.util.Date;
 @Getter
 @Entity
 @Table(name="users")
-public class UserEntity{
+public class UserEntity extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(nullable = false)
+    private String name;                // 사번
 
     @Column(nullable = false)
-    private String userId;
+    private String description;         // 사용자 이름
 
     @Column(nullable = false)
-    private String name;
+    private String password;            // 비밀 번호
 
     @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = false)
-    private String email;
+    private String email;               // 이메일
 
     @Column
-    private String office;
+    private String ovsCd;               // 사무소 코드
 
     @Column(updatable = false)
     @CreatedDate
-    private LocalDateTime startDate;
+    private LocalDateTime startDate;    // 입사일
 
     @Column
-    private LocalDateTime endDate;
+    private LocalDateTime endDate;      // 퇴사일
 
+    @Column
+    private String role;                // 권한
 }

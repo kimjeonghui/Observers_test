@@ -13,9 +13,15 @@ import javax.validation.constraints.NotNull;
 @Builder
 public class RegisterDTO {
     @NotNull
-    private String userId;
-    @NotNull
     private String name;
     @NotNull
+    private String description;
+    @NotNull
     private String password;
+    @NotNull
+    private String email;
+
+    private String ovsCd;
+
+    private String role;
 }

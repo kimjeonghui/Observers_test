@@ -19,21 +19,35 @@ public class QUserEntity extends EntityPathBase<UserEntity> {
 
     public static final QUserEntity userEntity = new QUserEntity("userEntity");
 
+    public final QBaseEntity _super = new QBaseEntity(this);
+
+    //inherited
+    public final StringPath createdBy = _super.createdBy;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
+
+    public final StringPath description = createString("description");
+
     public final StringPath email = createString("email");
 
     public final DateTimePath<java.time.LocalDateTime> endDate = createDateTime("endDate", java.time.LocalDateTime.class);
 
-    public final NumberPath<Long> id = createNumber("id", Long.class);
+    //inherited
+    public final StringPath lastModifiedBy = _super.lastModifiedBy;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> lastUpdatedDate = _super.lastUpdatedDate;
 
     public final StringPath name = createString("name");
 
-    public final StringPath office = createString("office");
+    public final StringPath ovsCd = createString("ovsCd");
 
     public final StringPath password = createString("password");
 
-    public final DateTimePath<java.time.LocalDateTime> startDate = createDateTime("startDate", java.time.LocalDateTime.class);
+    public final StringPath role = createString("role");
 
-    public final StringPath userId = createString("userId");
+    public final DateTimePath<java.time.LocalDateTime> startDate = createDateTime("startDate", java.time.LocalDateTime.class);
 
     public QUserEntity(String variable) {
         super(UserEntity.class, forVariable(variable));
