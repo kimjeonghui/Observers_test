@@ -1,7 +1,8 @@
 import React from 'react';
+import styled from 'styled-components';
 
-import styled from '@emotion/styled';
-import { useTheme } from '@mui/system';
+import { Box } from '@mui/system';
+
 import LoginBgImg from '../assets/loginBg.png';
 import Container from '../components/global/Container';
 import Input from '../components/global/Input';
@@ -17,14 +18,27 @@ const LoginBg = styled.div`
 `;
 
 export default function Login(props) {
-  const theme = useTheme();
   return (
     <div>
       <LoginBg>
         <Container width='30' height='60'>
-          <Input widthV='20' heightV='5' label='아이디' />
-          <Input widthV='20' heightV='5' label='비밀번호' />
-          <Button color={theme.palette.posco_lb_100}>로그인</Button>
+          <Box
+            sx={{
+              height: '50%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              mt: '15vh',
+            }}
+          >
+            <Input widthV='20' heightV='5' label='아이디' />
+            <Input widthV='20' heightV='5' label='비밀번호' />
+            <br />
+            <Button size='lg' width='70%'>
+              로그인
+            </Button>
+          </Box>
         </Container>
       </LoginBg>
     </div>
