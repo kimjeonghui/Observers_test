@@ -3,7 +3,9 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import { StyledEngineProvider } from '@mui/styled-engine';
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { theme } from './components/global/GlobalStyles';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
@@ -12,9 +14,12 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <StyledEngineProvider injectFirst>
-      <ThemeProvider theme={{ ...theme }}>
-        <App />
-      </ThemeProvider>
+      <StyledThemeProvider theme={{ ...theme }}>
+        <MuiThemeProvider theme={{ ...theme }}>
+          <CssBaseline />
+          <App />
+        </MuiThemeProvider>
+      </StyledThemeProvider>
     </StyledEngineProvider>
   </React.StrictMode>
 );
