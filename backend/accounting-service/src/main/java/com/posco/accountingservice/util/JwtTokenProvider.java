@@ -1,6 +1,7 @@
 package com.posco.accountingservice.util;
 
 import com.posco.accountingservice.dto.response.UserDTO;
+import com.posco.accountingservice.entity.UserEntity;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
