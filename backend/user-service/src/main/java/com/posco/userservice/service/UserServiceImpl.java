@@ -2,6 +2,7 @@ package com.posco.userservice.service;
 
 import com.posco.userservice.dto.request.LoginDTO;
 import com.posco.userservice.dto.request.RegisterDTO;
+import com.posco.userservice.dto.request.UpdateDTO;
 import com.posco.userservice.dto.response.TokenDTO;
 import com.posco.userservice.entity.UserEntity;
 import com.posco.userservice.repository.UserRepository;
@@ -83,5 +84,30 @@ public class UserServiceImpl implements UserService{
     public boolean checkExistName(String name) {
         UserEntity userEntity = userRepository.findByName(name);
         return userEntity != null;
+    }
+
+    @Override
+    public TokenDTO updateUser(UpdateDTO updateDTO) {
+        UserEntity userEntity = userRepository.findByName(updateDTO.getName());
+        UserEntity newUser = UserEntity.builder()
+                .name(updateDTO.getName())
+                .description(updateDTO.getDescription())
+                .password(userEntity.getPassword())
+                .email(userEntity.getEmail())
+                .ovsCd(userEntity.getOvsCd())
+                .role(updateDTO.getRole())
+                .startDate(userEntity.getStartDate())
+                .endDate(updateDTO.getEndDate())
+                .build();
+        userRepository.save(newUser);
+
+        String accessToken = jwtTokenProvider.createAccessToken(newUser);
+        String refreshToken = jwtTokenProvider.createRefreshToken(newUser.getName());
+
+        return TokenDTO.builder()
+                .grantType("Bearer")
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 }
