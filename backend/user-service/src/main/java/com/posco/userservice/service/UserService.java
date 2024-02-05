@@ -11,4 +11,5 @@ public interface UserService {
     boolean checkExistName(String name);
     TokenDTO updateUser(UpdateDTO updateDTO);
     void deleteUser(String name);
+    TokenDTO makeToken(String name);
 }
