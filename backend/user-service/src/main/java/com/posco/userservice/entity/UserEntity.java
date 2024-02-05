@@ -1,5 +1,6 @@
 package com.posco.userservice.entity;
 
+import com.posco.userservice.dto.response.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,4 +46,17 @@ public class UserEntity extends BaseEntity{
 
     @Column
     private String refreshToken;        // 토큰
+
+    UserDTO toUserDTO(){
+        return UserDTO.builder()
+                .name(this.getName())
+                .description(this.getDescription())
+                .email(this.getEmail())
+                .ovsCd(this.getOvsCd())
+                .role(this.getRole())
+                .startDate(this.getStartDate())
+                .endDate(this.getEndDate())
+                .build();
+    }
 }
+

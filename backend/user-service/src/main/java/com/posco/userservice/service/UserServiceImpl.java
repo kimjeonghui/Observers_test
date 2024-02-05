@@ -4,6 +4,7 @@ import com.posco.userservice.dto.request.LoginDTO;
 import com.posco.userservice.dto.request.RegisterDTO;
 import com.posco.userservice.dto.request.UpdateDTO;
 import com.posco.userservice.dto.response.TokenDTO;
+import com.posco.userservice.dto.response.UserDTO;
 import com.posco.userservice.entity.UserEntity;
 import com.posco.userservice.repository.UserRepository;
 import com.posco.userservice.util.JwtTokenProvider;
@@ -13,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -130,6 +133,41 @@ public class UserServiceImpl implements UserService{
     @Override
     public void deleteUser(String name) {
         userRepository.deleteByName(name);
+    }
+
+    @Override
+    public List<UserDTO> getUserList() {
+        List<UserEntity> userEntityList = userRepository.findAll();
+        List<UserDTO> userDTOList = new ArrayList<>();
+
+        for(UserEntity userEntity: userEntityList){
+            UserDTO userDTO = UserDTO.builder()
+                    .name(userEntity.getName())
+                    .description(userEntity.getDescription())
+                    .email(userEntity.getEmail())
+                    .ovsCd(userEntity.getOvsCd())
+                    .role(userEntity.getRole())
+                    .startDate(userEntity.getStartDate())
+                    .endDate(userEntity.getEndDate())
+                    .build();
+            userDTOList.add(userDTO);
+        }
+        return userDTOList;
+    }
+
+    @Override
+    public UserDTO getUser(String name) {
+        UserEntity userEntity = userRepository.findByName(name);
+
+        return UserDTO.builder()
+                .name(userEntity.getName())
+                .description(userEntity.getDescription())
+                .email(userEntity.getEmail())
+                .ovsCd(userEntity.getOvsCd())
+                .role(userEntity.getRole())
+                .startDate(userEntity.getStartDate())
+                .endDate(userEntity.getEndDate())
+                .build();
     }
 
     @Override
