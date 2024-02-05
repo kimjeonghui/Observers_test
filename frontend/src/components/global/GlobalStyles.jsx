@@ -1,4 +1,4 @@
-import styled from '@emotion/styled';
+import styled from 'styled-components';
 import { createTheme } from '@mui/material/styles';
 import BgImg from '../../assets/bg.png';
 
