@@ -110,4 +110,9 @@ public class UserServiceImpl implements UserService{
                 .refreshToken(refreshToken)
                 .build();
     }
+
+    @Override
+    public void deleteUser(String name) {
+        userRepository.deleteByName(name);
+    }
 }

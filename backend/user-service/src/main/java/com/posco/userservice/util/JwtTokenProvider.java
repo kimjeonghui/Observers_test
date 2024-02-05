@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
+import javax.servlet.http.HttpServletRequest;
 import java.security.Key;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,6 +44,7 @@ public class JwtTokenProvider {
                 .setExpiration(accessTokenExpire)
                 .claim("name", userEntity.getName())
                 .claim("description", userEntity.getDescription())
+                .claim("role", userEntity.getRole())
                 .signWith(KEY, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -68,7 +70,6 @@ public class JwtTokenProvider {
         }
 
         String name = (String) claims.get("name");
-//        Long id = Long.valueOf(integerId);
 
         UserDTO userDTO = UserDTO.builder()
                 .name(name)
@@ -105,5 +106,17 @@ public class JwtTokenProvider {
         } catch (ExpiredJwtException e){
             return e.getClaims();
         }
+    }
+
+    // AccessToken에서 ID(Name) 정보 얻음
+    public static String getNameByAccessToken(HttpServletRequest request){
+        String accessToken = request.getHeader("Authorization").substring(7);
+        return (String) parseClaims(accessToken).get("name");
+    }
+
+    // AccessToken에서 role 정보 얻음
+    public static String getRoleByAccessToken(HttpServletRequest request){
+        String accessToken = request.getHeader("Authorization").substring(7);
+        return (String) parseClaims(accessToken).get("role");
     }
 }
