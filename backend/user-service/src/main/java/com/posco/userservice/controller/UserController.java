@@ -5,13 +5,16 @@ import com.posco.userservice.dto.request.RegisterDTO;
 import com.posco.userservice.dto.request.UpdateDTO;
 import com.posco.userservice.dto.response.TokenDTO;
 import com.posco.userservice.service.UserService;
+import com.posco.userservice.util.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
@@ -91,6 +94,33 @@ public class UserController {
         resultMap.put("msg", "회원 수정 성공");
         resultMap.put("accessToken", tokenDTO.getAccessToken());
         resultMap.put("refreshToken", tokenDTO.getRefreshToken());
+        return ResponseEntity.ok().body(resultMap);
+    }
+
+    @DeleteMapping("/{name}")
+    @Operation(summary = "Delete user", description = "")
+    public ResponseEntity<?> deleteUser(HttpServletRequest httpServletRequest, @PathVariable String name){
+        Map<String, Object> resultMap = new HashMap<>();
+
+        if(httpServletRequest.getHeader("Authorization")==null){
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "토큰이 없습니다.");
+            return ResponseEntity.badRequest().body(resultMap);
+        }
+        String role = JwtTokenProvider.getRoleByAccessToken(httpServletRequest);
+        if(!role.equals("ADMIN")){
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "삭제 권한이 없습니다.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(resultMap);
+        }
+        if(!userService.checkExistName(name)){
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "사용자가 존재하지 않습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
+        userService.deleteUser(name);
+        resultMap.put("result", SUCCESS);
+        resultMap.put("msg", "사용자 삭제 성공");
         return ResponseEntity.ok().body(resultMap);
     }
 }
