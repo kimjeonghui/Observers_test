@@ -45,6 +45,8 @@ public class QUserEntity extends EntityPathBase<UserEntity> {
 
     public final StringPath password = createString("password");
 
+    public final StringPath refreshToken = createString("refreshToken");
+
     public final StringPath role = createString("role");
 
     public final DateTimePath<java.time.LocalDateTime> startDate = createDateTime("startDate", java.time.LocalDateTime.class);
