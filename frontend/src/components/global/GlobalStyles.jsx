@@ -5,6 +5,9 @@ import BgImg from '../../assets/bg.png';
 export const Bg = styled.div`
   width: 100vw;
   height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background: center / cover no-repeat url('${BgImg}');
 `;
 
