@@ -14,8 +14,8 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <StyledEngineProvider injectFirst>
-      <StyledThemeProvider theme={{ ...theme }}>
-        <MuiThemeProvider theme={{ ...theme }}>
+      <StyledThemeProvider theme={theme}>
+        <MuiThemeProvider theme={theme}>
           <CssBaseline />
           <App />
         </MuiThemeProvider>
