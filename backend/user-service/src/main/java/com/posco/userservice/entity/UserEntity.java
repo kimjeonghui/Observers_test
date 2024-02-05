@@ -42,4 +42,7 @@ public class UserEntity extends BaseEntity{
 
     @Column
     private String role;                // 권한
+
+    @Column
+    private String refreshToken;        // 토큰
 }

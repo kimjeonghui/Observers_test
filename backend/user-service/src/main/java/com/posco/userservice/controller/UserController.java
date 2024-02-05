@@ -55,7 +55,7 @@ public class UserController {
     public ResponseEntity<?> login(@Valid @RequestBody LoginDTO loginDTO){
         Map<String, Object> resultMap = new HashMap<>();
         // 사용자 ID 존재 여부 확인
-        if(!userService.checkExistName(loginDTO.getName())){
+        if(userService.checkExistName(loginDTO.getName())){
             resultMap.put("result", FAIL);
             resultMap.put("msg", "유효하지 않은 사용자입니다.");
             return ResponseEntity.badRequest().body(resultMap);
@@ -79,7 +79,7 @@ public class UserController {
     public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateDTO updateDTO){
         Map<String, Object> resultMap = new HashMap<>();
         // 사용자 ID 존재 여부 확인
-        if(!userService.checkExistName(updateDTO.getName())){
+        if(userService.checkExistName(updateDTO.getName())){
             resultMap.put("result", FAIL);
             resultMap.put("msg", "유효하지 않은 사용자입니다.");
             return ResponseEntity.badRequest().body(resultMap);
@@ -111,9 +111,9 @@ public class UserController {
         if(!role.equals("ADMIN")){
             resultMap.put("result", FAIL);
             resultMap.put("msg", "삭제 권한이 없습니다.");
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(resultMap);
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(resultMap);
         }
-        if(!userService.checkExistName(name)){
+        if(userService.checkExistName(name)){
             resultMap.put("result", FAIL);
             resultMap.put("msg", "사용자가 존재하지 않습니다.");
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);

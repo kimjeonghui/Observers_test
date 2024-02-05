@@ -13,7 +13,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.Date;
 
 @Service
 @Transactional
@@ -38,14 +37,16 @@ public class UserServiceImpl implements UserService{
         String accessToken = jwtTokenProvider.createAccessToken(userEntity);
         String refreshToken = jwtTokenProvider.createRefreshToken(userEntity.getName());
 
-//        UserEntity newUserEntity = UserEntity.builder()
-//                .name(userEntity.getName())
-//                .description(userEntity.getDescription())
-//                .password(userEntity.getPassword())
-//                .startDate(userEntity.getStartDate())
-//                .endDate(userEntity.getEndDate())
-//                .build();
-//        userRepository.save(newUserEntity);
+        UserEntity newUserEntity = UserEntity.builder()
+                .name(userEntity.getName())
+                .description(userEntity.getDescription())
+                .password(userEntity.getPassword())
+                .email(userEntity.getEmail())
+                .ovsCd(userEntity.getOvsCd())
+                .role(userEntity.getRole())
+                .refreshToken(refreshToken)
+                .build();
+        userRepository.save(newUserEntity);
 
         return TokenDTO.builder()
                 .grantType("Bearer")
@@ -64,14 +65,16 @@ public class UserServiceImpl implements UserService{
         String accessToken = jwtTokenProvider.createAccessToken(userEntity);
         String refreshToken = jwtTokenProvider.createRefreshToken(userEntity.getName());
 
-//        UserEntity newUserEntity = UserEntity.builder()
-//                .name(userEntity.getName())
-//                .description(userEntity.getDescription())
-//                .password(userEntity.getPassword())
-//                .startDate(userEntity.getStartDate())
-//                .endDate(userEntity.getEndDate())
-//                .build();
-//        userRepository.save(newUserEntity);
+        UserEntity newUserEntity = UserEntity.builder()
+                .name(userEntity.getName())
+                .description(userEntity.getDescription())
+                .password(userEntity.getPassword())
+                .email(userEntity.getEmail())
+                .ovsCd(userEntity.getOvsCd())
+                .role(userEntity.getRole())
+                .refreshToken(refreshToken)
+                .build();
+        userRepository.save(newUserEntity);
 
         return TokenDTO.builder()
                 .grantType("Bearer")
@@ -83,13 +86,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public boolean checkExistName(String name) {
         UserEntity userEntity = userRepository.findByName(name);
-        return userEntity != null;
+        return userEntity == null;
     }
 
     @Override
     public TokenDTO updateUser(UpdateDTO updateDTO) {
         UserEntity userEntity = userRepository.findByName(updateDTO.getName());
-        UserEntity newUser = UserEntity.builder()
+        UserEntity updateUser = UserEntity.builder()
                 .name(updateDTO.getName())
                 .description(updateDTO.getDescription())
                 .password(userEntity.getPassword())
@@ -99,10 +102,23 @@ public class UserServiceImpl implements UserService{
                 .startDate(userEntity.getStartDate())
                 .endDate(updateDTO.getEndDate())
                 .build();
-        userRepository.save(newUser);
+//        userRepository.save(updateUser);
 
-        String accessToken = jwtTokenProvider.createAccessToken(newUser);
-        String refreshToken = jwtTokenProvider.createRefreshToken(newUser.getName());
+        String accessToken = jwtTokenProvider.createAccessToken(updateUser);
+        String refreshToken = jwtTokenProvider.createRefreshToken(updateUser.getName());
+
+        UserEntity newUserEntity = UserEntity.builder()
+                .name(updateUser.getName())
+                .description(updateUser.getDescription())
+                .password(updateUser.getPassword())
+                .email(updateUser.getEmail())
+                .ovsCd(updateUser.getOvsCd())
+                .role(updateUser.getRole())
+                .refreshToken(refreshToken)
+                .startDate(updateUser.getStartDate())
+                .endDate(updateUser.getEndDate())
+                .build();
+        userRepository.save(updateUser);
 
         return TokenDTO.builder()
                 .grantType("Bearer")
@@ -114,5 +130,30 @@ public class UserServiceImpl implements UserService{
     @Override
     public void deleteUser(String name) {
         userRepository.deleteByName(name);
+    }
+
+    @Override
+    public TokenDTO makeToken(String name) {
+        UserEntity userEntity = userRepository.findByName(name);
+
+        String accessToken = jwtTokenProvider.createAccessToken(userEntity);
+        String refreshToken = jwtTokenProvider.createRefreshToken(userEntity.getName());
+
+        UserEntity newUserEntity = UserEntity.builder()
+                .name(userEntity.getName())
+                .description(userEntity.getDescription())
+                .password(userEntity.getPassword())
+                .email(userEntity.getEmail())
+                .ovsCd(userEntity.getOvsCd())
+                .role(userEntity.getRole())
+                .refreshToken(refreshToken)
+                .build();
+        userRepository.save(newUserEntity);
+
+        return TokenDTO.builder()
+                .grantType("Bearer")
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 }

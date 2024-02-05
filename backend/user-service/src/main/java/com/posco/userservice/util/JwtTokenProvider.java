@@ -114,6 +114,10 @@ public class JwtTokenProvider {
         return (String) parseClaims(accessToken).get("name");
     }
 
+    public static String getNameByStringAccessToken(String accessToken){
+        return (String) parseClaims(accessToken).get("name");
+    }
+
     // AccessToken에서 role 정보 얻음
     public static String getRoleByAccessToken(HttpServletRequest request){
         String accessToken = request.getHeader("Authorization").substring(7);
