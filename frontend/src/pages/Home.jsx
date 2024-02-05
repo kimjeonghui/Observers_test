@@ -11,6 +11,7 @@ import AdminCode from './AdminCode';
 import AdminHome from './AdminHome';
 import ReceiptsMonth from './ReceiptsMonth';
 import Users from './Users';
+import Summary from './Summary';
 
 export default function Home(props) {
   return (
@@ -27,6 +28,7 @@ export default function Home(props) {
             <Route path='/admin-code' element={<AdminCode />} />
             <Route path='/admin-home' element={<AdminHome />} />
             <Route path='/users' element={<Users />} />
+            <Route path='/summary' element={<Summary />} />
           </Routes>
         </CustomContainer>
       </Bg>
