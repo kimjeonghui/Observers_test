@@ -1,8 +1,8 @@
-package com.posco.userservice.controller;
+package com.posco.summaryservice.controller;
 
-import com.posco.userservice.dto.response.TokenDTO;
-import com.posco.userservice.service.UserService;
-import com.posco.userservice.util.JwtTokenProvider;
+import com.posco.summaryservice.dto.response.TokenDTO;
+import com.posco.summaryservice.service.UserService;
+import com.posco.summaryservice.util.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

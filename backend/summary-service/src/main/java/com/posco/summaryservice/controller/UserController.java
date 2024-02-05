@@ -1,13 +1,12 @@
-package com.posco.userservice.controller;
+package com.posco.summaryservice.controller;
 
-import com.posco.userservice.dto.request.LoginDTO;
-import com.posco.userservice.dto.request.RegisterDTO;
-import com.posco.userservice.dto.request.UpdateDTO;
-import com.posco.userservice.dto.response.TokenDTO;
-import com.posco.userservice.dto.response.UserDTO;
-import com.posco.userservice.entity.UserEntity;
-import com.posco.userservice.service.UserService;
-import com.posco.userservice.util.JwtTokenProvider;
+import com.posco.summaryservice.dto.request.LoginDTO;
+import com.posco.summaryservice.dto.request.RegisterDTO;
+import com.posco.summaryservice.dto.request.UpdateDTO;
+import com.posco.summaryservice.dto.response.TokenDTO;
+import com.posco.summaryservice.dto.response.UserDTO;
+import com.posco.summaryservice.service.UserService;
+import com.posco.summaryservice.util.JwtTokenProvider;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
