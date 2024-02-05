@@ -440,9 +440,7 @@ function EnhancedTableToolbar(props) {
         >
           {numSelected} selected
         </Typography>
-      ) : (
-        <input />
-      )}
+      ) : null}
 
       {numSelected > 0 ? (
         <Tooltip title='Delete'>
