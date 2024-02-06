@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import InvoiceTable from '../components/invoice/InvoiceTable';
+import InvoiceExcel from '../components/invoice/InvoiceExcel';
 import { SpanTab, ActiveSpanTab } from '../components/invoice/InvoiceStyles';
 import SearchInput from '../components/global/SearchInput';
 export default function Invoice(props) {
@@ -35,7 +36,7 @@ export default function Invoice(props) {
           <InvoiceTable />
         </div>
       ) : (
-        <div>엑셀이요</div>
+        <InvoiceExcel />
       )}
     </div>
   );
