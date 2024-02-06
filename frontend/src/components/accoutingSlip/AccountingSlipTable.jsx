@@ -1,6 +1,9 @@
 import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
+import DatePicker from 'react-datepicker';
+import Button from '../global/Button';
+import 'react-datepicker/dist/react-datepicker.css';
 import {
   Box,
   Table,
@@ -17,220 +20,236 @@ import {
   Checkbox,
   IconButton,
   Tooltip,
+  // Button,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
 
 const rows = [
   {
-    ovs_cd: 'HDF27',
-    num: 1,
-    fiscal_month: '23.12',
-    tx_date: '2023.11.30',
-    store: 'EFFECTIVO DEL MES ANTERIOR',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'ARS',
-    withdrawal: 20312.47,
-    trans_cd: 'Y010',
-    description: 'EFFECTIVO DEL MES ANTERIOR',
-    trans_amount: null,
+    invoice_num: 'OAM-HDF32-202312-00001',
+    drcr: 1,
+    amount: '2,564.73EUR',
+    krw_amount: '3,645,533.00',
+    excange_rate: '1,421.41',
+    cost_center: 'HDF32',
+    account: '522011-1101',
+    description: 'Participatio',
+    created_by: 'PC000001',
+    creation_date: '2024-12-02',
+    group_id: 'OAM-202312-HDF32',
+    tx_num: 3,
+    tx_cd: 1202,
   },
   {
-    ovs_cd: 'HDF27',
-    num: 2,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.27',
-    store: 'YPF',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'ARS',
-    withdrawal: 1190205.87,
-    trans_cd: '1501',
-    description: 'CONBUSTIBLE /LAVADO',
-    trans_amount: null,
+    invoice_num: 'OAM-HDF32-202312-00001',
+    drcr: 1,
+    amount: '2,564.73EUR',
+    krw_amount: '3,645,533.00',
+    excange_rate: '1,421.41',
+    cost_center: 'HDF32',
+    account: '522011-1101',
+    description: 'Participatio',
+    created_by: 'PC000001',
+    creation_date: '2024-12-02',
+    group_id: 'OAM-202312-HDF32',
+    tx_num: 3,
+    tx_cd: 1202,
   },
   {
-    ovs_cd: 'HDF27',
-    num: 3,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.27',
-    store: 'MACRO SECURITIES',
-    dep_curr: 'ARS',
-    deposit: 183290.06,
-    wd_curr: 'USD',
-    withdrawal: 1190205.87,
-    trans_cd: 'X100',
-    description: 'CAMBIO',
-    trans_amount: null,
+    invoice_num: 'OAM-HDF32-202312-00001',
+    drcr: 1,
+    amount: '2,564.73EUR',
+    krw_amount: '3,645,533.00',
+    excange_rate: '1,421.41',
+    cost_center: 'HDF32',
+    account: '522011-1101',
+    description: 'Participatio',
+    created_by: 'PC000001',
+    creation_date: '2024-12-02',
+    group_id: 'OAM-202312-HDF32',
+    tx_num: 3,
+    tx_cd: 1202,
   },
   {
-    ovs_cd: 'HDF27',
-    num: 4,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.28',
-    store: 'IMP.LEY25413',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'ARS',
-    withdrawal: 2114.98,
-    trans_cd: '1699',
-    description: 'TAX',
-    trans_amount: null,
+    invoice_num: 'OAM-HDF32-202312-00002',
+    drcr: 1,
+    amount: '2,564.73EUR',
+    krw_amount: '3,645,533.00',
+    excange_rate: '1,421.41',
+    cost_center: 'HDF32',
+    account: '522011-1101',
+    description: 'Participatio',
+    created_by: 'PC000001',
+    creation_date: '2024-12-02',
+    group_id: 'OAM-202312-HDF32',
+    tx_num: 3,
+    tx_cd: 1202,
   },
   {
-    ovs_cd: 'HDF27',
-    num: 5,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.27',
-    store: 'LUMI PUNA',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'USD',
-    withdrawal: 66046.66,
-    trans_cd: '2505',
-    description: 'CAMPAMENTO/CATERING',
-    trans_amount: null,
+    invoice_num: 'OAM-HDF32-202312-00002',
+    drcr: 1,
+    amount: '2,564.73EUR',
+    krw_amount: '3,645,533.00',
+    excange_rate: '1,421.41',
+    cost_center: 'HDF32',
+    account: '522011-1101',
+    description: 'Participatio',
+    created_by: 'PC000001',
+    creation_date: '2024-12-02',
+    group_id: 'OAM-202312-HDF32',
+    tx_num: 3,
+    tx_cd: 1202,
   },
   {
-    ovs_cd: 'HDF27',
-    num: 6,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.13',
-    store: 'IMP.LEY25413',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'USD',
-    withdrawal: 10.73,
-    trans_cd: '1699',
-    description: 'TAX',
-    trans_amount: null,
+    invoice_num: 'OAM-HDF32-202312-00002',
+    drcr: 1,
+    amount: '2,564.73EUR',
+    krw_amount: '3,645,533.00',
+    excange_rate: '1,421.41',
+    cost_center: 'HDF32',
+    account: '522011-1101',
+    description: 'Participatio',
+    created_by: 'PC000001',
+    creation_date: '2024-12-02',
+    group_id: 'OAM-202312-HDF32',
+    tx_num: 3,
+    tx_cd: 1202,
   },
   {
-    ovs_cd: 'HDF27',
-    num: 7,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.13',
-    store: 'ESTUDIO HADAD',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'USD',
-    withdrawal: 1788.67,
-    trans_cd: '1699',
-    description: 'TAX',
-    trans_amount: null,
+    invoice_num: 'OAM-HDF32-202312-00003',
+    drcr: 1,
+    amount: '2,564.73EUR',
+    krw_amount: '3,645,533.00',
+    excange_rate: '1,421.41',
+    cost_center: 'HDF32',
+    account: '522011-1101',
+    description: 'Participatio',
+    created_by: 'PC000001',
+    creation_date: '2024-12-02',
+    group_id: 'OAM-202312-HDF32',
+    tx_num: 3,
+    tx_cd: 1202,
   },
   {
-    ovs_cd: 'HDF27',
-    num: 8,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.28',
-    store: 'IMP.LEY25413',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'USD',
-    withdrawal: 397.48,
-    trans_cd: '1699',
-    description: 'TAX',
-    trans_amount: null,
+    invoice_num: 'OAM-HDF32-202312-00003',
+    drcr: 1,
+    amount: '2,564.73EUR',
+    krw_amount: '3,645,533.00',
+    excange_rate: '1,421.41',
+    cost_center: 'HDF32',
+    account: '522011-1101',
+    description: 'Participatio',
+    created_by: 'PC000001',
+    creation_date: '2024-12-02',
+    group_id: 'OAM-202312-HDF32',
+    tx_num: 3,
+    tx_cd: 1202,
   },
   {
-    ovs_cd: 'HDF27',
-    num: 9,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.27',
-    store: 'DBCR 25413 S/DB TASAGRAL',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'ARS',
-    withdrawal: 287.59,
-    trans_cd: '1699',
-    description: 'TAX',
-    trans_amount: null,
+    invoice_num: 'OAM-HDF32-202312-00003',
+    drcr: 1,
+    amount: '2,564.73EUR',
+    krw_amount: '3,645,533.00',
+    excange_rate: '1,421.41',
+    cost_center: 'HDF32',
+    account: '522011-1101',
+    description: 'Participatio',
+    created_by: 'PC000001',
+    creation_date: '2024-12-02',
+    group_id: 'OAM-202312-HDF32',
+    tx_num: 3,
+    tx_cd: 1202,
   },
   {
-    ovs_cd: 'HDF27',
-    num: 10,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.27',
-    store: 'TEF DATANET PGOS AFIP',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'ARS',
-    withdrawal: 38187.18,
-    trans_cd: '1699',
-    description: 'TAX',
-    trans_amount: null,
+    invoice_num: 'OAM-HDF32-202312-00004',
+    drcr: 1,
+    amount: '2,564.73EUR',
+    krw_amount: '3,645,533.00',
+    excange_rate: '1,421.41',
+    cost_center: 'HDF32',
+    account: '522011-1101',
+    description: 'Participatio',
+    created_by: 'PC000001',
+    creation_date: '2024-12-02',
+    group_id: 'OAM-202312-HDF32',
+    tx_num: 3,
+    tx_cd: 1202,
   },
   {
-    ovs_cd: 'HDF27',
-    num: 11,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.27',
-    store: 'TEF DATANET PGOS AFIP',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'ARS',
-    withdrawal: 9745.15,
-    trans_cd: '1699',
-    description: 'TAX',
-    trans_amount: null,
+    invoice_num: 'OAM-HDF32-202312-00004',
+    drcr: 1,
+    amount: '2,564.73EUR',
+    krw_amount: '3,645,533.00',
+    excange_rate: '1,421.41',
+    cost_center: 'HDF32',
+    account: '522011-1101',
+    description: 'Participatio',
+    created_by: 'PC000001',
+    creation_date: '2024-12-02',
+    group_id: 'OAM-202312-HDF32',
+    tx_num: 3,
+    tx_cd: 1202,
   },
   {
-    ovs_cd: 'HDF27',
-    num: 12,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.23',
-    store: 'LUMI PUNA',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'USD',
-    withdrawal: 6604.02,
-    trans_cd: '2505',
-    description: 'CAMPAMENTO/CATERING',
-    trans_amount: null,
+    invoice_num: 'OAM-HDF32-202312-00004',
+    drcr: 1,
+    amount: '2,564.73EUR',
+    krw_amount: '3,645,533.00',
+    excange_rate: '1,421.41',
+    cost_center: 'HDF32',
+    account: '522011-1101',
+    description: 'Participatio',
+    created_by: 'PC000001',
+    creation_date: '2024-12-02',
+    group_id: 'OAM-202312-HDF32',
+    tx_num: 3,
+    tx_cd: 1202,
   },
   {
-    ovs_cd: 'HDF27',
-    num: 13,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.17',
-    store: 'MACRO SECURITIES',
-    dep_curr: 'ARS',
-    deposit: 183290.06,
-    wd_curr: 'USD',
-    withdrawal: 1190205.87,
-    trans_cd: 'X100',
-    description: 'CAMBIO',
-    trans_amount: null,
+    invoice_num: 'OAM-HDF32-202312-00005',
+    drcr: 1,
+    amount: '2,564.73EUR',
+    krw_amount: '3,645,533.00',
+    excange_rate: '1,421.41',
+    cost_center: 'HDF32',
+    account: '522011-1101',
+    description: 'Participatio',
+    created_by: 'PC000001',
+    creation_date: '2024-12-02',
+    group_id: 'OAM-202312-HDF32',
+    tx_num: 3,
+    tx_cd: 1202,
   },
   {
-    ovs_cd: 'HDF27',
-    num: 14,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.20',
-    store: 'YPF',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'ARS',
-    withdrawal: 30205.87,
-    trans_cd: '1501',
-    description: 'CONBUSTIBLE /LAVADO',
-    trans_amount: null,
+    invoice_num: 'OAM-HDF32-202312-00005',
+    drcr: 1,
+    amount: '2,564.73EUR',
+    krw_amount: '3,645,533.00',
+    excange_rate: '1,421.41',
+    cost_center: 'HDF32',
+    account: '522011-1101',
+    description: 'Participatio',
+    created_by: 'PC000001',
+    creation_date: '2024-12-02',
+    group_id: 'OAM-202312-HDF32',
+    tx_num: 3,
+    tx_cd: 1202,
   },
   {
-    ovs_cd: 'HDF27',
-    num: 15,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.04',
-    store: 'YPF',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'ARS',
-    withdrawal: 9205.87,
-    trans_cd: '1501',
-    description: 'CONBUSTIBLE /LAVADO',
-    trans_amount: null,
+    invoice_num: 'OAM-HDF32-202312-00005',
+    drcr: 1,
+    amount: '2,564.73EUR',
+    krw_amount: '3,645,533.00',
+    excange_rate: '1,421.41',
+    cost_center: 'HDF32',
+    account: '522011-1101',
+    description: 'Participatio',
+    created_by: 'PC000001',
+    creation_date: '2024-12-02',
+    group_id: 'OAM-202312-HDF32',
+    tx_num: 3,
+    tx_cd: 1202,
   },
 ];
 
@@ -265,87 +284,94 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'ovs_cd',
+    id: 'invoice_num',
     numeric: false,
     disablePadding: true,
-    label: '사무소코드',
+    label: 'INVOICE_NUM',
     minWidth: 120,
   },
   {
-    id: 'num',
-    numeric: true,
+    id: 'drcr',
+    numeric: false,
     disablePadding: false,
-    label: '순번',
+    label: '차대',
     minWidth: 100,
   },
   {
-    id: 'fiscal_month',
+    id: 'amount',
     numeric: false,
     disablePadding: false,
-    label: '회계월',
+    label: '금액',
     minWidth: 120,
   },
   {
-    id: 'tx_date',
-    numeric: true,
+    id: 'krw_amount',
+    numeric: false,
     disablePadding: true,
-    label: '거래일자',
+    label: '원화금액',
     minWidth: 200,
   },
   {
-    id: 'store',
+    id: 'excange_rate',
     numeric: false,
     disablePadding: true,
-    label: '거래처명',
+    label: '환율',
     minWidth: 300,
   },
   {
-    id: 'dep_curr',
+    id: 'cost_center',
     numeric: false,
     disablePadding: true,
-    label: '입금통화',
+    label: 'COST CENTER',
     minWidth: 100,
   },
   {
-    id: 'deposit',
+    id: 'account',
     numeric: false,
     disablePadding: true,
-    label: '입금금액',
+    label: '계정코드',
     minWidth: 200,
-  },
-  {
-    id: 'wd_curr',
-    numeric: false,
-    disablePadding: true,
-    label: '출금통화',
-    minWidth: 100,
-  },
-  {
-    id: 'withdrawal',
-    numeric: false,
-    disablePadding: true,
-    label: '출금금액',
-    minWidth: 200,
-  },
-  {
-    id: 'trans_cd',
-    numeric: false,
-    disablePadding: true,
-    label: '식별코드',
-    minWidth: 100,
   },
   {
     id: 'description',
     numeric: false,
     disablePadding: true,
-    label: '거래내역',
-    minWidth: 350,
+    label: '설명',
+    minWidth: 100,
   },
   {
-    id: 'trans_amount',
+    id: 'created_by',
     numeric: false,
     disablePadding: true,
-    label: '환산금액',
+    label: '생성자',
+    minWidth: 200,
+  },
+  {
+    id: 'creation_date',
+    numeric: false,
+    disablePadding: true,
+    label: '생성날짜',
+    minWidth: 100,
+  },
+  {
+    id: 'group_id',
+    numeric: false,
+    disablePadding: true,
+    label: '그룹아이디',
+    minWidth: 100,
+  },
+  {
+    id: 'tx_num',
+    numeric: false,
+    disablePadding: true,
+    label: '거래순번',
+    minWidth: 100,
+  },
+  {
+    id: 'tran_cd',
+    numeric: false,
+    disablePadding: true,
+    label: '식별코드',
     minWidth: 100,
   },
 ];
@@ -416,7 +442,12 @@ EnhancedTableHead.propTypes = {
 
 function EnhancedTableToolbar(props) {
   const { numSelected } = props;
-
+  const currentDate = new Date();
+  const currentMonth = currentDate.getMonth() + 1;
+  // dateRange는 [startDate, endDate] 형태의 배열을 값 가짐
+  const [dateRange, setDateRange] = useState([null, null]);
+  //dateRange 변수를 startDate와 endDate 프로퍼티로 전달
+  const [startDate, endDate] = dateRange;
   return (
     <Toolbar
       sx={{
@@ -440,7 +471,33 @@ function EnhancedTableToolbar(props) {
         >
           {numSelected} selected
         </Typography>
-      ) : null}
+      ) : (
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between', // Aligns children to the start and end of the container
+            gap: '8px',
+          }}
+        >
+          <button>앞</button>
+          <div>{currentMonth}</div>
+          <button>뒤</button>
+          <div style={{ height: '20px' }}></div>
+          <DatePicker
+            selectsRange={true}
+            startDate={startDate}
+            endDate={endDate}
+            onChange={(update) => {
+              setDateRange(update);
+            }}
+            withPortal
+          />
+          <input />
+          <Button style={{ marginLeft: 'auto' }}> 승인</Button>
+        </div>
+      )}
 
       {numSelected > 0 ? (
         <Tooltip title='Delete'>
@@ -457,7 +514,7 @@ EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
 };
 
-export default function InvoiceTable(props) {
+export default function AccountingSlipTable(props) {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [selected, setSelected] = useState([]);
@@ -527,7 +584,9 @@ export default function InvoiceTable(props) {
       sx={{
         width: '100%',
         display: 'flex',
+        flexDirection: 'row', // 가로 방향으로 정렬
         justifyContent: 'center',
+        alignItems: 'center', // 세로 방향 가운데 정렬
       }}
     >
       <Paper sx={{ width: '95%', overflow: 'hidden', mb: 2 }}>
@@ -572,18 +631,19 @@ export default function InvoiceTable(props) {
                         }}
                       />
                     </TableCell>
-                    <TableCell align='left'>{row.ovs_cd}</TableCell>
-                    <TableCell align='center'>{row.num}</TableCell>
-                    <TableCell align='center'>{row.fiscal_month}</TableCell>
-                    <TableCell align='center'>{row.tx_date}</TableCell>
-                    <TableCell align='center'>{row.store}</TableCell>
-                    <TableCell align='center'>{row.dep_curr}</TableCell>
-                    <TableCell align='center'>{row.deposit}</TableCell>
-                    <TableCell align='center'>{row.wd_curr}</TableCell>
-                    <TableCell align='center'>{row.withdrawal}</TableCell>
-                    <TableCell align='center'>{row.trans_cd}</TableCell>
+                    <TableCell align='left'>{row.invoice_num}</TableCell>
+                    <TableCell align='center'>{row.rcdc}</TableCell>
+                    <TableCell align='center'>{row.amount}</TableCell>
+                    <TableCell align='center'>{row.krw_amount}</TableCell>
+                    <TableCell align='center'>{row.excange_rate}</TableCell>
+                    <TableCell align='center'>{row.cost_center}</TableCell>
+                    <TableCell align='center'>{row.account}</TableCell>
                     <TableCell align='center'>{row.description}</TableCell>
-                    <TableCell align='center'>{row.trans_amount}</TableCell>
+                    <TableCell align='center'>{row.created_by}</TableCell>
+                    <TableCell align='center'>{row.creation_date}</TableCell>
+                    <TableCell align='center'>{row.group_id}</TableCell>
+                    <TableCell align='center'>{row.tx_num}</TableCell>
+                    <TableCell align='center'>{row.tx_cd}</TableCell>
                   </TableRow>
                 );
               })}

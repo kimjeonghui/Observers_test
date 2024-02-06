@@ -36,7 +36,7 @@ const CustomButton = styled(
 `;
 
 export default function ButtonComponent(props) {
-  const { color, fontColor, size, hoverColor, width } = props;
+  const { color, fontColor, size, hoverColor, width, ...rest } = props;
   return (
     <CustomButton
       color={color}
@@ -44,6 +44,7 @@ export default function ButtonComponent(props) {
       hoverColor={hoverColor}
       size={size}
       width={width}
+      {...rest}
     >
       {props.children}
     </CustomButton>
