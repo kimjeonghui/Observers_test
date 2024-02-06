@@ -10,7 +10,7 @@ export default function AdminHeader(props) {
       <AppBar position='static'>
         <Toolbar>
           <Tabs>
-            <Tab label='사무소관리' href='/admin-home' />
+            <Tab label='사무소관리' href='/admin-office' />
             <Tab label='식별코드' href='/admin-code' />
             <Tab label='사용자관리' href='/users' />
           </Tabs>
