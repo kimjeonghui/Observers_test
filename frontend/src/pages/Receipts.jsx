@@ -26,6 +26,46 @@ export default function Receipts(props) {
           <FolderIcon />
           <span style={{ marginLeft: '5px' }}>2023-10</span>
         </CustomButton>
+        <CustomButton
+          color={theme.palette.posco_lg_300}
+          fontColor={theme.palette.posco_gray_500}
+          hoverColor={theme.palette.posco_gray_100}
+          size='sm'
+          onClick={() => handleButtonClick('2023-11')}
+        >
+          <FolderIcon />
+          <span style={{ marginLeft: '5px' }}>2023-11</span>
+        </CustomButton>
+        <CustomButton
+          color={theme.palette.posco_lg_300}
+          fontColor={theme.palette.posco_gray_500}
+          hoverColor={theme.palette.posco_gray_100}
+          size='sm'
+          onClick={() => handleButtonClick('2023-12')}
+        >
+          <FolderIcon />
+          <span style={{ marginLeft: '5px' }}>2023-12</span>
+        </CustomButton>
+        <CustomButton
+          color={theme.palette.posco_lg_300}
+          fontColor={theme.palette.posco_gray_500}
+          hoverColor={theme.palette.posco_gray_100}
+          size='sm'
+          onClick={() => handleButtonClick('2024-01')}
+        >
+          <FolderIcon />
+          <span style={{ marginLeft: '5px' }}>2024-01</span>
+        </CustomButton>
+        <CustomButton
+          color={theme.palette.posco_lg_300}
+          fontColor={theme.palette.posco_gray_500}
+          hoverColor={theme.palette.posco_gray_100}
+          size='sm'
+          onClick={() => handleButtonClick('2024-02')}
+        >
+          <FolderIcon />
+          <span style={{ marginLeft: '5px' }}>2024-02</span>
+        </CustomButton>
       </Box>
     </div>
   );
