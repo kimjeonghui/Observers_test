@@ -21,7 +21,7 @@ export default function AdminOfficeDialog() {
   return (
     <React.Fragment>
       <Button size='sm' onClick={handleClickOpen}>
-        Insert Dialog
+        추가 Insert Dialog
       </Button>
       <Dialog
         open={open}
@@ -45,7 +45,7 @@ export default function AdminOfficeDialog() {
             autoFocus
             required
             margin='dense'
-            id='cop-code'
+            id='ovs_cop_cd'
             name='cop-code'
             label='법인 코드'
             type='text'
@@ -56,7 +56,7 @@ export default function AdminOfficeDialog() {
             autoFocus
             required
             margin='dense'
-            id='office-code'
+            id='ovs_cd'
             name='office-code'
             label='사무소 코드'
             type='text'
@@ -67,7 +67,7 @@ export default function AdminOfficeDialog() {
             autoFocus
             required
             margin='dense'
-            id='office-name'
+            id='ovs_meaning'
             name='office-name'
             label='사무소 이름'
             type='text'
@@ -78,7 +78,7 @@ export default function AdminOfficeDialog() {
             autoFocus
             required
             margin='dense'
-            id='home-currency'
+            id='loc_curr'
             name='home-currency'
             label='현지통화'
             type='text'
@@ -89,7 +89,7 @@ export default function AdminOfficeDialog() {
             autoFocus
             required
             margin='dense'
-            id='away-currency'
+            id='trans_curr'
             name='away-currency'
             label='송금통화'
             type='text'
@@ -100,7 +100,7 @@ export default function AdminOfficeDialog() {
             autoFocus
             required
             margin='dense'
-            id='gl-currency'
+            id='gl_curr'
             name='gl-currency'
             label='장부통화'
             type='text'
@@ -111,7 +111,7 @@ export default function AdminOfficeDialog() {
             autoFocus
             required
             margin='dense'
-            id='start-date'
+            id='start_date'
             name='start-date'
             label='시작날짜'
             type='date'
@@ -122,7 +122,7 @@ export default function AdminOfficeDialog() {
             autoFocus
             required
             margin='dense'
-            id='end-date'
+            id='end_date'
             name='end-date'
             label='종료날짜'
             type='date'

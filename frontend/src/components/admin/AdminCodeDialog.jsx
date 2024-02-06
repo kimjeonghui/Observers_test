@@ -21,7 +21,7 @@ export default function AdminCodeDialog() {
   return (
     <React.Fragment>
       <Button size='sm' onClick={handleClickOpen}>
-        Insert Dialog
+        추가 Insert Dialog
       </Button>
       <Dialog
         open={open}
@@ -111,28 +111,6 @@ export default function AdminCodeDialog() {
             autoFocus
             required
             margin='dense'
-            id='description'
-            name='description'
-            label='적요'
-            type='text'
-            fullWidth
-            variant='standard'
-          />
-          <TextField
-            autoFocus
-            required
-            margin='dense'
-            id='comment'
-            name='comment'
-            label='추가설명'
-            type='text'
-            fullWidth
-            variant='standard'
-          />
-          <TextField
-            autoFocus
-            required
-            margin='dense'
             id='major'
             name='major'
             label='대분류'
@@ -158,6 +136,28 @@ export default function AdminCodeDialog() {
             id='minor'
             name='minor'
             label='소분류'
+            type='text'
+            fullWidth
+            variant='standard'
+          />
+          <TextField
+            autoFocus
+            required
+            margin='dense'
+            id='description'
+            name='description'
+            label='적요'
+            type='text'
+            fullWidth
+            variant='standard'
+          />
+          <TextField
+            autoFocus
+            required
+            margin='dense'
+            id='comment'
+            name='comment'
+            label='추가설명'
             type='text'
             fullWidth
             variant='standard'
