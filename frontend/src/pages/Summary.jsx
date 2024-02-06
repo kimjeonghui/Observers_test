@@ -53,64 +53,124 @@ const rows = [
 const invoiceSubtotal = subtotal(rows);
 const invoiceTaxes = TAX_RATE * invoiceSubtotal;
 const invoiceTotal = invoiceTaxes + invoiceSubtotal;
+// import * as React from 'react';
+// import Paper from '@mui/material/Paper';
+// import Table from '@mui/material/Table';
+// import TableBody from '@mui/material/TableBody';
+// import TableCell from '@mui/material/TableCell';
+// import TableContainer from '@mui/material/TableContainer';
+// import TableHead from '@mui/material/TableHead';
+// import TablePagination from '@mui/material/TablePagination';
+// import TableRow from '@mui/material/TableRow';
+
+// const columns = [
+//   { id: 'name', label: 'Name', minWidth: 170 },
+//   { id: 'code', label: 'ISO\u00a0Code', minWidth: 100 },
+//   {
+//     id: 'population',
+//     label: 'Population',
+//     minWidth: 170,
+//     align: 'right',
+//     format: (value) => value.toLocaleString('en-US'),
+//   },
+//   {
+//     id: 'size',
+//     label: 'Size\u00a0(km\u00b2)',
+//     minWidth: 170,
+//     align: 'right',
+//     format: (value) => value.toLocaleString('en-US'),
+//   },
+//   {
+//     id: 'density',
+//     label: 'Density',
+//     minWidth: 170,
+//     align: 'right',
+//     format: (value) => value.toFixed(2),
+//   },
+// ];
+
+// function createData(name, code, population, size) {
+//   const density = population / size;
+//   return { name, code, population, size, density };
+// }
+
+// const rows = [
+//   createData('India', 'IN', 1324171354, 3287263),
+//   createData('China', 'CN', 1403500365, 9596961),
+//   createData('Italy', 'IT', 60483973, 301340),
+//   createData('United States', 'US', 327167434, 9833520),
+//   createData('Canada', 'CA', 37602103, 9984670),
+//   createData('Australia', 'AU', 25475400, 7692024),
+//   createData('Germany', 'DE', 83019200, 357578),
+//   createData('Ireland', 'IE', 4857000, 70273),
+//   createData('Mexico', 'MX', 126577691, 1972550),
+//   createData('Japan', 'JP', 126317000, 377973),
+//   createData('France', 'FR', 67022000, 640679),
+//   createData('United Kingdom', 'GB', 67545757, 242495),
+//   createData('Russia', 'RU', 146793744, 17098246),
+//   createData('Nigeria', 'NG', 200962417, 923768),
+//   createData('Brazil', 'BR', 210147125, 8515767),
+// ];
 export default function Summary(props) {
   return (
     <div>
-      <span>월 총괄표</span>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label='spanning table'>
-          <TableHead>
-            <TableRow>
-              <TableCell align='center' colSpan={1}>
-                구분
-              </TableCell>
-              <TableCell align='center' colSpan={1}>
-                계정과목
-              </TableCell>
-              <TableCell align='center' colSpan={1}>
-                적요
-              </TableCell>
-              <TableCell align='center' colSpan={1}>
-                식별코드
-              </TableCell>
-              <TableCell align='right'>USD</TableCell>
-              <TableCell align='right'>ARS</TableCell>
-            </TableRow>
-            {/* <TableRow>
+      <h2>월 총괄표</h2>
+      <Paper sx={{ width: '100%', overflow: 'hidden' }}>
+        <TableContainer sx={{ maxHeight: 700 }}>
+          <Table sx={{ minWidth: 700 }} stickyHeader aria-label='sticky table'>
+            <TableHead>
+              <TableRow>
+                <TableCell align='center' colSpan={1}>
+                  구분
+                </TableCell>
+                <TableCell align='center' colSpan={1}>
+                  계정과목
+                </TableCell>
+                <TableCell align='center' colSpan={1}>
+                  적요
+                </TableCell>
+                <TableCell align='center' colSpan={1}>
+                  식별코드
+                </TableCell>
+                <TableCell align='right'>USD</TableCell>
+                <TableCell align='right'>ARS</TableCell>
+              </TableRow>
+              {/* <TableRow>
             <TableCell>대분류</TableCell>
             <TableCell align='center'>중분류</TableCell>
             <TableCell align='center'>소분류</TableCell>
             <TableCell align='center'>Sum</TableCell>
           </TableRow> */}
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.topic}>
-                <TableCell>{row.topic}</TableCell>
-                <TableCell align='center'>{row.desc}</TableCell>
-                <TableCell align='center'>{row.qty}</TableCell>
-                <TableCell align='center'>{row.unit}</TableCell>
-                <TableCell align='center'>{row.usd}</TableCell>
-                <TableCell align='center'>{row.ars}</TableCell>
+            </TableHead>
+            <TableBody>
+              {rows.map((row) => (
+                <TableRow key={row.topic}>
+                  <TableCell>{row.topic}</TableCell>
+                  <TableCell align='center'>{row.desc}</TableCell>
+                  <TableCell align='center'>{row.qty}</TableCell>
+                  <TableCell align='center'>{row.unit}</TableCell>
+                  <TableCell align='center'>{row.usd}</TableCell>
+                  <TableCell align='center'>{row.ars}</TableCell>
+                </TableRow>
+              ))}
+              <TableRow>
+                <TableCell rowSpan={3} />
+                <TableCell colSpan={2}>Subtotal</TableCell>
+                <TableCell align='right'></TableCell>
               </TableRow>
-            ))}
-            <TableRow>
-              <TableCell rowSpan={3} />
-              <TableCell colSpan={2}>Subtotal</TableCell>
-              <TableCell align='right'>{ccyFormat(invoiceSubtotal)}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>Tax</TableCell>
-              <TableCell align='right'>{`${(TAX_RATE * 100).toFixed(0)} %`}</TableCell>
-              <TableCell align='right'>{ccyFormat(invoiceTaxes)}</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell colSpan={2}>Total</TableCell>
-              <TableCell align='right'>{ccyFormat(invoiceTotal)}</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
+              <TableRow>
+                <TableCell>Tax</TableCell>
+                <TableCell align='right'>{`${(TAX_RATE * 100).toFixed(0)} %`}</TableCell>
+                <TableCell align='right'></TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell colSpan={2}>Total</TableCell>
+                <TableCell align='right'></TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Paper>
     </div>
   );
 }
