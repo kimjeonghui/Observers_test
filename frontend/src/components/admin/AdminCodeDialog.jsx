@@ -7,7 +7,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
-export default function AdminHomeDialog() {
+export default function AdminCodeDialog() {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
@@ -21,7 +21,7 @@ export default function AdminHomeDialog() {
   return (
     <React.Fragment>
       <Button size='sm' onClick={handleClickOpen}>
-        Insert Dialog
+        추가 Insert Dialog
       </Button>
       <Dialog
         open={open}
@@ -38,16 +38,16 @@ export default function AdminHomeDialog() {
           },
         }}
       >
-        <DialogTitle>사무소 추가</DialogTitle>
+        <DialogTitle>식별코드 추가</DialogTitle>
         <DialogContent>
           <DialogContentText>추가할 정보를 입력해주세요</DialogContentText>
           <TextField
             autoFocus
             required
             margin='dense'
-            id='cop-code'
-            name='cop-code'
-            label='법인 코드'
+            id='trans-code'
+            name='trans-code'
+            label='식별 코드'
             type='text'
             fullWidth
             variant='standard'
@@ -56,9 +56,9 @@ export default function AdminHomeDialog() {
             autoFocus
             required
             margin='dense'
-            id='office-code'
-            name='office-code'
-            label='사무소 코드'
+            id='account-name'
+            name='account-name'
+            label='계정명'
             type='text'
             fullWidth
             variant='standard'
@@ -67,9 +67,9 @@ export default function AdminHomeDialog() {
             autoFocus
             required
             margin='dense'
-            id='office-name'
-            name='office-name'
-            label='사무소 이름'
+            id='account'
+            name='account'
+            label='계정코드'
             type='text'
             fullWidth
             variant='standard'
@@ -78,9 +78,9 @@ export default function AdminHomeDialog() {
             autoFocus
             required
             margin='dense'
-            id='home-currency'
-            name='home-currency'
-            label='현지통화'
+            id='sub-account'
+            name='sub-account'
+            label='보조계정'
             type='text'
             fullWidth
             variant='standard'
@@ -89,9 +89,9 @@ export default function AdminHomeDialog() {
             autoFocus
             required
             margin='dense'
-            id='away-currency'
-            name='away-currency'
-            label='송금통화'
+            id='deposit-code'
+            name='deposit-code'
+            label='입출금구분'
             type='text'
             fullWidth
             variant='standard'
@@ -100,9 +100,9 @@ export default function AdminHomeDialog() {
             autoFocus
             required
             margin='dense'
-            id='gl-currency'
-            name='gl-currency'
-            label='장부통화'
+            id='dept-flag'
+            name='dept-flag'
+            label='부서코드 필수여부'
             type='text'
             fullWidth
             variant='standard'
@@ -111,10 +111,10 @@ export default function AdminHomeDialog() {
             autoFocus
             required
             margin='dense'
-            id='start-date'
-            name='start-date'
-            label='시작날짜'
-            type='date'
+            id='major'
+            name='major'
+            label='대분류'
+            type='text'
             fullWidth
             variant='standard'
           />
@@ -122,10 +122,43 @@ export default function AdminHomeDialog() {
             autoFocus
             required
             margin='dense'
-            id='end-date'
-            name='end-date'
-            label='종료날짜'
-            type='date'
+            id='medium'
+            name='medium'
+            label='중분류'
+            type='text'
+            fullWidth
+            variant='standard'
+          />
+          <TextField
+            autoFocus
+            required
+            margin='dense'
+            id='minor'
+            name='minor'
+            label='소분류'
+            type='text'
+            fullWidth
+            variant='standard'
+          />
+          <TextField
+            autoFocus
+            required
+            margin='dense'
+            id='description'
+            name='description'
+            label='적요'
+            type='text'
+            fullWidth
+            variant='standard'
+          />
+          <TextField
+            autoFocus
+            required
+            margin='dense'
+            id='comment'
+            name='comment'
+            label='추가설명'
+            type='text'
             fullWidth
             variant='standard'
           />
