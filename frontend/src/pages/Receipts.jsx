@@ -1,5 +1,32 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import CustomButton from '../components/global/Button';
+import { useTheme } from '@mui/material/styles';
+import FolderIcon from '@mui/icons-material/Folder';
+import { Box } from '@mui/material';
 
 export default function Receipts(props) {
-  return <div>영수증페이지입니다.</div>;
+  const theme = useTheme();
+  const navigate = useNavigate();
+
+  const handleButtonClick = (id) => {
+    navigate(`/receipts/${id}`);
+  };
+
+  return (
+    <div>
+      <Box sx={{ display: 'flex', gap: '20px', padding: '20px' }}>
+        <CustomButton
+          color={theme.palette.posco_lg_300}
+          fontColor={theme.palette.posco_gray_500}
+          hoverColor={theme.palette.posco_gray_100}
+          size='sm'
+          onClick={() => handleButtonClick('2023-10')}
+        >
+          <FolderIcon />
+          <span style={{ marginLeft: '5px' }}>2023-10</span>
+        </CustomButton>
+      </Box>
+    </div>
+  );
 }
