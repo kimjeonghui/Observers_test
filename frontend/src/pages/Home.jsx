@@ -8,7 +8,7 @@ import Ocr from './Ocr';
 import Receipts from './Receipts';
 import AccountingSlip from './AccountingSlip';
 import AdminCode from './AdminCode';
-import AdminHome from './AdminHome';
+import AdminOffice from './AdminOffice';
 import ReceiptsMonth from './ReceiptsMonth';
 import Users from './Users';
 
@@ -25,7 +25,7 @@ export default function Home(props) {
             <Route path='/ocr' element={<Ocr />} />
             <Route path='/accounting-slip' element={<AccountingSlip />} />
             <Route path='/admin-code' element={<AdminCode />} />
-            <Route path='/admin-home' element={<AdminHome />} />
+            <Route path='/admin-office' element={<AdminOffice />} />
             <Route path='/users' element={<Users />} />
           </Routes>
         </CustomContainer>
