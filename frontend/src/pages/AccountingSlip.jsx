@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import AccountingSlipTable from '../components/accoutingSlip/AccountingSlipTable';
-import CollapsibleTable from '../components/accoutingSlip/CollapsibleTable';
+import ApprovalTable from '../components/accoutingSlip/ApprovalTable';
 import {
   SpanTab,
   ActiveSpanTab,
@@ -47,7 +47,7 @@ export default function AccountingSlip(props) {
           )
         )}
       </div>
-      {activeTab === 0 && <CollapsibleTable />}
+      {activeTab === 0 && <ApprovalTable />}
       {activeTab === 1 && <AccountingSlipTable />}
     </div>
   );
