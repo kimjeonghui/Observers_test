@@ -6,10 +6,10 @@ function Ocr() {
   const chartSetting = {
     yAxis: [
       {
-        label: 'rainfall (mm)',
+        label: '입력 횟수',
       },
     ],
-    width: 500,
+    width: 700,
     height: 300,
     sx: {
       [`.${axisClasses.left} .${axisClasses.label}`]: {
@@ -17,121 +17,87 @@ function Ocr() {
       },
     },
   };
+
   const dataset = [
     {
-      london: 59,
-      paris: 57,
-      newYork: 86,
-      seoul: 21,
+      Total: 159,
+      OCR: 57,
       month: 'Jan',
     },
     {
-      london: 50,
-      paris: 52,
-      newYork: 78,
-      seoul: 28,
+      Total: 150,
+      OCR: 52,
       month: 'Fev',
     },
     {
-      london: 47,
-      paris: 53,
-      newYork: 106,
-      seoul: 41,
+      Total: 147,
+      OCR: 53,
       month: 'Mar',
     },
     {
-      london: 54,
-      paris: 56,
-      newYork: 92,
-      seoul: 73,
+      Total: 154,
+      OCR: 56,
       month: 'Apr',
     },
     {
-      london: 57,
-      paris: 69,
-      newYork: 92,
-      seoul: 99,
+      Total: 157,
+      OCR: 69,
       month: 'May',
     },
     {
-      london: 60,
-      paris: 63,
-      newYork: 103,
-      seoul: 144,
+      Total: 160,
+      OCR: 63,
+      Argentina: 103,
       month: 'June',
     },
     {
-      london: 59,
-      paris: 60,
-      newYork: 105,
-      seoul: 319,
+      Total: 159,
+      OCR: 60,
       month: 'July',
     },
     {
-      london: 65,
-      paris: 60,
-      newYork: 106,
-      seoul: 249,
+      Total: 165,
+      OCR: 60,
       month: 'Aug',
     },
     {
-      london: 51,
-      paris: 51,
-      newYork: 95,
-      seoul: 131,
+      Total: 151,
+      OCR: 51,
       month: 'Sept',
     },
     {
-      london: 60,
-      paris: 65,
-      newYork: 97,
-      seoul: 55,
+      Total: 160,
+      OCR: 65,
       month: 'Oct',
     },
     {
-      london: 67,
-      paris: 64,
-      newYork: 76,
-      seoul: 48,
+      Total: 167,
+      OCR: 64,
       month: 'Nov',
     },
     {
-      london: 61,
-      paris: 70,
-      newYork: 103,
-      seoul: 25,
+      Total: 161,
+      OCR: 70,
       month: 'Dec',
     },
   ];
 
-  const valueFormatter = (value) => `${value}mm`;
+  const valueFormatter = (value) => `${value}건`;
 
   return (
-    <div style={{ padding: '20px' }}>
-      <div>
-        <BarChart
-          xAxis={[
-            { scaleType: 'band', data: ['group A', 'group B', 'group C'] },
-          ]}
-          series={[
-            { data: [4, 3, 5] },
-            { data: [1, 6, 3] },
-            { data: [2, 5, 6] },
-          ]}
-          width={500}
-          height={300}
-        />
-      </div>
-
-      <div>
+    <div style={{ padding: '20px', display: 'flex', flexDirection: 'row' }}>
+      <div style={{ marginRight: '20px' }}>
         <BarChart
           dataset={dataset}
           xAxis={[{ scaleType: 'band', dataKey: 'month' }]}
           series={[
-            { dataKey: 'london', label: 'London', valueFormatter },
-            { dataKey: 'paris', label: 'Paris', valueFormatter },
-            { dataKey: 'newYork', label: 'New York', valueFormatter },
-            { dataKey: 'seoul', label: 'Seoul', valueFormatter },
+            {
+              dataKey: 'Total',
+              label: 'Total',
+              valueFormatter,
+              color: '#66CC99',
+            },
+            { dataKey: 'OCR', label: 'OCR', valueFormatter, color: '#FF6666' },
           ]}
           {...chartSetting}
         />
@@ -142,9 +108,13 @@ function Ocr() {
           series={[
             {
               data: [
-                { id: 0, value: 10, label: 'series A' },
-                { id: 1, value: 15, label: 'series B' },
-                { id: 2, value: 20, label: 'series C' },
+                { id: 0, value: 45, label: 'Accurate', color: '#6666FF' },
+                {
+                  id: 1,
+                  value: 86,
+                  label: 'Modified',
+                  color: '#CCCCCC',
+                },
               ],
             },
           ]}
