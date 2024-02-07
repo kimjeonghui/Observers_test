@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Entity
-@Table(name="users")
-public class UserEntity extends BaseEntity{
+@Table(name="summaries")
+public class SummaryEntity extends BaseEntity{
     @Id
     @Column(nullable = false)
     private String name;                // 사번
@@ -46,5 +46,4 @@ public class UserEntity extends BaseEntity{
     private String refreshToken;        // 토큰
 
 }
-
 
