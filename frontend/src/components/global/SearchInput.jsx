@@ -20,7 +20,7 @@ export default function SearchInput(props) {
   const { leftRadius, rightRadius, width, height } = props;
   const theme = useTheme();
   return (
-    <div>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
       <CustomInput
         type='text'
         placeholder='Search'

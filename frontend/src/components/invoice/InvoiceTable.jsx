@@ -1,4 +1,6 @@
 import React, { useMemo, useState } from 'react';
+
+import Button from '../global/Button';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import {
@@ -25,6 +27,7 @@ const rows = [
   {
     ovs_cd: 'HDF27',
     num: 1,
+    id: 1,
     fiscal_month: '23.12',
     tx_date: '2023.11.30',
     store: 'EFFECTIVO DEL MES ANTERIOR',
@@ -39,6 +42,7 @@ const rows = [
   {
     ovs_cd: 'HDF27',
     num: 2,
+    id: 2,
     fiscal_month: '23.12',
     tx_date: '2023.12.27',
     store: 'YPF',
@@ -53,6 +57,7 @@ const rows = [
   {
     ovs_cd: 'HDF27',
     num: 3,
+    id: 4,
     fiscal_month: '23.12',
     tx_date: '2023.12.27',
     store: 'MACRO SECURITIES',
@@ -67,6 +72,7 @@ const rows = [
   {
     ovs_cd: 'HDF27',
     num: 4,
+    id: 5,
     fiscal_month: '23.12',
     tx_date: '2023.12.28',
     store: 'IMP.LEY25413',
@@ -81,6 +87,7 @@ const rows = [
   {
     ovs_cd: 'HDF27',
     num: 5,
+    id: 6,
     fiscal_month: '23.12',
     tx_date: '2023.12.27',
     store: 'LUMI PUNA',
@@ -95,6 +102,7 @@ const rows = [
   {
     ovs_cd: 'HDF27',
     num: 6,
+    id: 7,
     fiscal_month: '23.12',
     tx_date: '2023.12.13',
     store: 'IMP.LEY25413',
@@ -109,6 +117,7 @@ const rows = [
   {
     ovs_cd: 'HDF27',
     num: 7,
+    id: 9,
     fiscal_month: '23.12',
     tx_date: '2023.12.13',
     store: 'ESTUDIO HADAD',
@@ -123,6 +132,7 @@ const rows = [
   {
     ovs_cd: 'HDF27',
     num: 8,
+    id: 10,
     fiscal_month: '23.12',
     tx_date: '2023.12.28',
     store: 'IMP.LEY25413',
@@ -137,6 +147,7 @@ const rows = [
   {
     ovs_cd: 'HDF27',
     num: 9,
+    id: 11,
     fiscal_month: '23.12',
     tx_date: '2023.12.27',
     store: 'DBCR 25413 S/DB TASAGRAL',
@@ -151,6 +162,7 @@ const rows = [
   {
     ovs_cd: 'HDF27',
     num: 10,
+    id: 12,
     fiscal_month: '23.12',
     tx_date: '2023.12.27',
     store: 'TEF DATANET PGOS AFIP',
@@ -165,6 +177,7 @@ const rows = [
   {
     ovs_cd: 'HDF27',
     num: 11,
+    id: 13,
     fiscal_month: '23.12',
     tx_date: '2023.12.27',
     store: 'TEF DATANET PGOS AFIP',
@@ -179,6 +192,7 @@ const rows = [
   {
     ovs_cd: 'HDF27',
     num: 12,
+    id: 14,
     fiscal_month: '23.12',
     tx_date: '2023.12.23',
     store: 'LUMI PUNA',
@@ -193,6 +207,7 @@ const rows = [
   {
     ovs_cd: 'HDF27',
     num: 13,
+    id: 15,
     fiscal_month: '23.12',
     tx_date: '2023.12.17',
     store: 'MACRO SECURITIES',
@@ -207,6 +222,7 @@ const rows = [
   {
     ovs_cd: 'HDF27',
     num: 14,
+    id: 16,
     fiscal_month: '23.12',
     tx_date: '2023.12.20',
     store: 'YPF',
@@ -221,6 +237,7 @@ const rows = [
   {
     ovs_cd: 'HDF27',
     num: 15,
+    id: 17,
     fiscal_month: '23.12',
     tx_date: '2023.12.04',
     store: 'YPF',
@@ -269,84 +286,91 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: '사무소코드',
-    minWidth: 120,
+    minWidth: 65,
   },
   {
     id: 'num',
     numeric: true,
     disablePadding: false,
     label: '순번',
-    minWidth: 100,
+    minWidth: 40,
   },
   {
     id: 'fiscal_month',
     numeric: false,
     disablePadding: false,
     label: '회계월',
-    minWidth: 120,
+    minWidth: 60,
   },
   {
     id: 'tx_date',
     numeric: true,
     disablePadding: true,
     label: '거래일자',
-    minWidth: 200,
+    minWidth: 70,
   },
   {
     id: 'store',
     numeric: false,
     disablePadding: true,
     label: '거래처명',
-    minWidth: 300,
+    minWidth: 120,
   },
   {
     id: 'dep_curr',
     numeric: false,
     disablePadding: true,
     label: '입금통화',
-    minWidth: 100,
+    minWidth: 60,
   },
   {
     id: 'deposit',
     numeric: false,
     disablePadding: true,
     label: '입금금액',
-    minWidth: 200,
+    minWidth: 80,
   },
   {
     id: 'wd_curr',
     numeric: false,
     disablePadding: true,
     label: '출금통화',
-    minWidth: 100,
+    minWidth: 60,
   },
   {
     id: 'withdrawal',
     numeric: false,
     disablePadding: true,
     label: '출금금액',
-    minWidth: 200,
+    minWidth: 80,
   },
   {
     id: 'trans_cd',
     numeric: false,
     disablePadding: true,
     label: '식별코드',
-    minWidth: 100,
+    minWidth: 60,
   },
   {
     id: 'description',
     numeric: false,
     disablePadding: true,
     label: '거래내역',
-    minWidth: 350,
+    minWidth: 120,
   },
   {
     id: 'trans_amount',
     numeric: false,
     disablePadding: true,
     label: '환산금액',
-    minWidth: 100,
+    minWidth: 80,
+  },
+  {
+    id: 'sup_evidence',
+    numeric: false,
+    disablePadding: true,
+    label: '증빙자료',
+    minWidth: 80,
   },
 ];
 
@@ -367,7 +391,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding='checkbox'>
+        <TableCell padding='checkbox' sx={{ padding: '0' }}>
           <Checkbox
             color='primary'
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -382,11 +406,17 @@ function EnhancedTableHead(props) {
           <TableCell
             key={headCell.id}
             align='center'
-            padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
-            style={{ minWidth: headCell.minWidth, width: '50px' }}
+            sx={{
+              minWidth: headCell.minWidth,
+              width: '50px',
+              fontSize: '13px',
+              fontWeight: '600',
+              padding: '0',
+            }}
           >
-            <TableSortLabel
+            {headCell.label}
+            {/* <TableSortLabel
               active={orderBy === headCell.id}
               direction={orderBy === headCell.id ? order : 'asc'}
               onClick={createSortHandler(headCell.id)}
@@ -397,7 +427,7 @@ function EnhancedTableHead(props) {
                   {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                 </Box>
               ) : null}
-            </TableSortLabel>
+            </TableSortLabel> */}
           </TableCell>
         ))}
       </TableRow>
@@ -420,7 +450,7 @@ function EnhancedTableToolbar(props) {
   return (
     <Toolbar
       sx={{
-        pl: { sm: 2 },
+        pl: { sm: 1 },
         pr: { xs: 1, sm: 1 },
         ...(numSelected > 0 && {
           bgcolor: (theme) =>
@@ -429,11 +459,13 @@ function EnhancedTableToolbar(props) {
               theme.palette.action.activatedOpacity
             ),
         }),
+        minHeight: { xs: '42px' },
+        height: { xs: '42px' },
       }}
     >
       {numSelected > 0 ? (
         <Typography
-          sx={{ flex: '1 1 100%' }}
+          sx={{ flex: '1 1 100%', fontSize: '16px' }}
           color='inherit'
           variant='subtitle1'
           component='div'
@@ -472,14 +504,14 @@ export default function InvoiceTable(props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.id);
+      const newSelected = rows.map((n) => n.num);
       setSelected(newSelected);
       return;
     }
     setSelected([]);
   };
 
-  const handleClick = (event, id) => {
+  const handleClick = (id) => {
     const selectedIndex = selected.indexOf(id);
     let newSelected = [];
 
@@ -522,19 +554,22 @@ export default function InvoiceTable(props) {
     [order, orderBy, page, rowsPerPage]
   );
 
+  const handleEviModal = (id) => {
+    alert(`증빙 모달 띄울거예요! 이 cell의 id는 ${id} 입니다!`);
+  };
+
   return (
     <Box
       sx={{
-        width: '100%',
         display: 'flex',
         justifyContent: 'center',
       }}
     >
-      <Paper sx={{ width: '95%', overflow: 'hidden', mb: 2 }}>
+      <Paper sx={{ width: '100%', overflow: 'auto', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer sx={{ height: '45vh' }}>
+        <TableContainer sx={{ height: '60vh' }}>
           <Table
-            sx={{ minWidth: 750 }}
+            sx={{ minWidth: { xs: '90vw', sm: '80vw', md: '50vw' } }}
             stickyHeader
             aria-label='sticky table'
             size='small'
@@ -553,37 +588,101 @@ export default function InvoiceTable(props) {
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
-                  <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, row.num)}
-                    role='checkbox'
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.num}
-                    selected={isItemSelected}
-                    sx={{ cursor: 'pointer' }}
-                  >
-                    <TableCell padding='checkbox'>
+                  <TableRow hover tabIndex={-1} key={row.num}>
+                    <TableCell padding='checkbox' sx={{ padding: '0' }}>
                       <Checkbox
                         color='primary'
+                        onClick={() => handleClick(row.num)}
                         checked={isItemSelected}
                         inputProps={{
                           'aria-labelledby': labelId,
                         }}
+                        sx={{ padding: '0 8px' }}
                       />
                     </TableCell>
-                    <TableCell align='left'>{row.ovs_cd}</TableCell>
-                    <TableCell align='center'>{row.num}</TableCell>
-                    <TableCell align='center'>{row.fiscal_month}</TableCell>
-                    <TableCell align='center'>{row.tx_date}</TableCell>
-                    <TableCell align='center'>{row.store}</TableCell>
-                    <TableCell align='center'>{row.dep_curr}</TableCell>
-                    <TableCell align='center'>{row.deposit}</TableCell>
-                    <TableCell align='center'>{row.wd_curr}</TableCell>
-                    <TableCell align='center'>{row.withdrawal}</TableCell>
-                    <TableCell align='center'>{row.trans_cd}</TableCell>
-                    <TableCell align='center'>{row.description}</TableCell>
-                    <TableCell align='center'>{row.trans_amount}</TableCell>
+                    <TableCell
+                      align='center'
+                      sx={{ fontSize: '12px', padding: 0 }}
+                    >
+                      {row.ovs_cd}
+                    </TableCell>
+                    <TableCell
+                      align='center'
+                      sx={{ fontSize: '12px', padding: 0 }}
+                    >
+                      {row.num}
+                    </TableCell>
+                    <TableCell
+                      align='center'
+                      sx={{ fontSize: '12px', padding: 0 }}
+                    >
+                      {row.fiscal_month}
+                    </TableCell>
+                    <TableCell
+                      align='center'
+                      sx={{ fontSize: '12px', padding: 0 }}
+                    >
+                      {row.tx_date}
+                    </TableCell>
+                    <TableCell
+                      align='center'
+                      sx={{ fontSize: '12px', padding: 0 }}
+                    >
+                      {row.store}
+                    </TableCell>
+                    <TableCell
+                      align='center'
+                      sx={{ fontSize: '12px', padding: 0 }}
+                    >
+                      {row.dep_curr}
+                    </TableCell>
+                    <TableCell
+                      align='center'
+                      sx={{ fontSize: '12px', padding: 0 }}
+                    >
+                      {row.deposit}
+                    </TableCell>
+                    <TableCell
+                      align='center'
+                      sx={{ fontSize: '12px', padding: 0 }}
+                    >
+                      {row.wd_curr}
+                    </TableCell>
+                    <TableCell
+                      align='center'
+                      sx={{ fontSize: '12px', padding: 0 }}
+                    >
+                      {row.withdrawal}
+                    </TableCell>
+                    <TableCell
+                      align='center'
+                      sx={{ fontSize: '12px', padding: 0 }}
+                    >
+                      {row.trans_cd}
+                    </TableCell>
+                    <TableCell
+                      align='center'
+                      sx={{ fontSize: '12px', padding: 0 }}
+                    >
+                      {row.description}
+                    </TableCell>
+                    <TableCell
+                      align='center'
+                      sx={{ fontSize: '12px', padding: 0 }}
+                    >
+                      {row.trans_amount}
+                    </TableCell>
+                    <TableCell align='center' sx={{ fontSize: '12px' }}>
+                      <Button
+                        width='80px'
+                        fontSize='12px'
+                        onClick={() => {
+                          handleEviModal(row.id);
+                        }}
+                      >
+                        증빙 입력
+                      </Button>
+                    </TableCell>
                   </TableRow>
                 );
               })}
