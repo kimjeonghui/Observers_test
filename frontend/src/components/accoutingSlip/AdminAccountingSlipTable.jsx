@@ -393,7 +393,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell>
+        <TableCell padding='checkbox'>
           <Checkbox
             color='primary'
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -407,7 +407,7 @@ function EnhancedTableHead(props) {
         {headCells.map((headCell) => (
           <TableCell
             key={headCell.id}
-            align='auto 0'
+            align='center'
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
             style={{ minWidth: headCell.minWidth, width: '50px' }}
@@ -495,7 +495,7 @@ function EnhancedTableToolbar(props) {
             withPortal
           />
           <input />
-          <Button style={{ marginLeft: 'auto' }}> 검증</Button>
+          <Button style={{ marginLeft: 'auto' }}> 승인</Button>
         </div>
       )}
 
@@ -512,14 +512,6 @@ function EnhancedTableToolbar(props) {
 
 EnhancedTableToolbar.propTypes = {
   numSelected: PropTypes.number.isRequired,
-};
-const groupBy = (array, key) => {
-  return array.reduce((result, currentValue) => {
-    (result[currentValue[key]] = result[currentValue[key]] || []).push(
-      currentValue
-    );
-    return result;
-  }, {});
 };
 
 export default function AccountingSlipTable(props) {
@@ -572,7 +564,7 @@ export default function AccountingSlipTable(props) {
     setPage(0);
   };
 
-  const isSelected = (tx_num) => selected.indexOf(tx_num) !== -1;
+  const isSelected = (id) => selected.indexOf(id) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -586,19 +578,34 @@ export default function AccountingSlipTable(props) {
       ),
     [order, orderBy, page, rowsPerPage]
   );
-  const groupedVisibleRows = groupBy(visibleRows, 'invoice_num');
+  const groupBy = (array, key) => {
+    return array.reduce((result, currentValue) => {
+      (result[currentValue[key]] = result[currentValue[key]] || []).push(
+        currentValue
+      );
+      return result;
+    }, {});
+  };
+  const groupedVisibleRows = groupBy(visibleRows, 'tx_num');
   return (
     <Box
       sx={{
         width: '100%',
         display: 'flex',
-        justifyContent: 'flex-start', // Change to 'flex-start'
+        flexDirection: 'row', // 가로 방향으로 정렬
+        justifyContent: 'center',
+        alignItems: 'center', // 세로 방향 가운데 정렬
       }}
     >
       <Paper sx={{ width: '95%', overflow: 'hidden', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer sx={{ height: '45vh' }}>
-          <Table stickyHeader aria-label='sticky table'>
+          <Table
+            sx={{ minWidth: 750 }}
+            stickyHeader
+            aria-label='sticky table'
+            size='small'
+          >
             <EnhancedTableHead
               numSelected={selected.length}
               order={order}
@@ -607,97 +614,130 @@ export default function AccountingSlipTable(props) {
               onRequestSort={handleRequestSort}
               rowCount={rows.length}
             />
-            {Object.keys(groupedVisibleRows).map(
-              (invoiceNumGroup, groupIndex) => (
-                <React.Fragment key={`group-${groupIndex}`}>
+            {/* <TableBody>
+              {visibleRows.map((row, index) => {
+                const isItemSelected = isSelected(row.num);
+                const labelId = `enhanced-table-checkbox-${index}`;
+
+                return (
                   <TableRow
-                    sx={{
-                      cursor: 'pointer',
-                      alignItems: 'left',
-                      '&:hover': {
-                        background: '#f5f5f5',
-                      },
-                    }}
+                    hover
+                    onClick={(event) => handleClick(event, row.num)}
+                    role='checkbox'
+                    aria-checked={isItemSelected}
+                    tabIndex={-1}
+                    key={row.num}
+                    selected={isItemSelected}
+                    sx={{ cursor: 'pointer' }}
                   >
-                    <TableCell
-                      colSpan={headCells.length + 1}
-                      sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'left',
-                      }}
-                    >
+                    <TableCell padding='checkbox'>
                       <Checkbox
                         color='primary'
-                        checked={isSelected(invoiceNumGroup)}
-                        onChange={(event) =>
-                          handleClick(event, invoiceNumGroup)
-                        }
+                        checked={isItemSelected}
+                        inputProps={{
+                          'aria-labelledby': labelId,
+                        }}
                       />
-
-                      <Typography
-                        variant='subtitle1'
-                        component='div'
-                        style={{ marginLeft: '8px' }}
-                      >
-                        {`${invoiceNumGroup} 그룹 선택됨`}
+                    </TableCell>
+                    <TableCell align='left'>{row.invoice_num}</TableCell>
+                    <TableCell align='center'>{row.rcdc}</TableCell>
+                    <TableCell align='center'>{row.amount}</TableCell>
+                    <TableCell align='center'>{row.krw_amount}</TableCell>
+                    <TableCell align='center'>{row.excange_rate}</TableCell>
+                    <TableCell align='center'>{row.cost_center}</TableCell>
+                    <TableCell align='center'>{row.account}</TableCell>
+                    <TableCell align='center'>{row.description}</TableCell>
+                    <TableCell align='center'>{row.created_by}</TableCell>
+                    <TableCell align='center'>{row.creation_date}</TableCell>
+                    <TableCell align='center'>{row.group_id}</TableCell>
+                    <TableCell align='center'>{row.tx_num}</TableCell>
+                    <TableCell align='center'>{row.tx_cd}</TableCell>
+                  </TableRow>
+                );
+              })}
+              {emptyRows > 0 && (
+                <TableRow
+                  style={{
+                    height: 43 * emptyRows,
+                  }}
+                >
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody> */}
+            <TableBody>
+              {Object.keys(groupedVisibleRows).map((txNumGroup, groupIndex) => (
+                // 각 tx_num 그룹에 대한 TableRow
+                <React.Fragment key={`group-${groupIndex}`}>
+                  <TableRow sx={{ cursor: 'pointer' }}>
+                    <TableCell colSpan={headCells.length + 1}>
+                      {/* Checkbox를 클릭하면 해당 그룹의 모든 항목이 선택/해제되도록 handleClick 함수 호출 */}
+                      <Checkbox
+                        color='primary'
+                        checked={isSelected(txNumGroup)}
+                        onChange={(event) => handleClick(event, txNumGroup)}
+                      />
+                      <Typography variant='subtitle1' component='div'>
+                        {`${txNumGroup} 그룹 선택됨`}
                       </Typography>
                     </TableCell>
                   </TableRow>
-                  {groupedVisibleRows[invoiceNumGroup].map((row, index) => {
+                  {/* 각 그룹의 행을 렌더링 */}
+                  {groupedVisibleRows[txNumGroup].map((row, index) => {
                     const isItemSelected = isSelected(row.tx_num);
                     const labelId = `enhanced-table-checkbox-${index}`;
 
                     return (
-                      <TableBody>
-                        <TableRow
-                          key={row.tx_num}
-                          hover
-                          onClick={(event) => handleClick(event, row.tx_num)}
-                          role='checkbox'
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          selected={isItemSelected}
-                        >
-                          <TableCell align='center'>
-                            {row.invoice_num}
-                          </TableCell>
-                          <TableCell align='center'>{row.rcdc}</TableCell>
-                          <TableCell align='center'>{row.amount}</TableCell>
-                          <TableCell align='center'>{row.krw_amount}</TableCell>
-                          <TableCell align='center'>
-                            {row.excange_rate}
-                          </TableCell>
-                          <TableCell align='center'>
-                            {row.cost_center}
-                          </TableCell>
-                          <TableCell align='center'>{row.account}</TableCell>
-                          <TableCell align='center'>
-                            {row.description}
-                          </TableCell>
-                          <TableCell align='center'>{row.created_by}</TableCell>
-                          <TableCell align='center'>
-                            {row.creation_date}
-                          </TableCell>
-                          <TableCell align='center'>{row.group_id}</TableCell>
-                          <TableCell align='center'>{row.tx_num}</TableCell>
-                          <TableCell align='center'>{row.tx_cd}</TableCell>
-                        </TableRow>
-                      </TableBody>
+                      <TableRow
+                        hover
+                        onClick={(event) => handleClick(event, row.tx_num)}
+                        role='checkbox'
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={row.tx_num}
+                        selected={isItemSelected}
+                        sx={{ cursor: 'pointer' }}
+                      >
+                        <TableCell padding='checkbox'>
+                          <Checkbox
+                            color='primary'
+                            checked={isItemSelected}
+                            inputProps={{
+                              'aria-labelledby': labelId,
+                            }}
+                          />
+                        </TableCell>
+                        {/* 나머지 TableCell 컴포넌트들은 필요에 따라 수정하세요 */}
+                        <TableCell align='left'>{row.invoice_num}</TableCell>
+                        <TableCell align='center'>{row.rcdc}</TableCell>
+                        <TableCell align='center'>{row.amount}</TableCell>
+                        <TableCell align='center'>{row.krw_amount}</TableCell>
+                        <TableCell align='center'>{row.excange_rate}</TableCell>
+                        <TableCell align='center'>{row.cost_center}</TableCell>
+                        <TableCell align='center'>{row.account}</TableCell>
+                        <TableCell align='center'>{row.description}</TableCell>
+                        <TableCell align='center'>{row.created_by}</TableCell>
+                        <TableCell align='center'>
+                          {row.creation_date}
+                        </TableCell>
+                        <TableCell align='center'>{row.group_id}</TableCell>
+                        <TableCell align='center'>{row.tx_num}</TableCell>
+                        <TableCell align='center'>{row.tx_cd}</TableCell>
+                      </TableRow>
                     );
                   })}
                 </React.Fragment>
-              )
-            )}
-            {emptyRows > 0 && (
-              <TableRow
-                style={{
-                  height: 43 * emptyRows,
-                }}
-              >
-                <TableCell colSpan={headCells.length + 1} />
-              </TableRow>
-            )}
+              ))}
+              {emptyRows > 0 && (
+                <TableRow
+                  style={{
+                    height: 43 * emptyRows,
+                  }}
+                >
+                  <TableCell colSpan={headCells.length + 1} />
+                </TableRow>
+              )}
+            </TableBody>
           </Table>
         </TableContainer>
         <TablePagination

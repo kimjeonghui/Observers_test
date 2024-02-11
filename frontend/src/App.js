@@ -8,7 +8,8 @@ import Receipts from './pages/Receipts';
 import ReceiptsMonth from './pages/ReceiptsMonth';
 import ReceiptsDetail from './pages/ReceiptsDetail';
 import Ocr from './pages/Ocr';
-import AccountingSlip from './pages/AccountingSlip';
+import ManagerAccountingSlip from './pages/ManagerAccountingSlip';
+import AdminAccountingSlip from './pages/AdminAccountingSlip';
 import AdminCode from './pages/AdminCode';
 import AdminOffice from './pages/AdminOffice';
 import Users from './pages/Users';
@@ -28,11 +29,18 @@ function App() {
           <Route path='/receipts/:id' element={<ReceiptsMonth />} />
           <Route path='/receipts/:id/:id' element={<ReceiptsDetail />} />
           <Route path='/ocr' element={<Ocr />} />
-          <Route path='/accounting-slip' element={<AccountingSlip />} />
+          <Route
+            path='/manager/accounting-slip'
+            element={<ManagerAccountingSlip />}
+          />
           <Route path='/admin-code' element={<AdminCode />} />
           <Route path='/admin-office' element={<AdminOffice />} />
           <Route path='/users' element={<Users />} />
           <Route path='/summary' element={<Summary />} />
+          <Route
+            path='/admin/accounting-slip'
+            element={<AdminAccountingSlip />}
+          />
         </Routes>
       </BrowserRouter>
     </div>
