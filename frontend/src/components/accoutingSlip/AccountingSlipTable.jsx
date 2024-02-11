@@ -392,7 +392,7 @@ function EnhancedTableHead(props) {
 
   return (
     <TableHead>
-      <TableRow>
+      <TableRow sx={{ display: 'flex', justifyContent: 'flex-start' }}>
         <TableCell>
           <Checkbox
             color='primary'
@@ -410,7 +410,14 @@ function EnhancedTableHead(props) {
             align='auto 0'
             padding={headCell.disablePadding ? 'none' : 'normal'}
             sortDirection={orderBy === headCell.id ? order : false}
-            style={{ minWidth: headCell.minWidth, width: '50px' }}
+            style={{
+              minWidth: headCell.minWidth,
+              width: '50px',
+              textAlign: 'left',
+              display: 'flex', // Center text horizontally
+              alignItems: 'center', // Center text vertically
+              padding: '8px',
+            }}
           >
             <TableSortLabel
               active={orderBy === headCell.id}
@@ -612,8 +619,10 @@ export default function AccountingSlipTable(props) {
                 <React.Fragment key={`group-${groupIndex}`}>
                   <TableRow
                     sx={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr', // 동일한 열 너비
+                      alignItems: 'stretch', // 수직으로 컨테이너를 채우도록 아이템을 늘립니다.
                       cursor: 'pointer',
-                      alignItems: 'left',
                       '&:hover': {
                         background: '#f5f5f5',
                       },
@@ -624,7 +633,7 @@ export default function AccountingSlipTable(props) {
                       sx={{
                         display: 'flex',
                         flexDirection: 'row',
-                        alignItems: 'left',
+                        alignItems: 'center', // Change to 'center' for vertical alignment
                       }}
                     >
                       <Checkbox
@@ -640,52 +649,61 @@ export default function AccountingSlipTable(props) {
                         component='div'
                         style={{ marginLeft: '8px' }}
                       >
-                        {`${invoiceNumGroup} 그룹 선택됨`}
+                        {`${invoiceNumGroup} `} {/* 그룹 선택됨 */}
                       </Typography>
                     </TableCell>
-                  </TableRow>
-                  {groupedVisibleRows[invoiceNumGroup].map((row, index) => {
-                    const isItemSelected = isSelected(row.tx_num);
-                    const labelId = `enhanced-table-checkbox-${index}`;
 
-                    return (
-                      <TableBody>
-                        <TableRow
-                          key={row.tx_num}
-                          hover
-                          onClick={(event) => handleClick(event, row.tx_num)}
-                          role='checkbox'
-                          aria-checked={isItemSelected}
-                          tabIndex={-1}
-                          selected={isItemSelected}
-                        >
-                          <TableCell align='center'>
-                            {row.invoice_num}
-                          </TableCell>
-                          <TableCell align='center'>{row.rcdc}</TableCell>
-                          <TableCell align='center'>{row.amount}</TableCell>
-                          <TableCell align='center'>{row.krw_amount}</TableCell>
-                          <TableCell align='center'>
-                            {row.excange_rate}
-                          </TableCell>
-                          <TableCell align='center'>
-                            {row.cost_center}
-                          </TableCell>
-                          <TableCell align='center'>{row.account}</TableCell>
-                          <TableCell align='center'>
-                            {row.description}
-                          </TableCell>
-                          <TableCell align='center'>{row.created_by}</TableCell>
-                          <TableCell align='center'>
-                            {row.creation_date}
-                          </TableCell>
-                          <TableCell align='center'>{row.group_id}</TableCell>
-                          <TableCell align='center'>{row.tx_num}</TableCell>
-                          <TableCell align='center'>{row.tx_cd}</TableCell>
-                        </TableRow>
-                      </TableBody>
-                    );
-                  })}
+                    <TableCell
+                      sx={{
+                        borderBottom: 'none',
+                      }}
+                    >
+                      {groupedVisibleRows[invoiceNumGroup].map((row, index) => {
+                        const isItemSelected = isSelected(row.tx_num);
+                        const labelId = `enhanced-table-checkbox-${index}`;
+
+                        return (
+                          <TableRow
+                            key={row.tx_num}
+                            hover
+                            onClick={(event) => handleClick(event, row.tx_num)}
+                            role='checkbox'
+                            aria-checked={isItemSelected}
+                            tabIndex={-1}
+                            selected={isItemSelected}
+                          >
+                            <TableCell align='center'>
+                              {row.invoice_num}
+                            </TableCell>
+                            <TableCell align='center'>{row.rcdc}</TableCell>
+                            <TableCell align='center'>{row.amount}</TableCell>
+                            <TableCell align='center'>
+                              {row.krw_amount}
+                            </TableCell>
+                            <TableCell align='center'>
+                              {row.excange_rate}
+                            </TableCell>
+                            <TableCell align='center'>
+                              {row.cost_center}
+                            </TableCell>
+                            <TableCell align='center'>{row.account}</TableCell>
+                            <TableCell align='center'>
+                              {row.description}
+                            </TableCell>
+                            <TableCell align='center'>
+                              {row.created_by}
+                            </TableCell>
+                            <TableCell align='center'>
+                              {row.creation_date}
+                            </TableCell>
+                            <TableCell align='center'>{row.group_id}</TableCell>
+                            <TableCell align='center'>{row.tx_num}</TableCell>
+                            <TableCell align='center'>{row.tx_cd}</TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableCell>
+                  </TableRow>
                 </React.Fragment>
               )
             )}
