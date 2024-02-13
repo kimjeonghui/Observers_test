@@ -4,6 +4,8 @@ import { alpha } from '@mui/material/styles';
 import DatePicker from 'react-datepicker';
 import Button from '../global/Button';
 import 'react-datepicker/dist/react-datepicker.css';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {
   Box,
   Table,
@@ -25,6 +27,8 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
+import { useTheme } from '@emotion/react';
+import AccountingSlipSearch from './AccountingSlipSearch';
 
 const rows = [
   {
@@ -575,6 +579,7 @@ export default function AccountingSlipTable(props) {
   const [dateRange, setDateRange] = useState([null, null]);
   //dateRange 변수를 startDate와 endDate 프로퍼티로 전달
   const [startDate, endDate] = dateRange;
+  const theme = useTheme();
 
   const onClickPreBtn = () => {
     setCurrentMonth((prevMonth) => (prevMonth - 1 + 12) % 12 || 12);
@@ -602,26 +607,39 @@ export default function AccountingSlipTable(props) {
           marginTop: '16px',
         }}
       >
-        <Button onClick={onClickPreBtn} size='md'>
-          &lt;
+        <Button
+          onClick={onClickPreBtn}
+          width='50px'
+          color={theme.palette.posco_white}
+          fontColor={theme.palette.posco_black}
+          hoverColor={theme.palette.posco_gray_100}
+        >
+          <ChevronLeftIcon></ChevronLeftIcon>
         </Button>
         <Typography sx={{ paddingX: '32px', fontSize: '28px' }}>
           {currentMonth}
         </Typography>
-        <Button onClick={onClickNextBtn} size='md'>
-          &gt;
+        <Button
+          onClick={onClickNextBtn}
+          width='50px'
+          color={theme.palette.posco_white}
+          fontColor={theme.palette.posco_black}
+          hoverColor={theme.palette.posco_gray_100}
+        >
+          <ChevronRightIcon></ChevronRightIcon>
         </Button>
-        <div style={{ height: '20px' }} />
       </div>
+      <div style={{ height: '20px' }} />
+      <div></div>
       <div
         style={{
           display: 'flex',
-          flexDirection: 'row',
-          gap: '16px',
-          marginLeft: 'auto',
+          alignItems: 'flex-start',
+          marginRight: ' auto',
         }}
       >
         <DatePicker
+          showIcon
           selectsRange={true}
           startDate={startDate}
           endDate={endDate}
@@ -629,14 +647,10 @@ export default function AccountingSlipTable(props) {
             setDateRange(update);
           }}
           withPortal
+          className='datepicker'
         />
-        <input />
+        <AccountingSlipSearch />
       </div>
-      <Button size='sm' style={{ marginLeft: 'auto' }}>
-        {' '}
-        검증
-      </Button>
-
       <Paper sx={{ width: '100%', overflow: 'hidden', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer sx={{ height: '60vh' }}>
@@ -778,6 +792,18 @@ export default function AccountingSlipTable(props) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '16px',
+          alignItems: 'center',
+        }}
+      >
+        <Button width='120px' style={{ marginLeft: 'auto' }}>
+          검증
+        </Button>
+      </div>
     </Box>
   );
 }

@@ -23,18 +23,8 @@ export default function AccountingSlip(props) {
   const [startDate, endDate] = dateRange;
 
   return (
-    <div>
-      <div
-      // style={{
-      //   display: 'flex',
-      //   flexDirection: 'row',
-      //   justifyContent: 'space-between',
-      //   alignItems: 'center',
-      //   width: '300px',
-      //   margin: '0 auto',
-      // }
-      // }
-      >
+    <div style={{ padding: '10px 36px' }}>
+      <div>
         {tabMenus.map((tab, idx) =>
           idx === activeTab ? (
             <ActiveSpanTab key={idx} onClick={() => handleTabChange(idx)}>

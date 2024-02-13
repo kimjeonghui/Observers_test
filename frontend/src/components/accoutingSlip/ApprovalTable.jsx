@@ -326,7 +326,7 @@ export default function StickyHeadTable() {
   return (
     <Box>
       <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '20px' }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
+        <TableContainer sx={{ maxHeight: 600 }}>
           <Table stickyHeader aria-label='sticky table'>
             <TableHead>
               <TableRow>
@@ -387,8 +387,8 @@ export default function StickyHeadTable() {
           marginTop: '20px', // 원하는 margin-top 값 설정
         }}
       >
-        <ButtonComponent size='md'>승인</ButtonComponent>
-        <ButtonComponent size='md'>반려</ButtonComponent>
+        <ButtonComponent width='120px'>승인</ButtonComponent>
+        <ButtonComponent width='120px'>반려</ButtonComponent>
       </div>
     </Box>
   );
