@@ -35,8 +35,8 @@ function Sidebar(props) {
   ]);
   const [userPages, setUserPages] = useState([
     { name: '당월 자료 입력', address: '/invoice', status: false },
-    { name: '월 총괄표', address: '/accounting-slip', status: false },
-    { name: '회계전표', address: '/summary', status: false },
+    { name: '월 총괄표', address: '/summary', status: false },
+    { name: '회계전표', address: '/accounting-slip', status: false },
     { name: '대시보드', address: '/ocr', status: false },
     { name: '증빙자료관리', address: '/receipts', status: false },
   ]);
@@ -68,7 +68,7 @@ function Sidebar(props) {
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
       <AppBar
-        position='fixed'
+        position='sticky'
         open={open}
         sx={{
           backgroundColor: theme.palette.posco_lg_100,
