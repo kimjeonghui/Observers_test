@@ -28,7 +28,7 @@ export const theme = createTheme({
     posco_gray_500: '#4B5151',
     posco_gray_700: '#383F3F',
     posco_gray_900: '#282E2E',
-    posco_lg_100: '#E7E7E7',
+    posco_lg_100: '#F5F6FA',
     posco_lg_300: '#D7D7D7',
     posco_lg_500: '#BDBDBA',
     posco_lg_700: '#B0B0B0',

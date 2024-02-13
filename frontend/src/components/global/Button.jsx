@@ -19,7 +19,8 @@ const CustomButton = styled(
     }};
     width: ${({ width }) => width};
     padding: ${({ width }) => !width && '0 30px'};
-    font-size: ${({ size }) => {
+    font-size: ${({ size, fontSize }) => {
+      if (fontSize) return fontSize;
       if (size === 'sm') return '14px';
       if (size === 'md') return '18px';
       if (size === 'lg') return '24px';
@@ -36,7 +37,8 @@ const CustomButton = styled(
 `;
 
 export default function ButtonComponent(props) {
-  const { color, fontColor, size, hoverColor, width, ...rest } = props;
+  const { color, fontColor, size, hoverColor, width, fontSize, ...rest } =
+    props;
   return (
     <CustomButton
       color={color}
@@ -44,6 +46,7 @@ export default function ButtonComponent(props) {
       hoverColor={hoverColor}
       size={size}
       width={width}
+      fontSize={fontSize}
       {...rest}
     >
       {props.children}

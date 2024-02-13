@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import InvoiceTable from '../components/invoice/InvoiceTable';
 import InvoiceExcel from '../components/invoice/InvoiceExcel';
 import { SpanTab, ActiveSpanTab } from '../components/invoice/InvoiceStyles';
-import SearchInput from '../components/global/SearchInput';
+
+import InvoiceSearch from '../components/invoice/InvoiceSearch';
 export default function Invoice(props) {
   const [activeTab, setActiveTab] = useState(0);
   const tabMenus = ['당월 입력 조회', '엑셀 입력'];
@@ -11,7 +12,7 @@ export default function Invoice(props) {
     setActiveTab(idx);
   };
   return (
-    <div>
+    <div style={{ padding: '10px 36px' }}>
       <div>
         {tabMenus.map((tab, idx) =>
           idx === activeTab ? (
@@ -27,12 +28,7 @@ export default function Invoice(props) {
       </div>
       {activeTab === 0 ? (
         <div>
-          <SearchInput
-            leftRadius={0}
-            rightRadius={15}
-            width='300px'
-            height='40px'
-          />
+          <InvoiceSearch />
           <InvoiceTable />
         </div>
       ) : (
