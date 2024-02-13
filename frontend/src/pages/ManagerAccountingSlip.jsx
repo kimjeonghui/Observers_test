@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import AccountingSlipTable from '../components/accoutingSlip/AccountingSlipTable';
+import AccountingSlipTable from '../components/accoutingSlip/AfterConfirmAccountingSlipTable';
 import ApprovalTable from '../components/accoutingSlip/ApprovalTable';
 import {
   SpanTab,
