@@ -7,9 +7,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import ButtonComponent from '../global/Button';
+import ConfirmRejectBtn from './ManagerConfirmRejectBtn';
 import { Box } from '@mui/material';
-
+import UserConfirmBtn from './UserConfirmBtn';
 const columns = [
   {
     id: 'ovs_cd',
@@ -326,7 +326,7 @@ export default function StickyHeadTable() {
   return (
     <Box>
       <Paper sx={{ width: '100%', overflow: 'hidden', marginTop: '20px' }}>
-        <TableContainer sx={{ maxHeight: 440 }}>
+        <TableContainer sx={{ maxHeight: 600 }}>
           <Table stickyHeader aria-label='sticky table'>
             <TableHead>
               <TableRow>
@@ -386,10 +386,9 @@ export default function StickyHeadTable() {
           margin: '0 auto', // 가운데 정렬을 위한 자동 마진
           marginTop: '20px', // 원하는 margin-top 값 설정
         }}
-      >
-        <ButtonComponent size='md'>승인</ButtonComponent>
-        <ButtonComponent size='md'>반려</ButtonComponent>
-      </div>
+      />
+      <ConfirmRejectBtn />
+      <UserConfirmBtn />
     </Box>
   );
 }

@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import AccountingSlipTable from '../components/accoutingSlip/AccountingSlipTable';
-import ApprovalTable from '../components/accoutingSlip/ApprovalTable';
+import AdminAccountingSlipTable from '../components/accoutingSlip/AdminAccountingSlipTable';
+import AdminApprovalTable from '../components/accoutingSlip/ApprovalTable';
 import {
   SpanTab,
   ActiveSpanTab,
 } from '../components/accoutingSlip/AccountingSlipStyles';
+import AccountingSlipTable from '../components/accoutingSlip/AccountingSlipTable';
 
 export default function AccountingSlip(props) {
   const [activeTab, setActiveTab] = useState(0);
@@ -23,18 +24,8 @@ export default function AccountingSlip(props) {
   const [startDate, endDate] = dateRange;
 
   return (
-    <div>
-      <div
-      // style={{
-      //   display: 'flex',
-      //   flexDirection: 'row',
-      //   justifyContent: 'space-between',
-      //   alignItems: 'center',
-      //   width: '300px',
-      //   margin: '0 auto',
-      // }
-      // }
-      >
+    <div style={{ padding: '10px 36px' }}>
+      <div>
         {tabMenus.map((tab, idx) =>
           idx === activeTab ? (
             <ActiveSpanTab key={idx} onClick={() => handleTabChange(idx)}>
@@ -47,8 +38,12 @@ export default function AccountingSlip(props) {
           )
         )}
       </div>
-      {activeTab === 0 && <ApprovalTable />}
-      {activeTab === 1 && <AccountingSlipTable />}
+      {activeTab === 0 && <AdminApprovalTable />}
+      {activeTab === 1 && (
+        <div>
+          <AdminAccountingSlipTable /> <AccountingSlipTable />
+        </div>
+      )}
     </div>
   );
 }
