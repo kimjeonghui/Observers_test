@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useNavigate } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import Home from './pages/Home';
@@ -17,11 +17,13 @@ import Summary from './pages/Summary';
 import Navbar from './components/global/Navbar';
 
 function App() {
+  const isLoginPage = window.location.pathname === '/login';
   return (
-    <div className='App'>
-      <BrowserRouter>
+    <BrowserRouter>
+      <div className='App'>
+        {!isLoginPage && <Navbar />}
+
         <Routes>
-          <Route element={<Navbar />} />
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/invoice' element={<Invoice />} />
@@ -42,8 +44,8 @@ function App() {
             element={<AdminAccountingSlip />}
           />
         </Routes>
-      </BrowserRouter>
-    </div>
+      </div>
+    </BrowserRouter>
   );
 }
 

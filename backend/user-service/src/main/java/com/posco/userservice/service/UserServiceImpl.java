@@ -30,7 +30,8 @@ public class UserServiceImpl implements UserService{
         UserEntity userEntity = UserEntity.builder()
                 .name(registerDTO.getName())
                 .description(registerDTO.getName())
-                .password(passwordEncoder.encode(registerDTO.getPassword()))
+//                .password(passwordEncoder.encode(registerDTO.getPassword()))
+                .password(registerDTO.getPassword())
                 .email(registerDTO.getEmail())
                 .ovsCd(registerDTO.getOvsCd())
                 .role(registerDTO.getRole())
@@ -61,10 +62,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public TokenDTO loginUser(LoginDTO loginDTO) {
         UserEntity userEntity = userRepository.findById(loginDTO.getName()).orElseThrow();
-        if(!passwordEncoder.matches(loginDTO.getPassword(), userEntity.getPassword())){
+//        if(!passwordEncoder.matches(loginDTO.getPassword(), userEntity.getPassword())){
+//            return null;
+//        }
+        if(!loginDTO.getPassword().equals(userEntity.getPassword())){
             return null;
         }
-
         String accessToken = jwtTokenProvider.createAccessToken(userEntity);
         String refreshToken = jwtTokenProvider.createRefreshToken(userEntity.getName());
 

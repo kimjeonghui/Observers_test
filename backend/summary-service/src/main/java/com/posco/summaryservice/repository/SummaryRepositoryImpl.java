@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @RequiredArgsConstructor
 @Repository
 @Slf4j
-public class UserRepositoryImpl implements UserRepositoryCustom{
+public class SummaryRepositoryImpl implements SummaryRepositoryCustom {
     private final JPAQueryFactory queryFactory;
     @Override
     public Long updateDescriptionByName(String name, String description) {
