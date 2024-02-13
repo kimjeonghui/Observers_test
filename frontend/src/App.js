@@ -8,6 +8,7 @@ import Receipts from './pages/Receipts';
 import ReceiptsMonth from './pages/ReceiptsMonth';
 import ReceiptsDetail from './pages/ReceiptsDetail';
 import Ocr from './pages/Ocr';
+import OcrCall from './pages/OcrCall';
 import ManagerAccountingSlip from './pages/AccountingSlip';
 import AccountingSlip from './pages/AccountingSlip';
 import AdminCode from './pages/AdminCode';
@@ -32,6 +33,7 @@ function App() {
           <Route path='/receipts/:id' element={<ReceiptsMonth />} />
           <Route path='/receipts/:id/:id' element={<ReceiptsDetail />} />
           <Route path='/ocr' element={<Ocr />} />
+          <Route path='/ocr-call' element={<OcrCall />} />
           <Route
             path='/manager/accounting-slip'
             element={<ManagerAccountingSlip />}

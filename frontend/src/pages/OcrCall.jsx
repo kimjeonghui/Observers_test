@@ -1,0 +1,116 @@
+import React, { useState } from 'react';
+import axios from 'axios';
+
+function Ocr() {
+  const [postResponse, setPostResponse] = useState('');
+  const [resultId, setResultId] = useState('');
+  const [getResponse, setGetResponse] = useState(null);
+  const [base64Image, setBase64Image] = useState('');
+  const [base64String, setBase64String] = useState('');
+
+  const handleImageUpload = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+
+      reader.onloadend = () => {
+        const base64String = reader.result;
+        setBase64Image(base64String);
+        setBase64String(base64String);
+      };
+
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handlePostRequest = () => {
+    const apiUrl =
+      'https://poscodx7-observers.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-receipt:analyze?api-version=2023-07-31';
+    const requestBody = {
+      base64Source: `${base64String.split(',')[1]}`,
+    };
+
+    axios
+      .post(apiUrl, requestBody, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Ocp-Apim-Subscription-Key': '06c6520948814f45a4d457e97158af35',
+        },
+      })
+      .then((response) => {
+        console.log('POST 요청 성공:', response.headers);
+
+        // 응답 헤더에서 operation-location 값을 추출
+        const operationLocation = response.headers['operation-location'];
+        if (operationLocation) {
+          const operationId = extractOperationIdFromLocation(operationLocation);
+          console.log('추출된 operationId:', operationId);
+          setResultId(operationId);
+        } else {
+          console.warn('operation-location 헤더를 찾을 수 없습니다.');
+        }
+
+        // 성공한 경우 원하는 동작을 추가하세요.
+        setPostResponse('POST 요청 성공');
+      })
+      .catch((error) => {
+        console.error('POST 요청 실패:', error);
+        // 실패한 경우 원하는 동작을 추가하세요.
+        setPostResponse('POST 요청 실패');
+      });
+  };
+
+  const handleGetRequest = () => {
+    const apiUrl = `https://poscodx7-observers.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-receipt/analyzeResults/${resultId}?api-version=2023-07-31`;
+
+    axios
+      .get(apiUrl, {
+        headers: {
+          'Ocp-Apim-Subscription-Key': '06c6520948814f45a4d457e97158af35',
+        },
+      })
+      .then((response) => {
+        console.log('GET 요청 성공:', response.data);
+        setGetResponse(response.data);
+      })
+      .catch((error) => {
+        console.error('GET 요청 실패:', error);
+      });
+  };
+
+  // operation-location에서 operationId를 추출하는 함수
+  const extractOperationIdFromLocation = (location) => {
+    const regex = /\/([^\/?]+)\?/;
+    const match = location.match(regex);
+    return match ? match[1] : '';
+  };
+
+  return (
+    <div style={{ padding: '20px', display: 'flex', flexDirection: 'row' }}>
+      <input type='file' onChange={handleImageUpload} />
+
+      {base64Image && (
+        <div>
+          <img src={base64Image} alt='Uploaded' />
+        </div>
+      )}
+
+      <div>
+        <button onClick={handlePostRequest}>POST 요청 보내기</button>
+        <p>{postResponse}</p>
+        <p>{resultId}</p>
+      </div>
+
+      <button onClick={handleGetRequest}>GET 요청 보내기</button>
+      {getResponse && (
+        <div>
+          <h2>응답 데이터:</h2>
+          <pre>{JSON.stringify(getResponse, null, 2)}</pre>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default Ocr;
