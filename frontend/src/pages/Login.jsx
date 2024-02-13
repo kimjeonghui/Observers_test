@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { Box } from '@mui/system';
 
 import requests from '../api/config';
 import { defaultApi } from '../api/axios';
 
-import LoginBgImg from '../assets/loginBg.png';
+import LoginBgImg from '../assets/login_bg.png';
 import Container from '../components/global/Container';
 import Input from '../components/global/Input';
 import Button from '../components/global/Button';
+import Logo from '../components/global/Logo';
 
 const LoginBg = styled.div`
   width: 100vw;
@@ -46,15 +46,16 @@ export default function Login(props) {
   return (
     <div>
       <LoginBg>
-        <Container width='30' height='60'>
-          <Box
-            sx={{
+        <Container width='35' height='60'>
+          <Logo height='50px' />
+          <div
+            style={{
               height: '50%',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
               alignItems: 'center',
-              mt: '15vh',
+              margin: 'auto 0',
             }}
           >
             <Input
@@ -63,6 +64,7 @@ export default function Login(props) {
               label='아이디'
               value={name}
               onChange={onChangeName}
+              sx={{ mb: '24px' }}
             />
             <Input
               widthV='20'
@@ -70,12 +72,13 @@ export default function Login(props) {
               label='비밀번호'
               value={password}
               onChange={onChangePassword}
+              sx={{ mb: '60px' }}
             />
-            <br />
+
             <Button size='lg' width='70%' onClick={handleLogin}>
               로그인
             </Button>
-          </Box>
+          </div>
         </Container>
       </LoginBg>
     </div>
