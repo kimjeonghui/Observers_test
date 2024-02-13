@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
+// CreatedBy와 LastModifiedBy를 위한 파일
 @RequiredArgsConstructor
 @Component
 public class LoginUserAuditorAware implements AuditorAware<String> {
@@ -14,7 +15,7 @@ public class LoginUserAuditorAware implements AuditorAware<String> {
     private final HttpSession httpSession;
     @Override
     public Optional<String> getCurrentAuditor() {
-        UserEntity user = (UserEntity) httpSession.getAttribute("user");
+        SummaryEntity user = (SummaryEntity) httpSession.getAttribute("user");
         if(user==null) return null;
         return Optional.ofNullable(user.getName());
     }

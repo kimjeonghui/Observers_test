@@ -2,6 +2,7 @@ package com.posco.summaryservice.util;
 
 import com.posco.summaryservice.dto.response.UserDTO;
 import com.posco.summaryservice.entity.UserEntity;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -86,16 +87,16 @@ public class JwtTokenProvider {
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             log.info("유효하지 않은 토큰입니다.", e);
-            throw new JwtException("유효하지 않은 토큰입니다.", HttpStatus.UNAUTHORIZED);
+            throw new io.jsonwebtoken.JwtException("유효하지 않은 토큰입니다.");
         } catch (ExpiredJwtException e) {
             log.info("만료된 토큰입니다.", e);
-            throw new JwtException("만료된 토큰입니다.", HttpStatus.FORBIDDEN);
+            throw new io.jsonwebtoken.JwtException("만료된 토큰입니다.");
         } catch (UnsupportedJwtException e) {
             log.info("지원하지 않는 토큰입니다.", e);
-            throw new JwtException("지원하지 않는 토큰입니다.", HttpStatus.UNAUTHORIZED);
+            throw new io.jsonwebtoken.JwtException("지원하지 않는 토큰입니다.");
         } catch (IllegalArgumentException e) {
             log.info("토큰의 클레임이 비어있습니다", e);
-            throw new JwtException("토큰의 클레임이 비어있습니다", HttpStatus.PRECONDITION_FAILED);
+            throw new JwtException("토큰의 클레임이 비어있습니다");
         }
     }
 
