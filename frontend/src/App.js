@@ -14,14 +14,15 @@ import AdminCode from './pages/AdminCode';
 import AdminOffice from './pages/AdminOffice';
 import Users from './pages/Users';
 import Summary from './pages/Summary';
-import Navbar from './components/global/Navbar';
+
+import Sidebar from './components/global/Sidebar';
 
 function App() {
   const isLoginPage = window.location.pathname === '/login';
   return (
     <BrowserRouter>
       <div className='App'>
-        {!isLoginPage && <Navbar />}
+        {!isLoginPage && <Sidebar />}
 
         <Routes>
           <Route path='/' element={<Home />} />
