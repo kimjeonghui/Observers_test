@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import * as React from 'react';
 import { BarChart, PieChart } from '@mui/x-charts';
 import { axisClasses } from '@mui/x-charts';
 
