@@ -15,7 +15,7 @@ public class LoginUserAuditorAware implements AuditorAware<String> {
     private final HttpSession httpSession;
     @Override
     public Optional<String> getCurrentAuditor() {
-        SummaryEntity user = (SummaryEntity) httpSession.getAttribute("user");
+        UserEntity user = (UserEntity) httpSession.getAttribute("user");
         if(user==null) return null;
         return Optional.ofNullable(user.getName());
     }
