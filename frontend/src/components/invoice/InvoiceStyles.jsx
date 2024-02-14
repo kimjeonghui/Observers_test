@@ -13,3 +13,13 @@ export const ActiveSpanTab = styled.span`
   font-weight: 700;
   cursor: pointer;
 `;
+
+export const ModalStrokeBtn = styled.span`
+  width: ${(props) => props.width};
+  height: ${(props) => props.height};
+  border-radius: 15px;
+  border: 1px solid ${(props) => props.theme.palette.posco_lg_500};
+  &:hover {
+    border: 2px solid ${(props) => props.theme.palette.posco_blue_500};
+  }
+`;
