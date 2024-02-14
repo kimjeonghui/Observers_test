@@ -87,12 +87,16 @@ function Ocr() {
   };
 
   return (
-    <div style={{ padding: '20px', display: 'flex', flexDirection: 'row' }}>
+    <div style={{ padding: '20px', display: 'flow', flexDirection: 'row' }}>
       <input type='file' onChange={handleImageUpload} />
 
       {base64Image && (
         <div>
-          <img src={base64Image} alt='Uploaded' />
+          <img
+            src={base64Image}
+            style={{ height: '400px', width: '350px' }}
+            alt='Uploaded'
+          />
         </div>
       )}
 
