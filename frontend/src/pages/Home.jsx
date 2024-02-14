@@ -1,39 +1,14 @@
-import React from 'react';
-
-import { Bg } from '../components/global/GlobalStyles';
-import CustomContainer from '../components/global/Container';
-import { Routes, Route } from 'react-router-dom';
-import Invoice from './Invoice';
-import Ocr from './Ocr';
-import AccountingSlip from './AccountingSlip';
-import AdminCode from './AdminCode';
-import AdminOffice from './AdminOffice';
-import Receipts from './Receipts';
-import ReceiptsMonth from './ReceiptsMonth';
-import ReceiptsDetail from './ReceiptsDetail';
-import Users from './Users';
-import Summary from './Summary';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home(props) {
-  return (
-    <div>
-      <Bg>
-        <CustomContainer width='80' height='78'>
-          <Routes>
-            <Route path='/' element={<h1>Home Page</h1>} />
-            <Route path='/invoice' element={<Invoice />} />
-            <Route path='/receipts' element={<Receipts />} />
-            <Route path='/receipts/:id' element={<ReceiptsMonth />} />
-            <Route path='/receipts/:id/:id' element={<ReceiptsDetail />} />
-            <Route path='/ocr' element={<Ocr />} />
-            <Route path='/accounting-slip' element={<AccountingSlip />} />
-            <Route path='/admin-code' element={<AdminCode />} />
-            <Route path='/admin-office' element={<AdminOffice />} />
-            <Route path='/users' element={<Users />} />
-            <Route path='/summary' element={<Summary />} />
-          </Routes>
-        </CustomContainer>
-      </Bg>
-    </div>
-  );
+  const navigate = useNavigate();
+  // 로그인한 사람에 따라 href 해주기
+  useEffect(() => {
+    // 유저정보가 없을때 navigate('/login);
+    //if(관리자일때) navigate('/summary');
+    //else navigate('/invoice');
+  }, []);
+
+  return <div>홈입니다.</div>;
 }
