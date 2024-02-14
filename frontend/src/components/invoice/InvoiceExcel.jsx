@@ -1,96 +1,6 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState } from 'react';
 import Spreadsheet from 'react-spreadsheet';
 import Button from '../global/Button';
-import classnames from 'classnames';
-
-const HEIGHT = 30;
-const WIDTH = 96;
-
-const CustomCell = ({
-  column,
-  row,
-  setCellDimensions,
-  select,
-  activate,
-  mode,
-  dragging,
-  active,
-  data,
-  evaluatedData,
-  DataViewer,
-  setCellData,
-}) => {
-  const rootRef = useRef(null);
-
-  useEffect(() => {
-    setCellDimensions(
-      { row, column },
-      {
-        height: HEIGHT,
-        width: WIDTH,
-        left: WIDTH * (column + 1),
-        top: HEIGHT * (row + 1),
-      }
-    );
-  }, [setCellDimensions, column, row]);
-
-  useEffect(() => {
-    if (rootRef.current && active && mode === 'view') {
-      rootRef.current.focus();
-    }
-  }, [rootRef, active, mode]);
-
-  const handleMouseDown = useCallback(
-    (event) => {
-      if (mode === 'view') {
-        if (event.shiftKey) {
-          select({ row, column });
-          return;
-        }
-
-        activate({ row, column });
-      }
-    },
-    [select, activate, column, mode, row]
-  );
-
-  const handleMouseOver = useCallback(() => {
-    if (dragging) {
-      select({ row, column });
-    }
-  }, [dragging, select, column, row]);
-
-  if (data && data.DataViewer) {
-    ({ DataViewer, ...data } = data);
-  }
-
-  return (
-    <td
-      ref={rootRef}
-      className={classnames(
-        'Spreadsheet__cell',
-        data && data.readOnly && 'Spreadsheet__cell--readonly',
-        data && data.className
-      )}
-      style={{
-        height: HEIGHT + 'px',
-        width: WIDTH + 'px',
-        fontSize: '12px',
-      }}
-      tabIndex={0}
-      onMouseOver={handleMouseOver}
-      onMouseDown={handleMouseDown}
-    >
-      <DataViewer
-        row={row}
-        column={column}
-        cell={data}
-        evaluatedCell={evaluatedData}
-        setCellData={setCellData}
-      />
-    </td>
-  );
-};
 
 export default function InvoiceExcel(props) {
   const columnLabels = [
@@ -142,7 +52,6 @@ export default function InvoiceExcel(props) {
           columnLabels={columnLabels}
           data={data}
           onChange={setData}
-          Cell={CustomCell}
         />
       </div>
     </div>
