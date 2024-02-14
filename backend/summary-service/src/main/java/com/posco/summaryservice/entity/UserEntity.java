@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @Getter
 @Entity
-@Table(name="users")
+@Table(name="pos_ovs_users")
 public class UserEntity extends BaseEntity{
     @Id
     @Column(nullable = false)

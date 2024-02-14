@@ -1,5 +1,10 @@
 package com.posco.summaryservice.repository;
 
+import com.posco.summaryservice.entity.SummaryEntity;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
 public interface SummaryRepositoryCustom {
-    Long updateDescriptionByName(String name, String description);
+//    SummaryEntity findAllByYearMonth(LocalDateTime dateTime);
 }

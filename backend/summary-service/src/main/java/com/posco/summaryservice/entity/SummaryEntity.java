@@ -8,42 +8,26 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Getter
 @Entity
-@Table(name="summaries")
+@Table(name="pos_ovs_period_summaries")
 public class SummaryEntity extends BaseEntity{
     @Id
-    @Column(nullable = false)
-    private String name;                // 사번
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long summaryId;
 
     @Column(nullable = false)
-    private String description;         // 사용자 이름
+    private String ovsCd;
 
     @Column(nullable = false)
-    private String password;            // 비밀 번호
+    private LocalDateTime fiscalMonth;
 
-    @Column(nullable = false)
-    private String email;               // 이메일
-
-    @Column
-    private String ovsCd;               // 사무소 코드
-
-    @Column(updatable = false)
-    @CreatedDate
-    private LocalDateTime startDate;    // 입사일
-
-    @Column
-    private LocalDateTime endDate;      // 퇴사일
-
-    @Column
-    private String role;                // 권한
-
-    @Column
-    private String refreshToken;        // 토큰
-
+    @OneToMany(mappedBy = "summaryEntity", cascade = CascadeType.REMOVE)
+    private List<SummaryContentsEntity> summaryContentsEntityList;
 }
 

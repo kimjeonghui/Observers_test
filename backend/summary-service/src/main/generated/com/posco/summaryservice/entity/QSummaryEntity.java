@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -27,11 +28,7 @@ public class QSummaryEntity extends EntityPathBase<SummaryEntity> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
-    public final StringPath description = createString("description");
-
-    public final StringPath email = createString("email");
-
-    public final DateTimePath<java.time.LocalDateTime> endDate = createDateTime("endDate", java.time.LocalDateTime.class);
+    public final DateTimePath<java.time.LocalDateTime> fiscalMonth = createDateTime("fiscalMonth", java.time.LocalDateTime.class);
 
     //inherited
     public final StringPath lastModifiedBy = _super.lastModifiedBy;
@@ -39,17 +36,11 @@ public class QSummaryEntity extends EntityPathBase<SummaryEntity> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastUpdatedDate = _super.lastUpdatedDate;
 
-    public final StringPath name = createString("name");
-
     public final StringPath ovsCd = createString("ovsCd");
 
-    public final StringPath password = createString("password");
+    public final ListPath<SummaryContentsEntity, QSummaryContentsEntity> summaryContentsEntityList = this.<SummaryContentsEntity, QSummaryContentsEntity>createList("summaryContentsEntityList", SummaryContentsEntity.class, QSummaryContentsEntity.class, PathInits.DIRECT2);
 
-    public final StringPath refreshToken = createString("refreshToken");
-
-    public final StringPath role = createString("role");
-
-    public final DateTimePath<java.time.LocalDateTime> startDate = createDateTime("startDate", java.time.LocalDateTime.class);
+    public final NumberPath<Long> summaryId = createNumber("summaryId", Long.class);
 
     public QSummaryEntity(String variable) {
         super(SummaryEntity.class, forVariable(variable));
