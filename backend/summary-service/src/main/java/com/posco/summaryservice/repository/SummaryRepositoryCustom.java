@@ -1,5 +1,5 @@
 package com.posco.summaryservice.repository;
 
-public interface UserRepositoryCustom {
+public interface SummaryRepositoryCustom {
     Long updateDescriptionByName(String name, String description);
 }

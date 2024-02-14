@@ -19,6 +19,7 @@ import {
   Toolbar,
   Typography,
   Paper,
+  Checkbox,
   IconButton,
   Tooltip,
   TextField,
@@ -408,6 +409,17 @@ function EnhancedTableHead(props) {
         zIndex: 1,
       }}
     >
+      <TableCell>
+        <Checkbox
+          color='primary'
+          indeterminate={numSelected > 0 && numSelected < rowCount}
+          checked={rowCount > 0 && numSelected === rowCount}
+          onChange={onSelectAllClick}
+          inputProps={{
+            'aria-label': 'select all desserts',
+          }}
+        />
+      </TableCell>
       {headCells.map((headCell) => (
         <TableCell
           key={headCell.id}
@@ -512,6 +524,34 @@ export default function AccountingSlipTable(props) {
     setOrderBy(property);
   };
 
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelected = rows.map((n) => n.id);
+      setSelected(newSelected);
+      return;
+    }
+    setSelected([]);
+  };
+
+  const handleClick = (event, id) => {
+    const selectedIndex = selected.indexOf(id);
+    let newSelected = [];
+
+    if (selectedIndex === -1) {
+      newSelected = newSelected.concat(selected, id);
+    } else if (selectedIndex === 0) {
+      newSelected = newSelected.concat(selected.slice(1));
+    } else if (selectedIndex === selected.length - 1) {
+      newSelected = newSelected.concat(selected.slice(0, -1));
+    } else if (selectedIndex > 0) {
+      newSelected = newSelected.concat(
+        selected.slice(0, selectedIndex),
+        selected.slice(selectedIndex + 1)
+      );
+    }
+    setSelected(newSelected);
+  };
+
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -520,6 +560,8 @@ export default function AccountingSlipTable(props) {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  const isSelected = (tx_num) => selected.indexOf(tx_num) !== -1;
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -632,6 +674,7 @@ export default function AccountingSlipTable(props) {
                   numSelected={selected.length}
                   order={order}
                   orderBy={orderBy}
+                  onSelectAllClick={handleSelectAllClick}
                   onRequestSort={handleRequestSort}
                   rowCount={rows.length}
                 />
@@ -662,6 +705,14 @@ export default function AccountingSlipTable(props) {
                           alignItems: 'center', // Change to 'center' for vertical alignment
                         }}
                       >
+                        <Checkbox
+                          color='primary'
+                          checked={isSelected(invoiceNumGroup)}
+                          onChange={(event) =>
+                            handleClick(event, invoiceNumGroup)
+                          }
+                        />
+
                         <Typography
                           variant='subtitle1'
                           component='div'
@@ -672,8 +723,19 @@ export default function AccountingSlipTable(props) {
                       </TableCell>
 
                       {groupedVisibleRows[invoiceNumGroup].map((row, index) => {
+                        const isItemSelected = isSelected(row.tx_num);
+                        const labelId = `enhanced-table-checkbox-${index}`;
+
                         return (
-                          <TableRow key={row.tx_num} tabIndex={-1}>
+                          <TableRow
+                            key={row.tx_num}
+                            hover
+                            onClick={(event) => handleClick(event, row.tx_num)}
+                            role='checkbox'
+                            aria-checked={isItemSelected}
+                            tabIndex={-1}
+                            selected={isItemSelected}
+                          >
                             {/* 2222222 */}
                             <TableCell align='center' style={{ minWidth: 250 }}>
                               {row.invoice_num}
@@ -733,9 +795,6 @@ export default function AccountingSlipTable(props) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <ManagerVerificationBtn />
-      <ManagerRejectBtn />
-      <ManagerImportBtn />
     </Box>
   );
 }

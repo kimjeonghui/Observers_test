@@ -17,13 +17,20 @@ const CustomInput = styled('input')(
 );
 
 export default function SearchInput(props) {
-  const { leftRadius, rightRadius, width, height } = props;
+  const {
+    leftRadius,
+    rightRadius,
+    width,
+    height,
+    placeholder: customPlaceholder,
+  } = props;
   const theme = useTheme();
+  const placeholder = customPlaceholder || 'Search';
   return (
-    <div>
+    <div style={{ display: 'flex', alignItems: 'center' }}>
       <CustomInput
         type='text'
-        placeholder='Search'
+        placeholder={placeholder}
         leftRadius={leftRadius}
         rightRadius={rightRadius}
         width={width}
