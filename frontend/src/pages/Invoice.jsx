@@ -9,6 +9,7 @@ import InvoiceModal from '../components/invoice/InvoiceModal';
 export default function Invoice(props) {
   const [activeTab, setActiveTab] = useState(0);
   const [open, setOpen] = useState(false);
+  const [isCalc, setIsCalc] = useState(false);
   const tabMenus = ['당월 입력 조회', '엑셀 입력'];
 
   const handleTabChange = (idx) => {
@@ -16,6 +17,10 @@ export default function Invoice(props) {
   };
   const handleOpen = () => {
     setOpen(true);
+  };
+  const handleCalc = () => {
+    alert('계산해라~');
+    setIsCalc(true);
   };
   return (
     <div style={{ padding: '10px 36px' }}>
@@ -37,9 +42,21 @@ export default function Invoice(props) {
         <div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <InvoiceSearch />
-            <CustomButton fontSize='12px' onClick={handleOpen}>
-              입력
-            </CustomButton>
+            <div>
+              {isCalc ? (
+                <CustomButton onClick={() => alert('결재요청했다~')} size='sm'>
+                  결재요청
+                </CustomButton>
+              ) : (
+                <CustomButton onClick={handleCalc} size='sm'>
+                  외환차손익계산
+                </CustomButton>
+              )}
+
+              <CustomButton onClick={handleOpen} size='sm'>
+                입력
+              </CustomButton>
+            </div>
           </div>
           <InvoiceTable />
         </div>
