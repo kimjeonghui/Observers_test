@@ -10,7 +10,6 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TablePagination from '@mui/material/TablePagination';
-import AdminHeader from './AdminHeader';
 import { createSvgIcon } from '@mui/material/utils';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -208,7 +207,6 @@ export default function Users(props) {
   };
   return (
     <div>
-      <AdminHeader />
       <h2>사용자 관리</h2>
       <Grid container spacing={3}>
         <Grid item xs={6}>
