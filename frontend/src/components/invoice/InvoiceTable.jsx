@@ -287,13 +287,15 @@ const headCells = [
     disablePadding: true,
     label: '사무소코드',
     minWidth: 65,
+    isSort: false,
   },
   {
     id: 'num',
     numeric: true,
     disablePadding: false,
     label: '순번',
-    minWidth: 40,
+    minWidth: 60,
+    isSort: true,
   },
   {
     id: 'fiscal_month',
@@ -301,6 +303,7 @@ const headCells = [
     disablePadding: false,
     label: '회계월',
     minWidth: 60,
+    isSort: false,
   },
   {
     id: 'tx_date',
@@ -308,20 +311,23 @@ const headCells = [
     disablePadding: true,
     label: '거래일자',
     minWidth: 70,
+    isSort: true,
   },
   {
     id: 'store',
     numeric: false,
     disablePadding: true,
     label: '거래처명',
-    minWidth: 120,
+    minWidth: 150,
+    isSort: true,
   },
   {
     id: 'dep_curr',
     numeric: false,
     disablePadding: true,
     label: '입금통화',
-    minWidth: 60,
+    minWidth: 80,
+    isSort: true,
   },
   {
     id: 'deposit',
@@ -329,13 +335,15 @@ const headCells = [
     disablePadding: true,
     label: '입금금액',
     minWidth: 80,
+    isSort: true,
   },
   {
     id: 'wd_curr',
     numeric: false,
     disablePadding: true,
     label: '출금통화',
-    minWidth: 60,
+    minWidth: 80,
+    isSort: true,
   },
   {
     id: 'withdrawal',
@@ -343,6 +351,7 @@ const headCells = [
     disablePadding: true,
     label: '출금금액',
     minWidth: 80,
+    isSort: true,
   },
   {
     id: 'trans_cd',
@@ -364,6 +373,7 @@ const headCells = [
     disablePadding: true,
     label: '환산금액',
     minWidth: 80,
+    isSort: true,
   },
   {
     id: 'sup_evidence',
@@ -391,7 +401,7 @@ function EnhancedTableHead(props) {
   return (
     <TableHead>
       <TableRow>
-        <TableCell padding='checkbox' sx={{ padding: '0' }}>
+        <TableCell sx={{ width: 4, padding: 0 }}>
           <Checkbox
             color='primary'
             indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -400,6 +410,7 @@ function EnhancedTableHead(props) {
             inputProps={{
               'aria-label': 'select all desserts',
             }}
+            sx={{ width: '36px' }}
           />
         </TableCell>
         {headCells.map((headCell) => (
@@ -409,25 +420,29 @@ function EnhancedTableHead(props) {
             sortDirection={orderBy === headCell.id ? order : false}
             sx={{
               minWidth: headCell.minWidth,
-              width: '50px',
-              fontSize: '13px',
+              fontSize: { xs: '12px', sm: '16px', md: '18px' },
               fontWeight: '600',
               padding: '0',
             }}
           >
-            {headCell.label}
-            {/* <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component='span' sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel> */}
+            {headCell.isSort ? (
+              <TableSortLabel
+                active={orderBy === headCell.id}
+                direction={orderBy === headCell.id ? order : 'asc'}
+                onClick={createSortHandler(headCell.id)}
+              >
+                {headCell.label}
+                {orderBy === headCell.id ? (
+                  <Box component='span' sx={visuallyHidden}>
+                    {order === 'desc'
+                      ? 'sorted descending'
+                      : 'sorted ascending'}
+                  </Box>
+                ) : null}
+              </TableSortLabel>
+            ) : (
+              <div> {headCell.label}</div>
+            )}
           </TableCell>
         ))}
       </TableRow>
@@ -494,7 +509,7 @@ export default function InvoiceTable(props) {
   const [orderBy, setOrderBy] = useState('calories');
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -589,7 +604,9 @@ export default function InvoiceTable(props) {
 
                 return (
                   <TableRow hover tabIndex={-1} key={row.num}>
-                    <TableCell padding='checkbox' sx={{ padding: '0' }}>
+                    <TableCell
+                      sx={{ width: 4, padding: 0, boxSizing: 'border-box' }}
+                    >
                       <Checkbox
                         color='primary'
                         onClick={() => handleClick(row.num)}
@@ -597,85 +614,130 @@ export default function InvoiceTable(props) {
                         inputProps={{
                           'aria-labelledby': labelId,
                         }}
-                        sx={{ padding: '0 8px' }}
+                        sx={{
+                          fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                          padding: '0 4px',
+                        }}
                       />
                     </TableCell>
                     <TableCell
                       align='center'
-                      sx={{ fontSize: '12px', padding: 0 }}
+                      sx={{
+                        fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                        padding: 0,
+                      }}
                     >
                       {row.ovs_cd}
                     </TableCell>
                     <TableCell
                       align='center'
-                      sx={{ fontSize: '12px', padding: 0 }}
+                      sx={{
+                        fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                        padding: 0,
+                      }}
                     >
                       {row.num}
                     </TableCell>
                     <TableCell
                       align='center'
-                      sx={{ fontSize: '12px', padding: 0 }}
+                      sx={{
+                        fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                        padding: 0,
+                      }}
                     >
                       {row.fiscal_month}
                     </TableCell>
                     <TableCell
                       align='center'
-                      sx={{ fontSize: '12px', padding: 0 }}
+                      sx={{
+                        fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                        padding: 0,
+                      }}
                     >
                       {row.tx_date}
                     </TableCell>
                     <TableCell
                       align='center'
-                      sx={{ fontSize: '12px', padding: 0 }}
+                      sx={{
+                        fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                        padding: 0,
+                      }}
                     >
                       {row.store}
                     </TableCell>
                     <TableCell
                       align='center'
-                      sx={{ fontSize: '12px', padding: 0 }}
+                      sx={{
+                        fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                        padding: 0,
+                      }}
                     >
                       {row.dep_curr}
                     </TableCell>
                     <TableCell
                       align='center'
-                      sx={{ fontSize: '12px', padding: 0 }}
+                      sx={{
+                        fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                        padding: 0,
+                      }}
                     >
                       {row.deposit}
                     </TableCell>
                     <TableCell
                       align='center'
-                      sx={{ fontSize: '12px', padding: 0 }}
+                      sx={{
+                        fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                        padding: 0,
+                      }}
                     >
                       {row.wd_curr}
                     </TableCell>
                     <TableCell
                       align='center'
-                      sx={{ fontSize: '12px', padding: 0 }}
+                      sx={{
+                        fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                        padding: 0,
+                      }}
                     >
                       {row.withdrawal}
                     </TableCell>
                     <TableCell
                       align='center'
-                      sx={{ fontSize: '12px', padding: 0 }}
+                      sx={{
+                        fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                        padding: 0,
+                      }}
                     >
                       {row.trans_cd}
                     </TableCell>
                     <TableCell
                       align='center'
-                      sx={{ fontSize: '12px', padding: 0 }}
+                      sx={{
+                        fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                        padding: 0,
+                      }}
                     >
                       {row.description}
                     </TableCell>
                     <TableCell
                       align='center'
-                      sx={{ fontSize: '12px', padding: 0 }}
+                      sx={{
+                        fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                        padding: 0,
+                      }}
                     >
                       {row.trans_amount}
                     </TableCell>
-                    <TableCell align='center' sx={{ fontSize: '12px' }}>
+                    <TableCell
+                      align='center'
+                      sx={{
+                        fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                        padding: 0,
+                      }}
+                    >
                       <Button
                         width='80px'
-                        fontSize='12px'
+                        fontSize='13px'
                         onClick={() => {
                           handleEviModal(row.id);
                         }}
@@ -699,7 +761,6 @@ export default function InvoiceTable(props) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
           component='div'
           count={rows.length}
           rowsPerPage={rowsPerPage}
