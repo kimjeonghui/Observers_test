@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import DatePicker from 'react-datepicker';
 import Button from '../global/Button';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import 'react-datepicker/dist/react-datepicker.css';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -567,6 +571,14 @@ export default function AccountingSlipTable(props) {
       return newMonth;
     });
   };
+  const [selectedOffice, setSelectedOffice] = useState('');
+  const handleChangeOffice = (event) => {
+    const selectedValue = event.target.value;
+    setSelectedOffice(selectedValue);
+    // Logic to filter data based on selected office
+    // You can implement this if needed
+  };
+
   return (
     <Box
       sx={{
@@ -577,6 +589,64 @@ export default function AccountingSlipTable(props) {
         alignItems: 'center',
       }}
     >
+      <TextField
+        select
+        label='사무소'
+        margin='dense'
+        variant='standard'
+        sx={{
+          width: '10%',
+          marginLeft: 'auto',
+          '@media (max-width: 600px)': {
+            fontSize: '14px',
+            width: '100%',
+          },
+        }}
+        value={selectedOffice}
+        onChange={handleChangeOffice}
+        //fullWidth
+      >
+        <MenuItem value='all'>전체</MenuItem>
+        <MenuItem value='HDF13'>브뤼셀</MenuItem>
+        <MenuItem value='HDF32'>유럽</MenuItem>
+        <MenuItem value='HDF27'>아르헨티나</MenuItem>
+      </TextField>
+      {/* <FormControl
+        sx={{
+          width: '10%',
+          marginLeft: 'auto',
+          '@media (max-width: 600px)': {
+            fontSize: '14px',
+            width: '100%',
+          },
+        }}
+      >
+        <InputLabel
+          id='demo-simple-select-label'
+          sx={{ fontSize: '16px', alignItems: 'center', marginTop: '-8px' }}
+        >
+          {costCenter}
+        </InputLabel>
+        <Select
+          labelId='demo-simple-select-label'
+          id='demo-simple-select'
+          value={}
+          label='Age'
+          onChange={handleChange}
+          sx={{
+            height: '40px',
+            '@media (max-width: 600px)': {
+              // Adjust styles for smaller screens
+              fontSize: '14px',
+              marginTop: '-4px',
+            },
+          }}
+        >
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+      </FormControl> */}
       <div
         style={{
           display: 'flex',

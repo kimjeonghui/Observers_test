@@ -12,17 +12,9 @@ import AccountingSlipTable from '../components/accoutingSlip/AccountingSlipTable
 export default function AccountingSlip(props) {
   const [activeTab, setActiveTab] = useState(0);
   const tabMenus = ['결재 승인', '회계전표'];
-
   const handleTabChange = (idx) => {
     setActiveTab(idx);
   };
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth() + 1;
-  // dateRange는 [startDate, endDate] 형태의 배열을 값 가짐
-  const [dateRange, setDateRange] = useState([null, null]);
-  //dateRange 변수를 startDate와 endDate 프로퍼티로 전달
-  const [startDate, endDate] = dateRange;
-
   return (
     <div style={{ padding: '10px 36px' }}>
       <div>
