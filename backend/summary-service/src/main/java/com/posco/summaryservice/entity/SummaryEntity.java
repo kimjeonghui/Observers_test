@@ -25,6 +25,9 @@ public class SummaryEntity extends BaseEntity{
     private String ovsCd;
 
     @Column(nullable = false)
+    private String ovsName;
+
+    @Column(nullable = false)
     private LocalDateTime fiscalMonth;
 
     @OneToMany(mappedBy = "summaryEntity", cascade = CascadeType.REMOVE)

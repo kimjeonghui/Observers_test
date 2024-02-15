@@ -1,6 +1,7 @@
 package com.posco.summaryservice.service;
 
 import com.posco.summaryservice.dto.request.SummaryDTO;
+import com.posco.summaryservice.dto.response.SummaryResponseDTO;
 import com.posco.summaryservice.entity.GLCodeEntity;
 import com.posco.summaryservice.entity.SummaryContentsEntity;
 import com.posco.summaryservice.entity.SummaryEntity;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,6 +37,7 @@ public class SummaryServiceImpl implements SummaryService {
         if(summaryEntity==null){
             summaryEntity = SummaryEntity.builder()
                     .ovsCd(summaryDTO.getOvsCd())
+                    .ovsName(summaryDTO.getOvsName())
                     .fiscalMonth(newTime)
                     .build();
             saveSummaryEntity = summaryRepository.save(summaryEntity);
@@ -89,5 +92,31 @@ public class SummaryServiceImpl implements SummaryService {
         }
         summaryContentsRepository.save(newSummaryContents);
         return newSummaryContents;
+    }
+
+    @Override
+    public List<SummaryResponseDTO> getSummaryContents(String ovsCd) {
+        List<SummaryEntity> summaryEntities = summaryRepository.findAllByOvsCd(ovsCd);
+        List<SummaryResponseDTO> summaryResponseDTOS = new ArrayList<>();
+        for(SummaryEntity summaryEntity : summaryEntities){
+            List<SummaryContentsEntity> contentsEntities = summaryContentsRepository.findAllBySummaryId(summaryEntity.getSummaryId());
+            for(SummaryContentsEntity summaryContentsEntity: contentsEntities){
+                SummaryResponseDTO responseDTO = SummaryResponseDTO.builder()
+                        .ovsCd(summaryEntity.getOvsCd())
+                        .ovsName(summaryEntity.getOvsName())
+                        .fiscalMonth(summaryEntity.getFiscalMonth())
+                        .majorCt(summaryContentsEntity.getMajorCt())
+                        .mediumCt(summaryContentsEntity.getMediumCt())
+                        .minorCt(summaryContentsEntity.getMinorCt())
+                        .locCurr(summaryContentsEntity.getLocCurr())
+                        .loc(summaryContentsEntity.getLoc())
+                        .transCurr(summaryContentsEntity.getTransCurr())
+                        .trans(summaryContentsEntity.getTrans())
+                        .note(summaryContentsEntity.getNote())
+                        .build();
+                summaryResponseDTOS.add(responseDTO);
+            }
+        }
+        return summaryResponseDTOS;
     }
 }
