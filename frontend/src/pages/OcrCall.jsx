@@ -43,9 +43,9 @@ function Ocr() {
         // 응답 헤더에서 operation-location 값을 추출
         const operationLocation = response.headers['operation-location'];
         if (operationLocation) {
-          const operationId = extractOperationIdFromLocation(operationLocation);
-          console.log('추출된 operationId:', operationId);
-          setResultId(operationId);
+          const resultId = extractResultId(operationLocation);
+          console.log('추출된 operationId:', operationLocation);
+          setResultId(resultId);
         } else {
           console.warn('operation-location 헤더를 찾을 수 없습니다.');
         }
@@ -80,7 +80,7 @@ function Ocr() {
   };
 
   // operation-location에서 operationId를 추출하는 함수
-  const extractOperationIdFromLocation = (location) => {
+  const extractResultId = (location) => {
     const regex = /\/([^\/?]+)\?/;
     const match = location.match(regex);
     return match ? match[1] : '';
