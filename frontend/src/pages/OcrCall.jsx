@@ -25,8 +25,7 @@ function Ocr() {
   };
 
   const handlePostRequest = () => {
-    const apiUrl =
-      'https://poscodx7-observers.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-receipt:analyze?api-version=2023-07-31';
+    const apiUrl = process.env.REACT_APP_OCR_POST_URI;
     const requestBody = {
       base64Source: `${base64String.split(',')[1]}`,
     };
@@ -35,7 +34,7 @@ function Ocr() {
       .post(apiUrl, requestBody, {
         headers: {
           'Content-Type': 'application/json',
-          'Ocp-Apim-Subscription-Key': '06c6520948814f45a4d457e97158af35',
+          'Ocp-Apim-Subscription-Key': process.env.REACT_APP_OCP_KEY,
         },
       })
       .then((response) => {
@@ -51,23 +50,24 @@ function Ocr() {
           console.warn('operation-location 헤더를 찾을 수 없습니다.');
         }
 
-        // 성공한 경우 원하는 동작을 추가하세요.
         setPostResponse('POST 요청 성공');
       })
       .catch((error) => {
         console.error('POST 요청 실패:', error);
-        // 실패한 경우 원하는 동작을 추가하세요.
         setPostResponse('POST 요청 실패');
       });
   };
 
   const handleGetRequest = () => {
-    const apiUrl = `https://poscodx7-observers.cognitiveservices.azure.com/formrecognizer/documentModels/prebuilt-receipt/analyzeResults/${resultId}?api-version=2023-07-31`;
+    const apiUrl =
+      process.env.REACT_APP_OCR_GET_URI1 +
+      `${resultId}` +
+      process.env.REACT_APP_OCR_GET_URI2;
 
     axios
       .get(apiUrl, {
         headers: {
-          'Ocp-Apim-Subscription-Key': '06c6520948814f45a4d457e97158af35',
+          'Ocp-Apim-Subscription-Key': process.env.REACT_APP_OCP_KEY,
         },
       })
       .then((response) => {
@@ -87,12 +87,16 @@ function Ocr() {
   };
 
   return (
-    <div style={{ padding: '20px', display: 'flex', flexDirection: 'row' }}>
+    <div style={{ padding: '20px', display: 'flow', flexDirection: 'row' }}>
       <input type='file' onChange={handleImageUpload} />
 
       {base64Image && (
         <div>
-          <img src={base64Image} alt='Uploaded' />
+          <img
+            src={base64Image}
+            style={{ height: '400px', width: '350px' }}
+            alt='Uploaded'
+          />
         </div>
       )}
 

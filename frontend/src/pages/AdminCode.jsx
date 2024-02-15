@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import Button from '../components/global/Button';
-import AdminHeader from './AdminHeader';
 import AdminCodeDialog from '../components/admin/AdminCodeDialog';
 import {
   Typography,
@@ -427,7 +425,6 @@ export default function AdminCode(props) {
 
   return (
     <div>
-      <AdminHeader />
       <Typography variant='h4' gutterBottom>
         식별코드 관리
       </Typography>

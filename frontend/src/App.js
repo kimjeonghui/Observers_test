@@ -16,6 +16,8 @@ import AdminOffice from './pages/AdminOffice';
 import Users from './pages/Users';
 import Summary from './pages/Summary';
 
+import SendImg from './pages/SendImg.jsx';
+
 import Sidebar from './components/global/Sidebar';
 
 function App() {
@@ -33,7 +35,8 @@ function App() {
           <Route path='/receipts/:id' element={<ReceiptsMonth />} />
           <Route path='/receipts/:id/:id' element={<ReceiptsDetail />} />
           <Route path='/ocr' element={<Ocr />} />
-          <Route path='/ocr-call' element={<OcrCall />} />
+          <Route path='/ocr-call' element={<OcrCall />} /> {/* 테스트용 */}
+          <Route path='/send-img' element={<SendImg />} /> {/* 테스트용 */}
           <Route
             path='/manager/accounting-slip'
             element={<ManagerAccountingSlip />}
