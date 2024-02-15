@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import AdminOfficeDialog from '../components/admin/AdminOfficeDialog';
+import AdminOfficeModal from '../components/admin/AdminOfficeModal';
+import CustomButton from '../components/global/Button';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {
@@ -23,6 +25,7 @@ export default function AdminOffice() {
   const [selectedOffice, setSelectedOffice] = useState('');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -41,10 +44,25 @@ export default function AdminOffice() {
   };
 
   const handleChangeOffice = (event) => {
-    const selectedValue = event.target.value;
-    setSelectedOffice(selectedValue);
-    // Logic to filter data based on selected office
-    // You can implement this if needed
+    const selectedOffice = event.target.value;
+    setSelectedOffice(selectedOffice);
+
+    if (selectedOffice === 'all') {
+      // If '전체' (all) is selected, fetch all references
+      fetchData();
+    } else {
+      // Fetch reference data for the selected office
+      axios
+        .get(`http://localhost:8080/admin-office/${selectedOffice}`)
+        .then((response) => {
+          const { data } = response;
+          setTableData([data.reference]);
+        })
+        .catch((error) => {
+          console.error('Error fetching data:', error);
+          setTableData([]);
+        });
+    }
   };
 
   const handleChangePage = (event, newPage) => {
@@ -57,6 +75,9 @@ export default function AdminOffice() {
   };
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - [].length) : 0;
+  const handleOpen = () => {
+    setOpen(true);
+  };
 
   return (
     <div>
@@ -73,17 +94,22 @@ export default function AdminOffice() {
             sx={{ width: '200px' }}
             value={selectedOffice}
             onChange={handleChangeOffice}
-            //fullWidth
+            // fullWidth
           >
             <MenuItem value='all'>전체</MenuItem>
-            <MenuItem value='HDF13'>브뤼셀</MenuItem>
-            <MenuItem value='HDF32'>유럽</MenuItem>
-            <MenuItem value='HDF27'>아르헨티나</MenuItem>
+            {tableData.map((row) => (
+              <MenuItem key={row.ovsCd} value={row.ovsCd}>
+                {row.ovsMeaning}
+              </MenuItem>
+            ))}
           </TextField>
         </Grid>
         <Grid item xs={6} textAlign='right'>
-          {/* <Button size='sm'>추가</Button> */}
           <AdminOfficeDialog />
+          <AdminOfficeModal open={open} setOpen={setOpen} />
+          <CustomButton onClick={handleOpen} size='sm'>
+            입력
+          </CustomButton>
         </Grid>
       </Grid>
       <Grid container spacing={3} justifyContent='center' alignItems='center'>
@@ -143,7 +169,7 @@ export default function AdminOffice() {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component='div'
-              count={[].length}
+              count={tableData.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
