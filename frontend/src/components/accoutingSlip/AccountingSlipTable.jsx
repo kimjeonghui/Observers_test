@@ -490,7 +490,6 @@ const groupBy = (array, key) => {
 export default function AccountingSlipTable(props) {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
-  const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const handleRequestSort = (event, property) => {
@@ -522,6 +521,7 @@ export default function AccountingSlipTable(props) {
   );
   const groupedVisibleRows = groupBy(visibleRows, 'invoice_num');
   const currentDate = new Date();
+  const [year, setYear] = useState(currentDate.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth() + 1);
   // dateRange는 [startDate, endDate] 형태의 배열을 값 가짐
   const [dateRange, setDateRange] = useState([null, null]);
@@ -529,11 +529,43 @@ export default function AccountingSlipTable(props) {
   const [startDate, endDate] = dateRange;
   const theme = useTheme();
 
-  const onClickPreBtn = () => {
-    setCurrentMonth((prevMonth) => (prevMonth - 1 + 12) % 12 || 12);
+  const getMonthString = (monthNumber) => {
+    const monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    return monthNames[monthNumber - 1];
   };
+  const currentMonthString = getMonthString(currentMonth);
+  const onClickPreBtn = () => {
+    setCurrentMonth((prevMonth) => {
+      const newMonth = (prevMonth - 1 + 12) % 12 || 12;
+      if (newMonth === 12) {
+        setYear((prevYear) => prevYear - 1);
+      }
+      return newMonth;
+    });
+  };
+
   const onClickNextBtn = () => {
-    setCurrentMonth((prevMonth) => (prevMonth + 1) % 12 || 12);
+    setCurrentMonth((prevMonth) => {
+      const newMonth = (prevMonth + 1) % 12 || 12;
+      if (newMonth === 1) {
+        setYear((prevYear) => prevYear + 1);
+      }
+      return newMonth;
+    });
   };
   return (
     <Box
@@ -565,7 +597,7 @@ export default function AccountingSlipTable(props) {
           <ChevronLeftIcon />
         </Button>
         <Typography sx={{ paddingX: '32px', fontSize: '28px' }}>
-          {currentMonth}
+          {currentMonthString} , {year}
         </Typography>
         <Button
           onClick={onClickNextBtn}
@@ -600,7 +632,7 @@ export default function AccountingSlipTable(props) {
         <AccountingSlipSearch />
       </div>
       <Paper sx={{ width: '100%', overflow: 'hidden', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar />
         <TableContainer sx={{ height: '60vh' }}>
           <Table>
             <TableHead
@@ -616,7 +648,6 @@ export default function AccountingSlipTable(props) {
             >
               <Paper sx={{ width: '100%' }}>
                 <EnhancedTableHead
-                  numSelected={selected.length}
                   order={order}
                   orderBy={orderBy}
                   onRequestSort={handleRequestSort}
@@ -712,7 +743,7 @@ export default function AccountingSlipTable(props) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      {/* 유저 권한에 따라서 사무소장만 볼 수 있도록, 검증은 자동으로 하고 그 결과에 따라 렌더링 되는 버튼이 달라짐 */}
+      {/* 유저 권한에 따라서 사무소장만 버튼 볼 수 있도록, 검증은 자동으로 하고 그 결과에 따라 렌더링 되는 버튼이 달라짐 */}
       <ManagerRejectBtn />
       <ManagerImportBtn />
     </Box>
