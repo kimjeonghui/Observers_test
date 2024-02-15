@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Observers.iml" filepath="$PROJECT_DIR$/.idea/Observers.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/reference-service.iml" filepath="$PROJECT_DIR$/.idea/modules/reference-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/reference-service.main.iml" filepath="$PROJECT_DIR$/.idea/modules/reference-service.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/reference-service.test.iml" filepath="$PROJECT_DIR$/.idea/modules/reference-service.test.iml" />
     </modules>
   </component>
 </project>
