@@ -495,7 +495,7 @@ export default function AccountingSlipTable(props) {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(25);
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -611,42 +611,6 @@ export default function AccountingSlipTable(props) {
         <MenuItem value='HDF32'>유럽</MenuItem>
         <MenuItem value='HDF27'>아르헨티나</MenuItem>
       </TextField>
-      {/* <FormControl
-        sx={{
-          width: '10%',
-          marginLeft: 'auto',
-          '@media (max-width: 600px)': {
-            fontSize: '14px',
-            width: '100%',
-          },
-        }}
-      >
-        <InputLabel
-          id='demo-simple-select-label'
-          sx={{ fontSize: '16px', alignItems: 'center', marginTop: '-8px' }}
-        >
-          {costCenter}
-        </InputLabel>
-        <Select
-          labelId='demo-simple-select-label'
-          id='demo-simple-select'
-          value={}
-          label='Age'
-          onChange={handleChange}
-          sx={{
-            height: '40px',
-            '@media (max-width: 600px)': {
-              // Adjust styles for smaller screens
-              fontSize: '14px',
-              marginTop: '-4px',
-            },
-          }}
-        >
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl> */}
       <div
         style={{
           display: 'flex',
