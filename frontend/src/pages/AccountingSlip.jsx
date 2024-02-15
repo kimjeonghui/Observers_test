@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import AdminAccountingSlipTable from '../components/accoutingSlip/AdminAccountingSlipTable';
+import CheckboxAccountingSlipTable from '../components/accoutingSlip/CheckboxAccountingSlipTable';
 import AdminApprovalTable from '../components/accoutingSlip/ApprovalTable';
 import {
   SpanTab,
@@ -41,7 +41,7 @@ export default function AccountingSlip(props) {
       {activeTab === 0 && <AdminApprovalTable />}
       {activeTab === 1 && (
         <div>
-          <AdminAccountingSlipTable /> <AccountingSlipTable />
+          <AccountingSlipTable />
         </div>
       )}
     </div>

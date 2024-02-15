@@ -29,9 +29,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
 import { useTheme } from '@emotion/react';
 import AccountingSlipSearch from './AccountingSlipSearch';
-import ManagerVerificationBtn from './ManagerVerificationBtn';
-import ManagerRejectBtn from './ManagerRejectBtn';
-import ManagerImportBtn from './ManagerImportBtn';
 
 const rows = [
   {

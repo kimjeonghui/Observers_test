@@ -10,7 +10,7 @@ export default function RejectBtn() {
         justifyContent: 'center',
       }}
     >
-      <ButtonComponent width='120px'>반려</ButtonComponent>
+      <ButtonComponent width='120px'>거래내역 재작성</ButtonComponent>
     </Box>
   );
 }

@@ -10,7 +10,7 @@ export default function ImportBtn() {
         justifyContent: 'center',
       }}
     >
-      <ButtonComponent width='120px'>전송</ButtonComponent>
+      <ButtonComponent width='120px'>ERP AP전송</ButtonComponent>
     </Box>
   );
 }

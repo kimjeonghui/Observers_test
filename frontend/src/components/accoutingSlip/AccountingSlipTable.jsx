@@ -28,7 +28,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
 import { useTheme } from '@emotion/react';
 import AccountingSlipSearch from './AccountingSlipSearch';
-import ManagerVerificationBtn from './ManagerVerificationBtn';
 import ManagerRejectBtn from './ManagerRejectBtn';
 import ManagerImportBtn from './ManagerImportBtn';
 
@@ -302,34 +301,34 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: '차대',
-    minWidth: 90,
+    minWidth: 80,
   },
   {
     id: 'amount',
     numeric: false,
     disablePadding: false,
     label: '금액',
-    minWidth: 100,
+    minWidth: 150,
   },
   {
     id: 'krw_amount',
     numeric: false,
     disablePadding: true,
     label: '원화금액',
-    minWidth: 100,
+    minWidth: 150,
   },
   {
     id: 'excange_rate',
     numeric: false,
     disablePadding: true,
     label: '환율',
-    minWidth: 70,
+    minWidth: 100,
   },
   {
     id: 'cost_center',
     numeric: false,
     disablePadding: true,
-    label: 'COST CENTER',
+    label: '사무소',
     minWidth: 100,
   },
   {
@@ -337,49 +336,49 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: '계정코드',
-    minWidth: 120,
+    minWidth: 150,
   },
   {
     id: 'description',
     numeric: false,
     disablePadding: true,
     label: '설명',
-    minWidth: 100,
+    minWidth: 200,
   },
   {
     id: 'created_by',
     numeric: false,
     disablePadding: true,
     label: '생성자',
-    minWidth: 100,
+    minWidth: 150,
   },
   {
     id: 'creation_date',
     numeric: false,
     disablePadding: true,
     label: '생성날짜',
-    minWidth: 100,
+    minWidth: 150,
   },
   {
     id: 'group_id',
     numeric: false,
     disablePadding: true,
     label: '그룹아이디',
-    minWidth: 130,
+    minWidth: 180,
   },
   {
     id: 'tx_num',
     numeric: false,
     disablePadding: true,
     label: '거래순번',
-    minWidth: 100,
+    minWidth: 80,
   },
   {
-    id: 'tran_cd',
+    id: 'tx_cd',
     numeric: false,
     disablePadding: true,
     label: '식별코드',
-    minWidth: 100,
+    minWidth: 95,
   },
 ];
 
@@ -400,39 +399,31 @@ function EnhancedTableHead(props) {
   return (
     <TableHead
       stickyHeader
-      aria-label='sticky table'
       sx={{
         display: 'flex',
         justifyContent: 'flex-start',
         position: 'sticky',
         top: 0,
+        zIndex: 1,
       }}
     >
-      {headCells.map((headCell) => (
-        <TableCell
-          key={headCell.id}
-          align='center'
-          sortDirection={orderBy === headCell.id ? order : false}
-          sx={{
-            minWidth: headCell.minWidth,
-            fontSize: '13px',
-            fontWeight: '600',
-          }}
-        >
-          {/* <TableSortLabel
-            active={orderBy === headCell.id}
-            direction={orderBy === headCell.id ? order : 'asc'}
-            onClick={createSortHandler(headCell.id)}
-          > */}
-          {headCell.label}
-          {orderBy === headCell.id ? (
-            <Box component='span' sx={visuallyHidden}>
-              {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-            </Box>
-          ) : null}
-          {/* </TableSortLabel> */}
-        </TableCell>
-      ))}
+      <TableRow>
+        {headCells.map((headCell) => (
+          <TableCell
+            key={headCell.id}
+            align='center'
+            sortDirection={orderBy === headCell.id ? order : false}
+            sx={{
+              minWidth: headCell.minWidth,
+              fontSize: { xs: '12px', sm: '16px', md: '18px' },
+              fontWeight: '600',
+              padding: '0',
+            }}
+          >
+            {headCell.label}
+          </TableCell>
+        ))}
+      </TableRow>
     </TableHead>
   );
 }
@@ -608,140 +599,96 @@ export default function AccountingSlipTable(props) {
         />
         <AccountingSlipSearch />
       </div>
-      <Paper sx={{ width: '100%', overflow: 'visible', mb: 2 }}>
+      <Paper sx={{ width: '100%', overflow: 'hidden', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer sx={{ height: '60vh' }}>
-          <Table
-            sx={{ minWidth: { xs: '90vw', sm: '80vw', md: '50vw' } }}
-            stickyHeader
-            aria-label='sticky table'
-            size='small'
-          >
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
+          <Table>
+            <TableHead
+              stickyHeader
+              aria-label='sticky table'
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-start',
+                position: 'sticky',
+                top: 0,
+                zIndex: 1,
+              }}
+            >
+              <Paper sx={{ width: '100%' }}>
+                <EnhancedTableHead
+                  numSelected={selected.length}
+                  order={order}
+                  orderBy={orderBy}
+                  onRequestSort={handleRequestSort}
+                  rowCount={rows.length}
+                />
+              </Paper>
+            </TableHead>
 
             <TableBody>
               {Object.keys(groupedVisibleRows).map(
-                (invoiceNumGroup, groupIndex) => (
-                  <TableRow>
-                    {/* 그룹 선택하는 줄 */}
-                    <TableCell
-                      colSpan={headCells.length + 1}
-                      sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center', // Change to 'center' for vertical alignment
-                        fontSize: '12px',
-                      }}
-                    >
-                      <Typography
-                        variant='subtitle1'
-                        component='div'
-                        style={{ marginLeft: '8px', fontSize: '12px' }}
+                (invoiceNumGroup, groupIndex) => {
+                  return (
+                    <React.Fragment key={`group-${groupIndex}`}>
+                      <TableRow
+                        sx={{
+                          display: 'grid',
+                          gridTemplateColumns: '1fr', // 동일한 열 너비
+                          alignItems: 'stretch', // 수직으로 컨테이너를 채우도록 아이템을 늘립니다.
+                          cursor: 'pointer',
+                          '&:hover': {
+                            background: '#f5f5f5',
+                          },
+                        }}
                       >
-                        {`${invoiceNumGroup} `} {/* 그룹 선택됨 */}
-                      </Typography>
-                    </TableCell>
-
-                    {groupedVisibleRows[invoiceNumGroup].map((row, index) => {
-                      const maxMinWidth = Math.max(
-                        ...headCells.map((headCell) => headCell.minWidth)
-                      );
-
-                      return (
-                        <TableRow key={row.tx_num} tabIndex={-1}>
-                          {/* 2222222 */}
-                          <TableCell
-                            align='center'
-                            style={{
-                              fontSize: '12px',
-                              minWidth: `${maxMinWidth}px`,
-                            }}
+                        {/* 그룹 선택하는 줄 */}
+                        <TableCell
+                          colSpan={headCells.length + 1}
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center', // Change to 'center' for vertical alignment
+                          }}
+                        >
+                          <Typography
+                            variant='subtitle1'
+                            component='div'
+                            style={{ marginLeft: '8px' }}
                           >
-                            {row.invoice_num}
-                          </TableCell>
-                          <TableCell
-                            align='center'
-                            style={{ fontSize: '12px', minWidth: '90px' }}
-                          >
-                            {row.rcdc}
-                          </TableCell>
-                          <TableCell
-                            align='center'
-                            style={{ fontSize: '12px', minWidth: '10px' }}
-                          >
-                            {row.amount}
-                          </TableCell>
-                          <TableCell
-                            align='center'
-                            style={{ fontSize: '12px', minWidth: '100px' }}
-                          >
-                            {row.krw_amount}
-                          </TableCell>
-                          <TableCell
-                            align='center'
-                            style={{ fontSize: '12px', minWidth: '70px' }}
-                          >
-                            {row.excange_rate}
-                          </TableCell>
-                          <TableCell
-                            align='center'
-                            style={{ fontSize: '12px', minWidth: '100px' }}
-                          >
-                            {row.cost_center}
-                          </TableCell>
-                          <TableCell
-                            align='center'
-                            style={{ fontSize: '12px', minWidth: '120px' }}
-                          >
-                            {row.account}
-                          </TableCell>
-                          <TableCell
-                            align='center'
-                            style={{ fontSize: '12px', minWidth: '100px' }}
-                          >
-                            {row.description}
-                          </TableCell>
-                          <TableCell
-                            align='center'
-                            style={{ fontSize: '12px', minWidth: '100px' }}
-                          >
-                            {row.created_by}
-                          </TableCell>
-                          <TableCell
-                            align='center'
-                            style={{ fontSize: '12px', minWidth: '100px' }}
-                          >
-                            {row.creation_date}
-                          </TableCell>
-                          <TableCell
-                            align='center'
-                            style={{ fontSize: '12px', minWidth: '130px' }}
-                          >
-                            {row.group_id}
-                          </TableCell>
-                          <TableCell
-                            align='center'
-                            style={{ fontSize: '12px', minWidth: '100px' }}
-                          >
-                            {row.tx_num}
-                          </TableCell>
-                          <TableCell
-                            align='center'
-                            style={{ fontSize: '12px', minWidth: '100px' }}
-                          >
-                            {row.tx_cd}
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
-                  </TableRow>
-                )
+                            {`${invoiceNumGroup} `} {/* 그룹 선택됨 */}
+                          </Typography>
+                        </TableCell>
+                        {groupedVisibleRows[invoiceNumGroup].map(
+                          (row, index) => (
+                            <TableRow
+                              key={row.tx_num}
+                              tabIndex={-1}
+                              sx={{ paddingTop: '3px', paddingBottom: '3px' }}
+                            >
+                              {headCells.map((headCell) => (
+                                <TableCell
+                                  key={headCell.id}
+                                  align='center'
+                                  style={{ minWidth: `${headCell.minWidth}px` }}
+                                  sx={{
+                                    fontSize: {
+                                      xs: '12px',
+                                      sm: '14px',
+                                      md: '16px',
+                                    },
+                                    padding: 0,
+                                  }}
+                                >
+                                  {row[headCell.id]}
+                                </TableCell>
+                              ))}
+                            </TableRow>
+                          )
+                        )}
+                      </TableRow>
+                    </React.Fragment>
+                  );
+                }
               )}
               {emptyRows > 0 && (
                 <TableRow
@@ -765,7 +712,7 @@ export default function AccountingSlipTable(props) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <ManagerVerificationBtn />
+      {/* 유저 권한에 따라서 사무소장만 볼 수 있도록, 검증은 자동으로 하고 그 결과에 따라 렌더링 되는 버튼이 달라짐 */}
       <ManagerRejectBtn />
       <ManagerImportBtn />
     </Box>
