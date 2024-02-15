@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -89,6 +90,34 @@ public class ReferenceController {
 
         resultMap.put("result", SUCCESS);
         resultMap.put("msg", "Reference deleted successfully.");
+
+        return ResponseEntity.ok().body(resultMap);
+    }
+
+    @PutMapping
+    @Operation(summary = "Update reference", description = "Update a reference")
+    public ResponseEntity<?> updateReference(@Valid @RequestBody ReferenceDTO updatedReferenceDTO) {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        // Check if the reference with the provided office code exists
+        ReferenceDTO existingReference = referenceService.getReferenceByOvsCd(updatedReferenceDTO.getOvsCd());
+        if (existingReference == null) {
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "Reference not found for office: " + updatedReferenceDTO.getOvsCd());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
+
+        // Update the existing reference with the provided data
+        ReferenceDTO updatedReference = referenceService.updateReference(updatedReferenceDTO);
+        if (updatedReference == null) {
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "Failed to update reference for office: " + updatedReferenceDTO.getOvsCd());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resultMap);
+        }
+
+        resultMap.put("result", SUCCESS);
+        resultMap.put("msg", "Reference updated successfully.");
+        resultMap.put("reference", updatedReference);
 
         return ResponseEntity.ok().body(resultMap);
     }

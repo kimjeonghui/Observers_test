@@ -48,6 +48,34 @@ public class ReferenceServiceImpl implements ReferenceService {
         return false;
     }
 
+    @Override
+    public ReferenceDTO updateReference(ReferenceDTO updatedReferenceDTO) {
+        // Retrieve the existing reference entity from the repository using the ovsCd in updatedReferenceDTO
+        ReferenceEntity existingReferenceEntity = referenceRepository.findByOvsCd(updatedReferenceDTO.getOvsCd());
+        if (existingReferenceEntity == null) {
+            // Reference not found, return null or throw an exception as per your requirement
+            return null;
+        }
+
+        // Update the existing reference entity with data from the updated DTO
+        existingReferenceEntity.setOvsMeaning(updatedReferenceDTO.getOvsMeaning());
+        existingReferenceEntity.setOvsCopCd(updatedReferenceDTO.getOvsCopCd());
+        existingReferenceEntity.setGlCurr(updatedReferenceDTO.getGlCurr());
+        existingReferenceEntity.setLocCurr(updatedReferenceDTO.getLocCurr());
+        existingReferenceEntity.setLocCurr2(updatedReferenceDTO.getLocCurr2());
+        existingReferenceEntity.setTransCurr(updatedReferenceDTO.getTransCurr());
+        existingReferenceEntity.setTransCurr2(updatedReferenceDTO.getTransCurr2());
+        existingReferenceEntity.setStartDate(updatedReferenceDTO.getStartDate());
+        existingReferenceEntity.setEndDate(updatedReferenceDTO.getEndDate());
+        // Update other fields as needed
+
+        // Save the updated reference entity back to the repository
+        existingReferenceEntity = referenceRepository.save(existingReferenceEntity);
+
+        // Convert the updated entity to DTO and return it
+        return convertToDTO(existingReferenceEntity);
+    }
+
     // Helper method to convert Entity to DTO
     private ReferenceDTO convertToDTO(ReferenceEntity referenceEntity) {
         return ReferenceDTO.builder()

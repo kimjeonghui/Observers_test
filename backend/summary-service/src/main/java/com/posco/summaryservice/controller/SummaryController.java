@@ -1,11 +1,13 @@
 package com.posco.summaryservice.controller;
 
 import com.posco.summaryservice.dto.request.SummaryDTO;
+import com.posco.summaryservice.dto.response.SummaryResponseDTO;
 import com.posco.summaryservice.entity.SummaryContentsEntity;
 import com.posco.summaryservice.entity.SummaryEntity;
 import com.posco.summaryservice.service.SummaryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 
 
 @RestController
@@ -45,6 +48,14 @@ public class SummaryController {
         }
         resultMap.put("result", SUCCESS);
         resultMap.put("msg", "월 총괄표 입력 성공");
+        return ResponseEntity.ok().body(resultMap);
+    }
+
+    @GetMapping("/{ovsCd}")
+    public ResponseEntity<?> getSummary (@PathVariable String ovsCd){
+        Map<String, Object> resultMap = new HashMap<>();
+        List<SummaryResponseDTO> responseDTOList = summaryService.getSummaryContents(ovsCd);
+
         return ResponseEntity.ok().body(resultMap);
     }
 }
