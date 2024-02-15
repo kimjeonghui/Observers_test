@@ -12,5 +12,7 @@ public interface ReferenceService {
 
     ReferenceDTO createReference(ReferenceDTO referenceDTO);
 
+    ReferenceDTO updateReference(ReferenceDTO updatedReferenceDTO);
+
     boolean deleteReferenceByOvsCd(String ovsCd);
 }
