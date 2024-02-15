@@ -17,7 +17,7 @@ public class OcrController {
             // 이미지 처리
 
 
-            // 성공적으로 이미지를 받았을 때 응답 
+            // 성공적으로 이미지를 받았을 때 응답
             return ResponseEntity.ok("Image uploaded successfully!");
         } catch (Exception e) {
             // 이미지를 받는 중에 에러가 발생한 경우 처리
