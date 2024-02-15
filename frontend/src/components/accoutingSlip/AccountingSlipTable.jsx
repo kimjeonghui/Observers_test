@@ -295,14 +295,14 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: 'INVOICE_NUM',
-    minWidth: 160,
+    minWidth: 230,
   },
   {
     id: 'drcr',
     numeric: false,
     disablePadding: false,
     label: '차대',
-    minWidth: 80,
+    minWidth: 90,
   },
   {
     id: 'amount',
@@ -316,7 +316,7 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: '원화금액',
-    minWidth: 120,
+    minWidth: 100,
   },
   {
     id: 'excange_rate',
@@ -400,41 +400,37 @@ function EnhancedTableHead(props) {
   return (
     <TableHead
       stickyHeader
+      aria-label='sticky table'
       sx={{
         display: 'flex',
         justifyContent: 'flex-start',
         position: 'sticky',
         top: 0,
-        zIndex: 1,
       }}
     >
       {headCells.map((headCell) => (
         <TableCell
           key={headCell.id}
-          align='auto 0'
-          padding={headCell.disablePadding ? 'none' : 'normal'}
+          align='center'
           sortDirection={orderBy === headCell.id ? order : false}
-          style={{
+          sx={{
             minWidth: headCell.minWidth,
-            width: '50px',
-            textAlign: 'center',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '8px',
+            fontSize: '13px',
+            fontWeight: '600',
           }}
         >
-          <TableSortLabel
+          {/* <TableSortLabel
             active={orderBy === headCell.id}
             direction={orderBy === headCell.id ? order : 'asc'}
             onClick={createSortHandler(headCell.id)}
-          >
-            {headCell.label}
-            {orderBy === headCell.id ? (
-              <Box component='span' sx={visuallyHidden}>
-                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-              </Box>
-            ) : null}
-          </TableSortLabel>
+          > */}
+          {headCell.label}
+          {orderBy === headCell.id ? (
+            <Box component='span' sx={visuallyHidden}>
+              {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+            </Box>
+          ) : null}
+          {/* </TableSortLabel> */}
         </TableCell>
       ))}
     </TableHead>
@@ -612,103 +608,139 @@ export default function AccountingSlipTable(props) {
         />
         <AccountingSlipSearch />
       </div>
-      <Paper sx={{ width: '100%', overflow: 'hidden', mb: 2 }}>
+      <Paper sx={{ width: '100%', overflow: 'visible', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
         <TableContainer sx={{ height: '60vh' }}>
-          <Table>
-            <TableHead
-              stickyHeader
-              aria-label='sticky table'
-              sx={{
-                display: 'flex',
-                justifyContent: 'flex-start',
-                position: 'sticky',
-                top: 0,
-                zIndex: 1,
-              }}
-            >
-              <Paper sx={{ width: '100%' }}>
-                <EnhancedTableHead
-                  numSelected={selected.length}
-                  order={order}
-                  orderBy={orderBy}
-                  onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
-                />
-              </Paper>
-            </TableHead>
+          <Table
+            sx={{ minWidth: { xs: '90vw', sm: '80vw', md: '50vw' } }}
+            stickyHeader
+            aria-label='sticky table'
+            size='small'
+          >
+            <EnhancedTableHead
+              numSelected={selected.length}
+              order={order}
+              orderBy={orderBy}
+              onRequestSort={handleRequestSort}
+              rowCount={rows.length}
+            />
 
             <TableBody>
               {Object.keys(groupedVisibleRows).map(
                 (invoiceNumGroup, groupIndex) => (
-                  <React.Fragment key={`group-${groupIndex}`}>
-                    <TableRow
+                  <TableRow>
+                    {/* 그룹 선택하는 줄 */}
+                    <TableCell
+                      colSpan={headCells.length + 1}
                       sx={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr', // 동일한 열 너비
-                        alignItems: 'stretch', // 수직으로 컨테이너를 채우도록 아이템을 늘립니다.
-                        cursor: 'pointer',
-                        '&:hover': {
-                          background: '#f5f5f5',
-                        },
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center', // Change to 'center' for vertical alignment
+                        fontSize: '12px',
                       }}
                     >
-                      {/* 그룹 선택하는 줄 */}
-                      <TableCell
-                        colSpan={headCells.length + 1}
-                        sx={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          alignItems: 'center', // Change to 'center' for vertical alignment
-                        }}
+                      <Typography
+                        variant='subtitle1'
+                        component='div'
+                        style={{ marginLeft: '8px', fontSize: '12px' }}
                       >
-                        <Typography
-                          variant='subtitle1'
-                          component='div'
-                          style={{ marginLeft: '8px' }}
-                        >
-                          {`${invoiceNumGroup} `} {/* 그룹 선택됨 */}
-                        </Typography>
-                      </TableCell>
+                        {`${invoiceNumGroup} `} {/* 그룹 선택됨 */}
+                      </Typography>
+                    </TableCell>
 
-                      {groupedVisibleRows[invoiceNumGroup].map((row, index) => {
-                        return (
-                          <TableRow key={row.tx_num} tabIndex={-1}>
-                            {/* 2222222 */}
-                            <TableCell align='center' style={{ minWidth: 250 }}>
-                              {row.invoice_num}
-                            </TableCell>
-                            <TableCell align='center'>{row.rcdc}</TableCell>
-                            <TableCell align='center'>{row.amount}</TableCell>
-                            <TableCell align='center'>
-                              {row.krw_amount}
-                            </TableCell>
-                            <TableCell align='center'>
-                              {row.excange_rate}
-                            </TableCell>
-                            <TableCell align='center'>
-                              {row.cost_center}
-                            </TableCell>
-                            <TableCell align='center'>{row.account}</TableCell>
-                            <TableCell align='center'>
-                              {row.description}
-                            </TableCell>
-                            <TableCell align='center'>
-                              {row.created_by}
-                            </TableCell>
-                            <TableCell align='center'>
-                              {row.creation_date}
-                            </TableCell>
-                            <TableCell align='center'>{row.group_id}</TableCell>
-                            <TableCell align='center' style={{ minWidth: 200 }}>
-                              {row.tx_num}
-                            </TableCell>
-                            <TableCell align='center'>{row.tx_cd}</TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableRow>
-                  </React.Fragment>
+                    {groupedVisibleRows[invoiceNumGroup].map((row, index) => {
+                      const maxMinWidth = Math.max(
+                        ...headCells.map((headCell) => headCell.minWidth)
+                      );
+
+                      return (
+                        <TableRow key={row.tx_num} tabIndex={-1}>
+                          {/* 2222222 */}
+                          <TableCell
+                            align='center'
+                            style={{
+                              fontSize: '12px',
+                              minWidth: `${maxMinWidth}px`,
+                            }}
+                          >
+                            {row.invoice_num}
+                          </TableCell>
+                          <TableCell
+                            align='center'
+                            style={{ fontSize: '12px', minWidth: '90px' }}
+                          >
+                            {row.rcdc}
+                          </TableCell>
+                          <TableCell
+                            align='center'
+                            style={{ fontSize: '12px', minWidth: '10px' }}
+                          >
+                            {row.amount}
+                          </TableCell>
+                          <TableCell
+                            align='center'
+                            style={{ fontSize: '12px', minWidth: '100px' }}
+                          >
+                            {row.krw_amount}
+                          </TableCell>
+                          <TableCell
+                            align='center'
+                            style={{ fontSize: '12px', minWidth: '70px' }}
+                          >
+                            {row.excange_rate}
+                          </TableCell>
+                          <TableCell
+                            align='center'
+                            style={{ fontSize: '12px', minWidth: '100px' }}
+                          >
+                            {row.cost_center}
+                          </TableCell>
+                          <TableCell
+                            align='center'
+                            style={{ fontSize: '12px', minWidth: '120px' }}
+                          >
+                            {row.account}
+                          </TableCell>
+                          <TableCell
+                            align='center'
+                            style={{ fontSize: '12px', minWidth: '100px' }}
+                          >
+                            {row.description}
+                          </TableCell>
+                          <TableCell
+                            align='center'
+                            style={{ fontSize: '12px', minWidth: '100px' }}
+                          >
+                            {row.created_by}
+                          </TableCell>
+                          <TableCell
+                            align='center'
+                            style={{ fontSize: '12px', minWidth: '100px' }}
+                          >
+                            {row.creation_date}
+                          </TableCell>
+                          <TableCell
+                            align='center'
+                            style={{ fontSize: '12px', minWidth: '130px' }}
+                          >
+                            {row.group_id}
+                          </TableCell>
+                          <TableCell
+                            align='center'
+                            style={{ fontSize: '12px', minWidth: '100px' }}
+                          >
+                            {row.tx_num}
+                          </TableCell>
+                          <TableCell
+                            align='center'
+                            style={{ fontSize: '12px', minWidth: '100px' }}
+                          >
+                            {row.tx_cd}
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableRow>
                 )
               )}
               {emptyRows > 0 && (
