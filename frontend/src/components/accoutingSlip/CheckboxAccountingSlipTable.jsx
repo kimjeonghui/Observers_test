@@ -4,6 +4,8 @@ import { alpha } from '@mui/material/styles';
 import DatePicker from 'react-datepicker';
 import Button from '../global/Button';
 import 'react-datepicker/dist/react-datepicker.css';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import {
   Box,
   Table,
@@ -20,10 +22,13 @@ import {
   Checkbox,
   IconButton,
   Tooltip,
+  TextField,
   // Button,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
+import { useTheme } from '@emotion/react';
+import AccountingSlipSearch from './AccountingSlipSearch';
 
 const rows = [
   {
@@ -281,42 +286,42 @@ function stableSort(array, comparator) {
   });
   return stabilizedThis.map((el) => el[0]);
 }
-
+// 1111111
 const headCells = [
   {
     id: 'invoice_num',
     numeric: false,
     disablePadding: true,
     label: 'INVOICE_NUM',
-    minWidth: 120,
+    minWidth: 160,
   },
   {
     id: 'drcr',
     numeric: false,
     disablePadding: false,
     label: '차대',
-    minWidth: 100,
+    minWidth: 80,
   },
   {
     id: 'amount',
     numeric: false,
     disablePadding: false,
     label: '금액',
-    minWidth: 120,
+    minWidth: 100,
   },
   {
     id: 'krw_amount',
     numeric: false,
     disablePadding: true,
     label: '원화금액',
-    minWidth: 200,
+    minWidth: 120,
   },
   {
     id: 'excange_rate',
     numeric: false,
     disablePadding: true,
     label: '환율',
-    minWidth: 300,
+    minWidth: 70,
   },
   {
     id: 'cost_center',
@@ -330,7 +335,7 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: '계정코드',
-    minWidth: 200,
+    minWidth: 120,
   },
   {
     id: 'description',
@@ -344,7 +349,7 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: '생성자',
-    minWidth: 200,
+    minWidth: 100,
   },
   {
     id: 'creation_date',
@@ -358,7 +363,7 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: '그룹아이디',
-    minWidth: 100,
+    minWidth: 130,
   },
   {
     id: 'tx_num',
@@ -391,49 +396,56 @@ function EnhancedTableHead(props) {
   };
 
   return (
-    <TableHead>
-      <TableRow sx={{ display: 'flex', justifyContent: 'flex-start' }}>
-        <TableCell>
-          <Checkbox
-            color='primary'
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              'aria-label': 'select all desserts',
-            }}
-          />
-        </TableCell>
-        {headCells.map((headCell) => (
-          <TableCell
-            key={headCell.id}
-            align='auto 0'
-            padding={headCell.disablePadding ? 'none' : 'normal'}
-            sortDirection={orderBy === headCell.id ? order : false}
-            style={{
-              minWidth: headCell.minWidth,
-              width: '50px',
-              textAlign: 'left',
-              display: 'flex', // Center text horizontally
-              alignItems: 'center', // Center text vertically
-              padding: '8px',
-            }}
+    <TableHead
+      stickyHeader
+      sx={{
+        display: 'flex',
+        justifyContent: 'flex-start',
+        position: 'sticky',
+        top: 0,
+        zIndex: 1,
+      }}
+    >
+      <TableCell>
+        <Checkbox
+          color='primary'
+          indeterminate={numSelected > 0 && numSelected < rowCount}
+          checked={rowCount > 0 && numSelected === rowCount}
+          onChange={onSelectAllClick}
+          inputProps={{
+            'aria-label': 'select all desserts',
+          }}
+        />
+      </TableCell>
+      {headCells.map((headCell) => (
+        <TableCell
+          key={headCell.id}
+          align='auto 0'
+          padding={headCell.disablePadding ? 'none' : 'normal'}
+          sortDirection={orderBy === headCell.id ? order : false}
+          style={{
+            minWidth: headCell.minWidth,
+            width: '50px',
+            textAlign: 'center',
+            display: 'flex',
+            alignItems: 'center',
+            padding: '8px',
+          }}
+        >
+          <TableSortLabel
+            active={orderBy === headCell.id}
+            direction={orderBy === headCell.id ? order : 'asc'}
+            onClick={createSortHandler(headCell.id)}
           >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : 'asc'}
-              onClick={createSortHandler(headCell.id)}
-            >
-              {headCell.label}
-              {orderBy === headCell.id ? (
-                <Box component='span' sx={visuallyHidden}>
-                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-                </Box>
-              ) : null}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-      </TableRow>
+            {headCell.label}
+            {orderBy === headCell.id ? (
+              <Box component='span' sx={visuallyHidden}>
+                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+              </Box>
+            ) : null}
+          </TableSortLabel>
+        </TableCell>
+      ))}
     </TableHead>
   );
 }
@@ -449,12 +461,6 @@ EnhancedTableHead.propTypes = {
 
 function EnhancedTableToolbar(props) {
   const { numSelected } = props;
-  const currentDate = new Date();
-  const currentMonth = currentDate.getMonth() + 1;
-  // dateRange는 [startDate, endDate] 형태의 배열을 값 가짐
-  const [dateRange, setDateRange] = useState([null, null]);
-  //dateRange 변수를 startDate와 endDate 프로퍼티로 전달
-  const [startDate, endDate] = dateRange;
   return (
     <Toolbar
       sx={{
@@ -478,33 +484,7 @@ function EnhancedTableToolbar(props) {
         >
           {numSelected} selected
         </Typography>
-      ) : (
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between', // Aligns children to the start and end of the container
-            gap: '8px',
-          }}
-        >
-          <button>앞</button>
-          <div>{currentMonth}</div>
-          <button>뒤</button>
-          <div style={{ height: '20px' }} />
-          <DatePicker
-            selectsRange={true}
-            startDate={startDate}
-            endDate={endDate}
-            onChange={(update) => {
-              setDateRange(update);
-            }}
-            withPortal
-          />
-          <input />
-          <Button style={{ marginLeft: 'auto' }}> 검증</Button>
-        </div>
-      )}
+      ) : null}
 
       {numSelected > 0 ? (
         <Tooltip title='Delete'>
@@ -535,7 +515,6 @@ export default function AccountingSlipTable(props) {
   const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -594,70 +573,152 @@ export default function AccountingSlipTable(props) {
     [order, orderBy, page, rowsPerPage]
   );
   const groupedVisibleRows = groupBy(visibleRows, 'invoice_num');
+  const currentDate = new Date();
+  const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth() + 1);
+  // dateRange는 [startDate, endDate] 형태의 배열을 값 가짐
+  const [dateRange, setDateRange] = useState([null, null]);
+  //dateRange 변수를 startDate와 endDate 프로퍼티로 전달
+  const [startDate, endDate] = dateRange;
+  const theme = useTheme();
+
+  const onClickPreBtn = () => {
+    setCurrentMonth((prevMonth) => (prevMonth - 1 + 12) % 12 || 12);
+  };
+  const onClickNextBtn = () => {
+    setCurrentMonth((prevMonth) => (prevMonth + 1) % 12 || 12);
+  };
   return (
     <Box
       sx={{
         width: '100%',
         display: 'flex',
-        justifyContent: 'flex-start', // Change to 'flex-start'
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
+        alignItems: 'center',
       }}
     >
-      <Paper sx={{ width: '95%', overflow: 'hidden', mb: 2 }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          alignItems: 'center',
+          justifyContent: 'space-between', // Aligns children to the start and end of the container
+          gap: '8px',
+          marginTop: '16px',
+        }}
+      >
+        <Button
+          onClick={onClickPreBtn}
+          width='50px'
+          color={theme.palette.posco_white}
+          fontColor={theme.palette.posco_black}
+          hoverColor={theme.palette.posco_gray_100}
+        >
+          <ChevronLeftIcon />
+        </Button>
+        <Typography sx={{ paddingX: '32px', fontSize: '28px' }}>
+          {currentMonth}
+        </Typography>
+        <Button
+          onClick={onClickNextBtn}
+          width='50px'
+          color={theme.palette.posco_white}
+          fontColor={theme.palette.posco_black}
+          hoverColor={theme.palette.posco_gray_100}
+        >
+          <ChevronRightIcon />
+        </Button>
+      </div>
+      <div style={{ height: '20px' }} />
+      <div />
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'flex-start',
+          marginRight: ' auto',
+        }}
+      >
+        <DatePicker
+          showIcon
+          selectsRange={true}
+          startDate={startDate}
+          endDate={endDate}
+          onChange={(update) => {
+            setDateRange(update);
+          }}
+          withPortal
+          className='datepicker'
+        />
+        <AccountingSlipSearch />
+      </div>
+      <Paper sx={{ width: '100%', overflow: 'hidden', mb: 2 }}>
         <EnhancedTableToolbar numSelected={selected.length} />
-        <TableContainer sx={{ height: '45vh' }}>
-          <Table stickyHeader aria-label='sticky table'>
-            <EnhancedTableHead
-              numSelected={selected.length}
-              order={order}
-              orderBy={orderBy}
-              onSelectAllClick={handleSelectAllClick}
-              onRequestSort={handleRequestSort}
-              rowCount={rows.length}
-            />
-            {Object.keys(groupedVisibleRows).map(
-              (invoiceNumGroup, groupIndex) => (
-                <React.Fragment key={`group-${groupIndex}`}>
-                  <TableRow
-                    sx={{
-                      display: 'grid',
-                      gridTemplateColumns: '1fr', // 동일한 열 너비
-                      alignItems: 'stretch', // 수직으로 컨테이너를 채우도록 아이템을 늘립니다.
-                      cursor: 'pointer',
-                      '&:hover': {
-                        background: '#f5f5f5',
-                      },
-                    }}
-                  >
-                    <TableCell
-                      colSpan={headCells.length + 1}
+        <TableContainer sx={{ height: '60vh' }}>
+          <Table>
+            <TableHead
+              stickyHeader
+              aria-label='sticky table'
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-start',
+                position: 'sticky',
+                top: 0,
+                zIndex: 1,
+              }}
+            >
+              <Paper sx={{ width: '100%' }}>
+                <EnhancedTableHead
+                  numSelected={selected.length}
+                  order={order}
+                  orderBy={orderBy}
+                  onSelectAllClick={handleSelectAllClick}
+                  onRequestSort={handleRequestSort}
+                  rowCount={rows.length}
+                />
+              </Paper>
+            </TableHead>
+
+            <TableBody>
+              {Object.keys(groupedVisibleRows).map(
+                (invoiceNumGroup, groupIndex) => (
+                  <React.Fragment key={`group-${groupIndex}`}>
+                    <TableRow
                       sx={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center', // Change to 'center' for vertical alignment
+                        display: 'grid',
+                        gridTemplateColumns: '1fr', // 동일한 열 너비
+                        alignItems: 'stretch', // 수직으로 컨테이너를 채우도록 아이템을 늘립니다.
+                        cursor: 'pointer',
+                        '&:hover': {
+                          background: '#f5f5f5',
+                        },
                       }}
                     >
-                      <Checkbox
-                        color='primary'
-                        checked={isSelected(invoiceNumGroup)}
-                        onChange={(event) =>
-                          handleClick(event, invoiceNumGroup)
-                        }
-                      />
-
-                      <Typography
-                        variant='subtitle1'
-                        component='div'
-                        style={{ marginLeft: '8px' }}
+                      {/* 그룹 선택하는 줄 */}
+                      <TableCell
+                        colSpan={headCells.length + 1}
+                        sx={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          alignItems: 'center', // Change to 'center' for vertical alignment
+                        }}
                       >
-                        {`${invoiceNumGroup} `} {/* 그룹 선택됨 */}
-                      </Typography>
-                    </TableCell>
+                        <Checkbox
+                          color='primary'
+                          checked={isSelected(invoiceNumGroup)}
+                          onChange={(event) =>
+                            handleClick(event, invoiceNumGroup)
+                          }
+                        />
 
-                    <TableCell
-                      sx={{
-                        borderBottom: 'none',
-                      }}
-                    >
+                        <Typography
+                          variant='subtitle1'
+                          component='div'
+                          style={{ marginLeft: '8px' }}
+                        >
+                          {`${invoiceNumGroup} `} {/* 그룹 선택됨 */}
+                        </Typography>
+                      </TableCell>
+
                       {groupedVisibleRows[invoiceNumGroup].map((row, index) => {
                         const isItemSelected = isSelected(row.tx_num);
                         const labelId = `enhanced-table-checkbox-${index}`;
@@ -672,7 +733,8 @@ export default function AccountingSlipTable(props) {
                             tabIndex={-1}
                             selected={isItemSelected}
                           >
-                            <TableCell align='center'>
+                            {/* 2222222 */}
+                            <TableCell align='center' style={{ minWidth: 250 }}>
                               {row.invoice_num}
                             </TableCell>
                             <TableCell align='center'>{row.rcdc}</TableCell>
@@ -697,25 +759,27 @@ export default function AccountingSlipTable(props) {
                               {row.creation_date}
                             </TableCell>
                             <TableCell align='center'>{row.group_id}</TableCell>
-                            <TableCell align='center'>{row.tx_num}</TableCell>
+                            <TableCell align='center' style={{ minWidth: 200 }}>
+                              {row.tx_num}
+                            </TableCell>
                             <TableCell align='center'>{row.tx_cd}</TableCell>
                           </TableRow>
                         );
                       })}
-                    </TableCell>
-                  </TableRow>
-                </React.Fragment>
-              )
-            )}
-            {emptyRows > 0 && (
-              <TableRow
-                style={{
-                  height: 43 * emptyRows,
-                }}
-              >
-                <TableCell colSpan={headCells.length + 1} />
-              </TableRow>
-            )}
+                    </TableRow>
+                  </React.Fragment>
+                )
+              )}
+              {emptyRows > 0 && (
+                <TableRow
+                  style={{
+                    height: 43 * emptyRows,
+                  }}
+                >
+                  <TableCell colSpan={headCells.length + 1} />
+                </TableRow>
+              )}
+            </TableBody>
           </Table>
         </TableContainer>
         <TablePagination

@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import DatePicker from 'react-datepicker';
 import Button from '../global/Button';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import 'react-datepicker/dist/react-datepicker.css';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
@@ -28,7 +32,6 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
 import { useTheme } from '@emotion/react';
 import AccountingSlipSearch from './AccountingSlipSearch';
-import ManagerVerificationBtn from './ManagerVerificationBtn';
 import ManagerRejectBtn from './ManagerRejectBtn';
 import ManagerImportBtn from './ManagerImportBtn';
 
@@ -295,7 +298,7 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: 'INVOICE_NUM',
-    minWidth: 160,
+    minWidth: 230,
   },
   {
     id: 'drcr',
@@ -309,27 +312,27 @@ const headCells = [
     numeric: false,
     disablePadding: false,
     label: '금액',
-    minWidth: 100,
+    minWidth: 150,
   },
   {
     id: 'krw_amount',
     numeric: false,
     disablePadding: true,
     label: '원화금액',
-    minWidth: 120,
+    minWidth: 150,
   },
   {
     id: 'excange_rate',
     numeric: false,
     disablePadding: true,
     label: '환율',
-    minWidth: 70,
+    minWidth: 100,
   },
   {
     id: 'cost_center',
     numeric: false,
     disablePadding: true,
-    label: 'COST CENTER',
+    label: '사무소',
     minWidth: 100,
   },
   {
@@ -337,49 +340,49 @@ const headCells = [
     numeric: false,
     disablePadding: true,
     label: '계정코드',
-    minWidth: 120,
+    minWidth: 150,
   },
   {
     id: 'description',
     numeric: false,
     disablePadding: true,
     label: '설명',
-    minWidth: 100,
+    minWidth: 200,
   },
   {
     id: 'created_by',
     numeric: false,
     disablePadding: true,
     label: '생성자',
-    minWidth: 100,
+    minWidth: 150,
   },
   {
     id: 'creation_date',
     numeric: false,
     disablePadding: true,
     label: '생성날짜',
-    minWidth: 100,
+    minWidth: 150,
   },
   {
     id: 'group_id',
     numeric: false,
     disablePadding: true,
     label: '그룹아이디',
-    minWidth: 130,
+    minWidth: 180,
   },
   {
     id: 'tx_num',
     numeric: false,
     disablePadding: true,
     label: '거래순번',
-    minWidth: 100,
+    minWidth: 80,
   },
   {
-    id: 'tran_cd',
+    id: 'tx_cd',
     numeric: false,
     disablePadding: true,
     label: '식별코드',
-    minWidth: 100,
+    minWidth: 95,
   },
 ];
 
@@ -408,35 +411,23 @@ function EnhancedTableHead(props) {
         zIndex: 1,
       }}
     >
-      {headCells.map((headCell) => (
-        <TableCell
-          key={headCell.id}
-          align='auto 0'
-          padding={headCell.disablePadding ? 'none' : 'normal'}
-          sortDirection={orderBy === headCell.id ? order : false}
-          style={{
-            minWidth: headCell.minWidth,
-            width: '50px',
-            textAlign: 'center',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '8px',
-          }}
-        >
-          <TableSortLabel
-            active={orderBy === headCell.id}
-            direction={orderBy === headCell.id ? order : 'asc'}
-            onClick={createSortHandler(headCell.id)}
+      <TableRow>
+        {headCells.map((headCell) => (
+          <TableCell
+            key={headCell.id}
+            align='center'
+            sortDirection={orderBy === headCell.id ? order : false}
+            sx={{
+              minWidth: headCell.minWidth,
+              fontSize: { xs: '12px', sm: '16px', md: '18px' },
+              fontWeight: '600',
+              padding: '0',
+            }}
           >
             {headCell.label}
-            {orderBy === headCell.id ? (
-              <Box component='span' sx={visuallyHidden}>
-                {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
-              </Box>
-            ) : null}
-          </TableSortLabel>
-        </TableCell>
-      ))}
+          </TableCell>
+        ))}
+      </TableRow>
     </TableHead>
   );
 }
@@ -503,7 +494,6 @@ const groupBy = (array, key) => {
 export default function AccountingSlipTable(props) {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
-  const [selected, setSelected] = useState([]);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const handleRequestSort = (event, property) => {
@@ -535,6 +525,7 @@ export default function AccountingSlipTable(props) {
   );
   const groupedVisibleRows = groupBy(visibleRows, 'invoice_num');
   const currentDate = new Date();
+  const [year, setYear] = useState(currentDate.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth() + 1);
   // dateRange는 [startDate, endDate] 형태의 배열을 값 가짐
   const [dateRange, setDateRange] = useState([null, null]);
@@ -542,12 +533,52 @@ export default function AccountingSlipTable(props) {
   const [startDate, endDate] = dateRange;
   const theme = useTheme();
 
+  const getMonthString = (monthNumber) => {
+    const monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ];
+
+    return monthNames[monthNumber - 1];
+  };
+  const currentMonthString = getMonthString(currentMonth);
   const onClickPreBtn = () => {
-    setCurrentMonth((prevMonth) => (prevMonth - 1 + 12) % 12 || 12);
+    setCurrentMonth((prevMonth) => {
+      const newMonth = (prevMonth - 1 + 12) % 12 || 12;
+      if (newMonth === 12) {
+        setYear((prevYear) => prevYear - 1);
+      }
+      return newMonth;
+    });
   };
+
   const onClickNextBtn = () => {
-    setCurrentMonth((prevMonth) => (prevMonth + 1) % 12 || 12);
+    setCurrentMonth((prevMonth) => {
+      const newMonth = (prevMonth + 1) % 12 || 12;
+      if (newMonth === 1) {
+        setYear((prevYear) => prevYear + 1);
+      }
+      return newMonth;
+    });
   };
+  const [selectedOffice, setSelectedOffice] = useState('');
+  const handleChangeOffice = (event) => {
+    const selectedValue = event.target.value;
+    setSelectedOffice(selectedValue);
+    // Logic to filter data based on selected office
+    // You can implement this if needed
+  };
+
   return (
     <Box
       sx={{
@@ -558,6 +589,64 @@ export default function AccountingSlipTable(props) {
         alignItems: 'center',
       }}
     >
+      <TextField
+        select
+        label='사무소'
+        margin='dense'
+        variant='standard'
+        sx={{
+          width: '10%',
+          marginLeft: 'auto',
+          '@media (max-width: 600px)': {
+            fontSize: '14px',
+            width: '100%',
+          },
+        }}
+        value={selectedOffice}
+        onChange={handleChangeOffice}
+        //fullWidth
+      >
+        <MenuItem value='all'>전체</MenuItem>
+        <MenuItem value='HDF13'>브뤼셀</MenuItem>
+        <MenuItem value='HDF32'>유럽</MenuItem>
+        <MenuItem value='HDF27'>아르헨티나</MenuItem>
+      </TextField>
+      {/* <FormControl
+        sx={{
+          width: '10%',
+          marginLeft: 'auto',
+          '@media (max-width: 600px)': {
+            fontSize: '14px',
+            width: '100%',
+          },
+        }}
+      >
+        <InputLabel
+          id='demo-simple-select-label'
+          sx={{ fontSize: '16px', alignItems: 'center', marginTop: '-8px' }}
+        >
+          {costCenter}
+        </InputLabel>
+        <Select
+          labelId='demo-simple-select-label'
+          id='demo-simple-select'
+          value={}
+          label='Age'
+          onChange={handleChange}
+          sx={{
+            height: '40px',
+            '@media (max-width: 600px)': {
+              // Adjust styles for smaller screens
+              fontSize: '14px',
+              marginTop: '-4px',
+            },
+          }}
+        >
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+      </FormControl> */}
       <div
         style={{
           display: 'flex',
@@ -578,7 +667,7 @@ export default function AccountingSlipTable(props) {
           <ChevronLeftIcon />
         </Button>
         <Typography sx={{ paddingX: '32px', fontSize: '28px' }}>
-          {currentMonth}
+          {currentMonthString} , {year}
         </Typography>
         <Button
           onClick={onClickNextBtn}
@@ -613,7 +702,7 @@ export default function AccountingSlipTable(props) {
         <AccountingSlipSearch />
       </div>
       <Paper sx={{ width: '100%', overflow: 'hidden', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar />
         <TableContainer sx={{ height: '60vh' }}>
           <Table>
             <TableHead
@@ -629,7 +718,6 @@ export default function AccountingSlipTable(props) {
             >
               <Paper sx={{ width: '100%' }}>
                 <EnhancedTableHead
-                  numSelected={selected.length}
                   order={order}
                   orderBy={orderBy}
                   onRequestSort={handleRequestSort}
@@ -640,76 +728,68 @@ export default function AccountingSlipTable(props) {
 
             <TableBody>
               {Object.keys(groupedVisibleRows).map(
-                (invoiceNumGroup, groupIndex) => (
-                  <React.Fragment key={`group-${groupIndex}`}>
-                    <TableRow
-                      sx={{
-                        display: 'grid',
-                        gridTemplateColumns: '1fr', // 동일한 열 너비
-                        alignItems: 'stretch', // 수직으로 컨테이너를 채우도록 아이템을 늘립니다.
-                        cursor: 'pointer',
-                        '&:hover': {
-                          background: '#f5f5f5',
-                        },
-                      }}
-                    >
-                      {/* 그룹 선택하는 줄 */}
-                      <TableCell
-                        colSpan={headCells.length + 1}
+                (invoiceNumGroup, groupIndex) => {
+                  return (
+                    <React.Fragment key={`group-${groupIndex}`}>
+                      <TableRow
                         sx={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          alignItems: 'center', // Change to 'center' for vertical alignment
+                          display: 'grid',
+                          gridTemplateColumns: '1fr', // 동일한 열 너비
+                          alignItems: 'stretch', // 수직으로 컨테이너를 채우도록 아이템을 늘립니다.
+                          cursor: 'pointer',
+                          '&:hover': {
+                            background: '#f5f5f5',
+                          },
                         }}
                       >
-                        <Typography
-                          variant='subtitle1'
-                          component='div'
-                          style={{ marginLeft: '8px' }}
+                        {/* 그룹 선택하는 줄 */}
+                        <TableCell
+                          colSpan={headCells.length + 1}
+                          sx={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            alignItems: 'center', // Change to 'center' for vertical alignment
+                          }}
                         >
-                          {`${invoiceNumGroup} `} {/* 그룹 선택됨 */}
-                        </Typography>
-                      </TableCell>
-
-                      {groupedVisibleRows[invoiceNumGroup].map((row, index) => {
-                        return (
-                          <TableRow key={row.tx_num} tabIndex={-1}>
-                            {/* 2222222 */}
-                            <TableCell align='center' style={{ minWidth: 250 }}>
-                              {row.invoice_num}
-                            </TableCell>
-                            <TableCell align='center'>{row.rcdc}</TableCell>
-                            <TableCell align='center'>{row.amount}</TableCell>
-                            <TableCell align='center'>
-                              {row.krw_amount}
-                            </TableCell>
-                            <TableCell align='center'>
-                              {row.excange_rate}
-                            </TableCell>
-                            <TableCell align='center'>
-                              {row.cost_center}
-                            </TableCell>
-                            <TableCell align='center'>{row.account}</TableCell>
-                            <TableCell align='center'>
-                              {row.description}
-                            </TableCell>
-                            <TableCell align='center'>
-                              {row.created_by}
-                            </TableCell>
-                            <TableCell align='center'>
-                              {row.creation_date}
-                            </TableCell>
-                            <TableCell align='center'>{row.group_id}</TableCell>
-                            <TableCell align='center' style={{ minWidth: 200 }}>
-                              {row.tx_num}
-                            </TableCell>
-                            <TableCell align='center'>{row.tx_cd}</TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableRow>
-                  </React.Fragment>
-                )
+                          <Typography
+                            variant='subtitle1'
+                            component='div'
+                            style={{ marginLeft: '8px' }}
+                          >
+                            {`${invoiceNumGroup} `} {/* 그룹 선택됨 */}
+                          </Typography>
+                        </TableCell>
+                        {groupedVisibleRows[invoiceNumGroup].map(
+                          (row, index) => (
+                            <TableRow
+                              key={row.tx_num}
+                              tabIndex={-1}
+                              sx={{ paddingTop: '3px', paddingBottom: '3px' }}
+                            >
+                              {headCells.map((headCell) => (
+                                <TableCell
+                                  key={headCell.id}
+                                  align='center'
+                                  style={{ minWidth: `${headCell.minWidth}px` }}
+                                  sx={{
+                                    fontSize: {
+                                      xs: '12px',
+                                      sm: '14px',
+                                      md: '16px',
+                                    },
+                                    padding: 0,
+                                  }}
+                                >
+                                  {row[headCell.id]}
+                                </TableCell>
+                              ))}
+                            </TableRow>
+                          )
+                        )}
+                      </TableRow>
+                    </React.Fragment>
+                  );
+                }
               )}
               {emptyRows > 0 && (
                 <TableRow
@@ -733,7 +813,7 @@ export default function AccountingSlipTable(props) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      <ManagerVerificationBtn />
+      {/* 유저 권한에 따라서 사무소장만 버튼 볼 수 있도록, 검증은 자동으로 하고 그 결과에 따라 렌더링 되는 버튼이 달라짐 */}
       <ManagerRejectBtn />
       <ManagerImportBtn />
     </Box>
