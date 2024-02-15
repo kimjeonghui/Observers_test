@@ -397,7 +397,7 @@ export default function AdminCode(props) {
   const [tableData, setTableData] = useState(rows);
   const [selectedCode, setSelectedCode] = useState('');
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(20);
 
   const handleChangeCode = (event) => {
     const selectedValue = event.target.value;
