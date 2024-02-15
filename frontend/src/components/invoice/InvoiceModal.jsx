@@ -5,14 +5,18 @@ import {
   DialogContent,
   DialogTitle,
   DialogActions,
-  InputLabel,
   MenuItem,
   Select,
   TextField,
+  FormControl,
+  Typography,
 } from '@mui/material';
-import { ModalStrokeBtn } from './InvoiceStyles';
+import { ModalStrokeBtn, FlexDiv } from './InvoiceStyles';
 import CustomButton from '../global/Button';
 import Input from '../global/Input';
+import ModalInput from '../global/ModalInput';
+import 'react-datepicker/dist/react-datepicker.css';
+
 function InvoiceModal(props) {
   const { open, setOpen } = props;
   const [steps, setSteps] = useState(1);
@@ -50,11 +54,19 @@ function InvoiceModal(props) {
         return (
           <div>
             <DialogTitle>입력 방식을 선택해주세요.</DialogTitle>
-            <DialogContent>
-              <ModalStrokeBtn onClick={() => handleSteps(1)}>
+            <DialogContent sx={{ display: 'flex' }}>
+              <ModalStrokeBtn
+                width='30%'
+                height='30vh'
+                onClick={() => handleSteps(3)}
+              >
                 Manual
               </ModalStrokeBtn>
-              <ModalStrokeBtn onClick={() => handleSteps(1)}>
+              <ModalStrokeBtn
+                width='30%'
+                height='30vh'
+                onClick={() => handleSteps(1)}
+              >
                 Photo
               </ModalStrokeBtn>
             </DialogContent>
@@ -67,30 +79,29 @@ function InvoiceModal(props) {
               <ModalStrokeBtn>
                 <input type='file' accept='image/png, image/jpeg' />
               </ModalStrokeBtn>
-              <InputLabel id='dep_curr'>입금통화</InputLabel>
-              <Select
-                labelId='dep_curr'
-                id='demo-simple-select'
-                value={dep_curr}
-                label='입금통화'
-                onChange={handleDepChange}
-              >
-                <MenuItem value='ARS'>ARS</MenuItem>
-                <MenuItem value='USD'>USD</MenuItem>
-                <MenuItem value='KRW'>KRW</MenuItem>
-              </Select>
-              <InputLabel id='wd_curr'>출금통화</InputLabel>
-              <Select
-                labelId='wd_curr'
-                id='demo-simple-select'
-                value={wd_curr}
-                label='출금통화'
-                onChange={handleWdChange}
-              >
-                <MenuItem value='ARS'>ARS</MenuItem>
-                <MenuItem value='USD'>USD</MenuItem>
-                <MenuItem value='KRW'>KRW</MenuItem>
-              </Select>
+              <FormControl sx={{ minWidth: 120 }} size='small'>
+                <Typography
+                  my={1}
+                  sx={{
+                    fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                    fontWeight: 600,
+                  }}
+                >
+                  입금통화
+                </Typography>
+                <Select
+                  labelId='dep_curr'
+                  id='dep-curr-small'
+                  value={dep_curr}
+                  label=''
+                  onChange={handleDepChange}
+                  sx={{ backgroundColor: '#F5F6FA' }}
+                >
+                  <MenuItem value='ARS'>ARS</MenuItem>
+                  <MenuItem value='USD'>USD</MenuItem>
+                  <MenuItem value='KRW'>KRW</MenuItem>
+                </Select>
+              </FormControl>
             </DialogContent>
             <DialogActions>
               <CustomButton onClick={handleOcrSubmit}>제출하기</CustomButton>
@@ -102,66 +113,116 @@ function InvoiceModal(props) {
       case 4:
         return (
           <div>
-            <DialogContent>
-              <Input
-                widthV='30'
-                heightV='5'
-                label='거래처명'
-                placeholder='거래처명을 입력하세요'
-              />
-              <Input
-                widthV='10'
-                heightV='5'
-                label='식별코드'
-                placeholder='거래처명을 입력하세요'
-              />
-              <br />
-              <Select
-                labelId='dep_curr'
-                id='demo-simple-select'
-                value={dep_curr}
-                label='입금통화'
-                onChange={handleDepChange}
-              >
-                <MenuItem value='ARS'>ARS</MenuItem>
-                <MenuItem value='USD'>USD</MenuItem>
-                <MenuItem value='KRW'>KRW</MenuItem>
-              </Select>
-              <Input
-                widthV='10'
-                heightV='5'
-                label='입금금액'
-                placeholder='입금금액을 입력하세요'
-              />
-              <Select
-                labelId='dep_curr'
-                id='demo-simple-select'
-                value={wd_curr}
-                label='출금통화'
-                onChange={handleWdChange}
-              >
-                <MenuItem value='ARS'>ARS</MenuItem>
-                <MenuItem value='USD'>USD</MenuItem>
-                <MenuItem value='KRW'>KRW</MenuItem>
-              </Select>
-              <Input
-                widthV='10'
-                heightV='5'
-                label='출금금액'
-                placeholder='출금금액을 입력하세요'
-              />
+            <DialogContent sx={{ padding: '36px 88px' }}>
+              <FlexDiv>
+                <ModalInput
+                  label='거래처명'
+                  width='40vw'
+                  placeholder='거래처명을 입력하세요'
+                />
 
-              <Input widthV='10' heightV='5' label='거래일자' type='date' />
-              <br />
-              <TextField
-                sx={{ width: '30vw' }}
-                id='standard-multiline-static'
-                label='Multiline'
-                multiline
-                rows={4}
-                defaultValue='Default Value'
-                variant='standard'
-              />
+                <FormControl sx={{ minWidth: 120 }} size='small'>
+                  <Typography
+                    my={1}
+                    sx={{
+                      fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                      fontWeight: 600,
+                    }}
+                  >
+                    식별코드
+                  </Typography>
+                  <Select
+                    value={dep_curr}
+                    label=''
+                    onChange={handleDepChange}
+                    sx={{ backgroundColor: '#F5F6FA' }}
+                  >
+                    <MenuItem value='1101'>1101</MenuItem>
+                    <MenuItem value='1102'>1102</MenuItem>
+                    <MenuItem value='1103'>1103</MenuItem>
+                  </Select>
+                </FormControl>
+              </FlexDiv>
+              <FlexDiv>
+                <FormControl sx={{ minWidth: 120 }} size='small'>
+                  <Typography
+                    my={1}
+                    sx={{
+                      fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                      fontWeight: 600,
+                    }}
+                  >
+                    입금통화
+                  </Typography>
+                  <Select
+                    value={dep_curr}
+                    label=''
+                    onChange={handleDepChange}
+                    sx={{ backgroundColor: '#F5F6FA' }}
+                  >
+                    <MenuItem value='ARS'>ARS</MenuItem>
+                    <MenuItem value='USD'>USD</MenuItem>
+                    <MenuItem value='KRW'>KRW</MenuItem>
+                  </Select>
+                </FormControl>
+
+                <ModalInput
+                  label='입금금액'
+                  width='10vw'
+                  placeholder='소수점 2자리포함'
+                  type='number'
+                />
+
+                <FormControl sx={{ minWidth: 120 }} size='small'>
+                  <Typography
+                    my={1}
+                    sx={{
+                      fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                      fontWeight: 600,
+                    }}
+                  >
+                    출금통화
+                  </Typography>
+                  <Select
+                    value={wd_curr}
+                    label=''
+                    onChange={handleDepChange}
+                    sx={{ backgroundColor: '#F5F6FA' }}
+                  >
+                    <MenuItem value='ARS'>ARS</MenuItem>
+                    <MenuItem value='USD'>USD</MenuItem>
+                    <MenuItem value='KRW'>KRW</MenuItem>
+                  </Select>
+                </FormControl>
+                <ModalInput
+                  label='출금금액'
+                  width='10vw'
+                  placeholder='소수점 2자리포함'
+                  type='number'
+                />
+
+                <ModalInput type='date' label='거래일자' />
+              </FlexDiv>
+              <div>
+                <Typography
+                  my={1}
+                  sx={{
+                    fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                    fontWeight: 600,
+                  }}
+                >
+                  거래내역
+                </Typography>
+
+                <TextField
+                  sx={{ backgroundColor: '#F5F6FA' }}
+                  fullWidth
+                  multiline
+                  rows={4}
+                  placeholder='거래내역을 입력하세요'
+                />
+              </div>
+              <CustomButton size='md'>등록</CustomButton>
             </DialogContent>
           </div>
         );
@@ -171,7 +232,7 @@ function InvoiceModal(props) {
   };
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth='md'>
+    <Dialog open={open} onClose={handleClose} fullWidth={true} maxWidth='lg'>
       {renderDialogContent()}
     </Dialog>
   );

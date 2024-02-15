@@ -14,7 +14,7 @@ export const ActiveSpanTab = styled.span`
   cursor: pointer;
 `;
 
-export const ModalStrokeBtn = styled.span`
+export const ModalStrokeBtn = styled.div`
   width: ${(props) => props.width};
   height: ${(props) => props.height};
   border-radius: 15px;
@@ -22,4 +22,10 @@ export const ModalStrokeBtn = styled.span`
   &:hover {
     border: 2px solid ${(props) => props.theme.palette.posco_blue_500};
   }
+`;
+
+export const FlexDiv = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
 `;
