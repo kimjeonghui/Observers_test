@@ -80,7 +80,7 @@ public class QSummaryContentsEntity extends EntityPathBase<SummaryContentsEntity
 
     public QSummaryContentsEntity(Class<? extends SummaryContentsEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.glCodeEntity = inits.isInitialized("glCodeEntity") ? new QGLCodeEntity(forProperty("glCodeEntity")) : null;
+        this.glCodeEntity = inits.isInitialized("glCodeEntity") ? new QGLCodeEntity(forProperty("glCodeEntity"), inits.get("glCodeEntity")) : null;
         this.summaryEntity = inits.isInitialized("summaryEntity") ? new QSummaryEntity(forProperty("summaryEntity")) : null;
     }
 

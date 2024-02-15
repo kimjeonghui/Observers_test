@@ -60,6 +60,5 @@ public class SummaryContentsEntity extends BaseEntity{
     @ManyToOne(targetEntity = GLCodeEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "tran_cd")
     @JsonBackReference
-//    @MapsId
     private GLCodeEntity glCodeEntity;
 }

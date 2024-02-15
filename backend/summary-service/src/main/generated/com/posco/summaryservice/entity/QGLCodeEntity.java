@@ -18,6 +18,8 @@ public class QGLCodeEntity extends EntityPathBase<GLCodeEntity> {
 
     private static final long serialVersionUID = 236827580L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QGLCodeEntity gLCodeEntity = new QGLCodeEntity("gLCodeEntity");
 
     public final QBaseEntity _super = new QBaseEntity(this);
@@ -54,6 +56,8 @@ public class QGLCodeEntity extends EntityPathBase<GLCodeEntity> {
 
     public final StringPath ovsCd = createString("ovsCd");
 
+    public final QReferenceEntity referenceEntity;
+
     public final NumberPath<Long> subAccount = createNumber("subAccount", Long.class);
 
     public final ListPath<SummaryContentsEntity, QSummaryContentsEntity> summaryContentsEntities = this.<SummaryContentsEntity, QSummaryContentsEntity>createList("summaryContentsEntities", SummaryContentsEntity.class, QSummaryContentsEntity.class, PathInits.DIRECT2);
@@ -61,15 +65,24 @@ public class QGLCodeEntity extends EntityPathBase<GLCodeEntity> {
     public final StringPath tranCd = createString("tranCd");
 
     public QGLCodeEntity(String variable) {
-        super(GLCodeEntity.class, forVariable(variable));
+        this(GLCodeEntity.class, forVariable(variable), INITS);
     }
 
     public QGLCodeEntity(Path<? extends GLCodeEntity> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QGLCodeEntity(PathMetadata metadata) {
-        super(GLCodeEntity.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QGLCodeEntity(PathMetadata metadata, PathInits inits) {
+        this(GLCodeEntity.class, metadata, inits);
+    }
+
+    public QGLCodeEntity(Class<? extends GLCodeEntity> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.referenceEntity = inits.isInitialized("referenceEntity") ? new QReferenceEntity(forProperty("referenceEntity")) : null;
     }
 
 }
