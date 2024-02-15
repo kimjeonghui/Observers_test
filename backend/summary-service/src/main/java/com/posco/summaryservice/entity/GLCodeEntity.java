@@ -20,7 +20,7 @@ public class GLCodeEntity extends BaseEntity{
     @Column
     private String tranCd;              // 식별 코드
 
-    @Column
+    @Column(nullable = false)
     private String accountName;         // 계정명
 
     @Column
@@ -29,10 +29,10 @@ public class GLCodeEntity extends BaseEntity{
     @Column
     private Long subAccount;            // 보조 계정
 
-    @Column
+    @Column(nullable = false)
     private Long depositCd;             // 입출금 구분
 
-    @Column
+    @Column(nullable = false)
     private Long deptReqFlag;           // 부서 코드 필수 여부
 
     @Column
@@ -50,9 +50,13 @@ public class GLCodeEntity extends BaseEntity{
     @Column
     private String minorCt;             // 소분류
 
-    @Column(updatable = false)
+    @Column(name = "ovs_cd", insertable = false, updatable = false)
     private String ovsCd;               // 사무소 코드
 
     @OneToMany(mappedBy = "glCodeEntity", cascade = CascadeType.REMOVE)
     private List<SummaryContentsEntity> summaryContentsEntities;
+
+    @ManyToOne(targetEntity = ReferenceEntity.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "ovs_cd")
+    private ReferenceEntity referenceEntity;
 }
