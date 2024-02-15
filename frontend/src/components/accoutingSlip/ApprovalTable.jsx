@@ -9,35 +9,35 @@ import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import ConfirmRejectBtn from './ManagerConfirmRejectBtn';
 import { Box } from '@mui/material';
-import UserConfirmBtn from './UserConfirmBtn';
+import { useTheme } from '@mui/material/styles';
 const columns = [
   {
     id: 'ovs_cd',
     numeric: false,
     disablePadding: true,
     label: '사무소코드',
-    minWidth: 120,
+    minWidth: 100,
   },
   {
     id: 'num',
     numeric: true,
     disablePadding: false,
     label: '순번',
-    minWidth: 100,
+    minWidth: 70,
   },
   {
     id: 'fiscal_month',
     numeric: false,
     disablePadding: false,
     label: '회계월',
-    minWidth: 120,
+    minWidth: 100,
   },
   {
     id: 'tx_date',
     numeric: true,
     disablePadding: true,
     label: '거래일자',
-    minWidth: 200,
+    minWidth: 100,
   },
   {
     id: 'store',
@@ -51,35 +51,35 @@ const columns = [
     numeric: false,
     disablePadding: true,
     label: '입금통화',
-    minWidth: 100,
+    minWidth: 80,
   },
   {
     id: 'deposit',
     numeric: false,
     disablePadding: true,
     label: '입금금액',
-    minWidth: 200,
+    minWidth: 150,
   },
   {
     id: 'wd_curr',
     numeric: false,
     disablePadding: true,
     label: '출금통화',
-    minWidth: 100,
+    minWidth: 80,
   },
   {
     id: 'withdrawal',
     numeric: false,
     disablePadding: true,
     label: '출금금액',
-    minWidth: 200,
+    minWidth: 150,
   },
   {
     id: 'trans_cd',
     numeric: false,
     disablePadding: true,
     label: '식별코드',
-    minWidth: 100,
+    minWidth: 80,
   },
   {
     id: 'description',
@@ -93,7 +93,7 @@ const columns = [
     numeric: false,
     disablePadding: true,
     label: '환산금액',
-    minWidth: 100,
+    minWidth: 150,
   },
 ];
 
@@ -311,8 +311,9 @@ const rows = [
 ];
 
 export default function StickyHeadTable() {
+  const theme = useTheme();
   const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [rowsPerPage, setRowsPerPage] = React.useState(25);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -333,8 +334,16 @@ export default function StickyHeadTable() {
                 {columns.map((column) => (
                   <TableCell
                     key={column.id}
-                    align={column.align}
+                    align='center'
                     style={{ minWidth: column.minWidth }}
+                    sx={{
+                      fontWeight: '600',
+                      fontSize: {
+                        xs: theme.typography.pxToRem(10),
+                        sm: theme.typography.pxToRem(12),
+                        md: theme.typography.pxToRem(16),
+                      },
+                    }}
                   >
                     {column.label}
                   </TableCell>
@@ -346,16 +355,23 @@ export default function StickyHeadTable() {
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => {
                   return (
-                    <TableRow
-                      hover
-                      role='checkbox'
-                      tabIndex={-1}
-                      key={row.code}
-                    >
+                    <TableRow hover tabIndex={-1} key={row.code}>
                       {columns.map((column) => {
                         const value = row[column.id];
                         return (
-                          <TableCell key={column.id} align={column.align}>
+                          <TableCell
+                            key={column.id}
+                            align='center'
+                            sx={{
+                              fontSize: {
+                                xs: theme.typography.pxToRem(10),
+                                sm: theme.typography.pxToRem(12),
+                                md: theme.typography.pxToRem(16),
+                              },
+                              paddingTop: '6px',
+                              paddingBottom: '6px',
+                            }}
+                          >
                             {column.format && typeof value === 'number'
                               ? column.format(value)
                               : value}
@@ -388,7 +404,6 @@ export default function StickyHeadTable() {
         }}
       />
       <ConfirmRejectBtn />
-      <UserConfirmBtn />
     </Box>
   );
 }
