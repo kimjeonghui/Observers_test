@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import CheckboxAccountingSlipTable from '../components/accoutingSlip/CheckboxAccountingSlipTable';
 import AdminApprovalTable from '../components/accoutingSlip/ApprovalTable';
 import {
   SpanTab,
