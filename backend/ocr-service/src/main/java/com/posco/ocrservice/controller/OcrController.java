@@ -140,8 +140,10 @@ public class OcrController {
                         System.out.println("GET 요청 성공: " + response);
 
                         // 데이터 파싱하여 DB에 저장 & 프론트로 전송
-                        jsonParsing(response);
-
+                        OcrDTO dto = jsonParsing(response);
+                        System.out.println(dto.getStoreName());
+                        System.out.println(dto.getPurDate());
+                        System.out.println(dto.getTotalPrice());
                     },
                     error -> System.err.println("GET 요청 실패: " + error.getMessage())
             );
@@ -150,7 +152,11 @@ public class OcrController {
         }
     }
 
-    public void jsonParsing(String response) {
+    public OcrDTO jsonParsing(String response) {
+        String merchantName = null;
+        String transactionDate = null;
+        Double totalPrice = null;
+
         try {
             JSONParser jsonParser = new JSONParser();
             JSONObject jsonObject = (JSONObject) jsonParser.parse(response);
@@ -169,19 +175,19 @@ public class OcrController {
 
                     // MerchantName
                     JSONObject merchantNameObject = (JSONObject) fields.get("MerchantName");
-                    String merchantName = (String) merchantNameObject.get("content");
+                    merchantName = (String) merchantNameObject.get("content");
                     System.out.println("====MerchantName====");
                     System.out.println(merchantName);
 
                     // TransactionDate
                     JSONObject transactionDateObject = (JSONObject) fields.get("TransactionDate");
-                    String transactionDate = (String) transactionDateObject.get("valueDate");
+                    transactionDate = (String) transactionDateObject.get("valueDate");
                     System.out.println("====TransactionDate====");
                     System.out.println(transactionDate);
 
                     // TotalPrice
                     JSONObject totalObject = (JSONObject) fields.get("Total");
-                    Double totalPrice = (Double) totalObject.get("valueNumber");
+                    totalPrice = (Double) totalObject.get("valueNumber");
                     System.out.println("====TotalPrice====");
                     System.out.println(totalPrice);
 
@@ -235,5 +241,8 @@ public class OcrController {
             // ParseException이 발생했을 때 처리
             e.printStackTrace();
         }
+
+        OcrDTO dto = new OcrDTO(merchantName, transactionDate, totalPrice);
+        return dto;
     }
 }
