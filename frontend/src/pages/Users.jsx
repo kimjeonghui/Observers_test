@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+
+import requests from '../api/config';
+
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
 import Button from '../components/global/Button';
@@ -14,25 +17,28 @@ import { createSvgIcon } from '@mui/material/utils';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
+import Typography from '@mui/material/Typography';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
+import UserRegisterModal from '../components/users/UserRegisterModal';
+
+import axios from 'axios';
 
 export default function Users(props) {
   const [tableData, setTableData] = useState([]);
 
-  const handleAddRow = () => {
-    // Implement logic to add a new row to the table
-    // You might want to fetch data from an API or add a dummy row
-    // For now, let's add a dummy row with random data
-    const newRow = Array.from(
-      { length: 10 },
-      (_, index) => `Data ${index + 1}`
-    );
-    setTableData((prevData) => [...prevData, newRow]);
-  };
-  function createRow(topic, desc, qty, unit, usd, ars, role) {
-    return { topic, desc, qty, unit, usd, ars, role };
+  // const handleAddRow = () => {
+  //   // Implement logic to add a new row to the table
+  //   // You might want to fetch data from an API or add a dummy row
+  //   // For now, let's add a dummy row with random data
+  //   const newRow = Array.from(
+  //     { length: 10 },
+  //     (_, index) => `Data ${index + 1}`
+  //   );
+  //   setTableData((prevData) => [...prevData, newRow]);
+  // };
+  function createRow(name, desc, email, ovsName, startDate, endDate, role) {
+    return { name, desc, email, ovsName, startDate, endDate, role };
   }
   const rows = [
     createRow(
@@ -189,12 +195,14 @@ export default function Users(props) {
     'Plus'
   );
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [age, setAge] = React.useState('');
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [ovsCode, setOvsCode] = useState('');
+  const [registerOpen, setRegisterOpen] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false);
 
   const handleChange = (event) => {
-    setAge(event.target.value);
+    setOvsCode(event.target.value);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -205,20 +213,42 @@ export default function Users(props) {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  const handleRegisterOpen = (event) => {
+    setRegisterOpen(true);
+  };
+
+  const handleUpdateOpen = (event) => {
+    setUpdateOpen(true);
+  };
+
+  const handleDeleteUser = (deleteName) => {
+    axios
+      .delete(requests.DELETE_USER('posco2'), {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: 'Baerer ' + requests.GET_TOKEN(),
+        },
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
   return (
     <div>
+      <UserRegisterModal open={registerOpen} setOpen={setRegisterOpen} />
       <h2>사용자 관리</h2>
       <Grid container spacing={3}>
         <Grid item xs={6}>
           <Input widthV='20' heightV='5' label='Search' />
         </Grid>
         <Grid item xs={6} textAlign='right'>
-          <FormControl>
-            <InputLabel id='demo-simple-select-label'>Age</InputLabel>
+          {/* <FormControl>
+            <InputLabel id='demo-simple-select-label'>사무소코드</InputLabel>
             <Select
               labelId='demo-simple-select-label'
               id='demo-simple-select'
-              value={age}
+              value={ovsCode}
               label='Age'
               onChange={handleChange}
             >
@@ -226,8 +256,34 @@ export default function Users(props) {
               <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem>
             </Select>
+          </FormControl> */}
+          <FormControl sx={{ minWidth: 120 }} size='small'>
+            <Typography
+              my={1}
+              sx={{
+                fontSize: { xs: '12px', sm: '14px', md: '16px' },
+                fontWeight: 600,
+              }}
+            >
+              사무소코드
+            </Typography>
+            <Select
+              value={ovsCode}
+              label=''
+              onChange={handleChange}
+              sx={{
+                backgroundColor: '#F5F6FA',
+                width: '20vw',
+                maxWidth: '250px',
+                marginRight: '2vw',
+              }}
+            >
+              <MenuItem value='ARS'>ARS</MenuItem>
+              <MenuItem value='USD'>USD</MenuItem>
+              <MenuItem value='KRW'>KRW</MenuItem>
+            </Select>
           </FormControl>
-          <Button size='sm' onClick={handleAddRow}>
+          <Button size='sm' onClick={handleRegisterOpen}>
             <PlusIcon color='white' />
           </Button>
         </Grid>
@@ -261,28 +317,26 @@ export default function Users(props) {
                 <TableCell align='right'> </TableCell>
                 <TableCell align='right'> </TableCell>
               </TableRow>
-              {/* <TableRow>
-            <TableCell>대분류</TableCell>
-            <TableCell align='center'>중분류</TableCell>
-            <TableCell align='center'>소분류</TableCell>
-            <TableCell align='center'>Sum</TableCell>
-          </TableRow> */}
             </TableHead>
             <TableBody>
               {rows.map((row) => (
-                <TableRow key={row.topic}>
-                  <TableCell>{row.topic}</TableCell>
+                <TableRow key={row.name}>
+                  <TableCell>{row.name}</TableCell>
                   <TableCell align='center'>{row.desc}</TableCell>
-                  <TableCell align='center'>{row.qty}</TableCell>
-                  <TableCell align='center'>{row.unit}</TableCell>
-                  <TableCell align='center'>{row.usd}</TableCell>
-                  <TableCell align='center'>{row.ars}</TableCell>
+                  <TableCell align='center'>{row.email}</TableCell>
+                  <TableCell align='center'>{row.ovsName}</TableCell>
+                  <TableCell align='center'>{row.startDate}</TableCell>
+                  <TableCell align='center'>{row.endDate}</TableCell>
                   <TableCell align='center'>{row.role}</TableCell>
                   <TableCell align='center'>
-                    <EditIcon />
+                    <div onClick={handleRegisterOpen}>
+                      <EditIcon />
+                    </div>
                   </TableCell>
                   <TableCell align='center'>
-                    <DeleteIcon />
+                    <div onClick={() => handleDeleteUser(row.name)}>
+                      <DeleteIcon />
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -299,37 +353,6 @@ export default function Users(props) {
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
       </Paper>
-      {/* <Grid container spacing={3} justifyContent='center' alignItems='center'>
-        <Grid item xs={12}>
-          <Paper elevation={3}>
-            <TableContainer>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>NAME</TableCell>
-                    <TableCell>DESCRIPTION</TableCell>
-                    <TableCell>PASSWORD</TableCell>
-                    <TableCell>EMAIL</TableCell>
-                    <TableCell>OVS_CD</TableCell>
-                    <TableCell>ROLE</TableCell>
-                    <TableCell>START_DATE</TableCell>
-                    <TableCell>END_DATE</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {tableData.map((row, rowIndex) => (
-                    <TableRow key={rowIndex}>
-                      {row.map((cell, cellIndex) => (
-                        <TableCell key={cellIndex}>{cell}</TableCell>
-                      ))}
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </Paper>
-        </Grid>
-      </Grid> */}
     </div>
   );
 }
