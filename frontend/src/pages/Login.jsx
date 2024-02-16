@@ -9,6 +9,7 @@ import Container from '../components/global/Container';
 import Input from '../components/global/Input';
 import Button from '../components/global/Button';
 import Logo from '../components/global/Logo';
+import axios from 'axios';
 
 const LoginBg = styled.div`
   width: 100vw;
@@ -31,16 +32,18 @@ export default function Login(props) {
     console.log(password);
   };
   const handleLogin = async () => {
-    try {
-      console.log(name, password);
-      const response = await defaultApi.post(requests.POST_LOGIN(), {
+    axios
+      .post(requests.POST_LOGIN(), {
         name,
         password,
+      })
+      .then((response) => {
+        console.log(response);
+        // response로 받은 유저 정보 상태관리하기
+      })
+      .catch((err) => {
+        console.error(err);
       });
-      console.log(response);
-    } catch (err) {
-      console.error(err);
-    }
   };
 
   return (
