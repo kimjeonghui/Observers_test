@@ -7,6 +7,8 @@ import InvoiceSearch from '../components/invoice/InvoiceSearch';
 import CustomButton from '../components/global/Button';
 import InvoiceModal from '../components/invoice/InvoiceModal';
 import InvoiceEviModal from '../components/invoice/InvoiceEviModal';
+import ExcelIcon from '../assets/excel-logo-64.png';
+import { CSVLink } from 'react-csv';
 export default function Invoice(props) {
   const [activeTab, setActiveTab] = useState(0);
   const [inputModalopen, setInputModalOpen] = useState(false);
@@ -29,7 +31,6 @@ export default function Invoice(props) {
   const invoiceData = [
     {
       ovs_cd: 'HDF27',
-      num: 1,
       id: 1,
       fiscal_month: '23.12',
       tx_date: '2023.11.30',
@@ -45,7 +46,6 @@ export default function Invoice(props) {
     },
     {
       ovs_cd: 'HDF27',
-      num: 2,
       id: 2,
       fiscal_month: '23.12',
       tx_date: '2023.12.27',
@@ -61,7 +61,6 @@ export default function Invoice(props) {
     },
     {
       ovs_cd: 'HDF27',
-      num: 3,
       id: 4,
       fiscal_month: '23.12',
       tx_date: '2023.12.27',
@@ -77,7 +76,6 @@ export default function Invoice(props) {
     },
     {
       ovs_cd: 'HDF27',
-      num: 4,
       id: 5,
       fiscal_month: '23.12',
       tx_date: '2023.12.28',
@@ -93,7 +91,6 @@ export default function Invoice(props) {
     },
     {
       ovs_cd: 'HDF27',
-      num: 5,
       id: 6,
       fiscal_month: '23.12',
       tx_date: '2023.12.27',
@@ -109,7 +106,6 @@ export default function Invoice(props) {
     },
     {
       ovs_cd: 'HDF27',
-      num: 6,
       id: 7,
       fiscal_month: '23.12',
       tx_date: '2023.12.13',
@@ -125,7 +121,6 @@ export default function Invoice(props) {
     },
     {
       ovs_cd: 'HDF27',
-      num: 7,
       id: 9,
       fiscal_month: '23.12',
       tx_date: '2023.12.13',
@@ -141,7 +136,6 @@ export default function Invoice(props) {
     },
     {
       ovs_cd: 'HDF27',
-      num: 8,
       id: 10,
       fiscal_month: '23.12',
       tx_date: '2023.12.28',
@@ -157,7 +151,6 @@ export default function Invoice(props) {
     },
     {
       ovs_cd: 'HDF27',
-      num: 9,
       id: 11,
       fiscal_month: '23.12',
       tx_date: '2023.12.27',
@@ -173,7 +166,6 @@ export default function Invoice(props) {
     },
     {
       ovs_cd: 'HDF27',
-      num: 10,
       id: 12,
       fiscal_month: '23.12',
       tx_date: '2023.12.27',
@@ -189,7 +181,6 @@ export default function Invoice(props) {
     },
     {
       ovs_cd: 'HDF27',
-      num: 11,
       id: 13,
       fiscal_month: '23.12',
       tx_date: '2023.12.27',
@@ -205,7 +196,6 @@ export default function Invoice(props) {
     },
     {
       ovs_cd: 'HDF27',
-      num: 12,
       id: 14,
       fiscal_month: '23.12',
       tx_date: '2023.12.23',
@@ -221,7 +211,6 @@ export default function Invoice(props) {
     },
     {
       ovs_cd: 'HDF27',
-      num: 13,
       id: 15,
       fiscal_month: '23.12',
       tx_date: '2023.12.17',
@@ -237,7 +226,6 @@ export default function Invoice(props) {
     },
     {
       ovs_cd: 'HDF27',
-      num: 14,
       id: 16,
       fiscal_month: '23.12',
       tx_date: '2023.12.20',
@@ -253,7 +241,6 @@ export default function Invoice(props) {
     },
     {
       ovs_cd: 'HDF27',
-      num: 15,
       id: 17,
       fiscal_month: '23.12',
       tx_date: '2023.12.04',
@@ -267,6 +254,19 @@ export default function Invoice(props) {
       trans_amount: null,
       status: 'open',
     },
+  ];
+  const headers = [
+    { label: '사무소코드', key: 'ovs_cd' },
+    { label: '회계월', key: 'fiscal_month' },
+    { label: '거래일자', key: 'tx_date' },
+    { label: '거래처명', key: 'store' },
+    { label: '입금통화', key: 'dep_curr' },
+    { label: '입금금액', key: 'deposit' },
+    { label: '출금통화', key: 'wd_curr' },
+    { label: '출금금액', key: 'withdrawal' },
+    { label: '식별코드', key: 'trans_cd' },
+    { label: '거래내역', key: 'description' },
+    { label: '환산금액', key: 'trans_amount' },
   ];
 
   return (
@@ -295,6 +295,22 @@ export default function Invoice(props) {
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <InvoiceSearch />
             <div>
+              <CSVLink
+                data={invoiceData}
+                headers={headers}
+                style={{ decoration: 'none' }}
+                filename='Posco_Oversea_Imprest.csv'
+              >
+                <CustomButton size='sm' color='#006736' hoverColor='#017940'>
+                  <img
+                    src={ExcelIcon}
+                    alt='excel icon'
+                    style={{ height: '60%', marginRight: '10px' }}
+                  />
+                  export
+                </CustomButton>
+              </CSVLink>
+
               {isCalc ? (
                 <CustomButton onClick={() => alert('결재요청했다~')} size='sm'>
                   결재요청

@@ -479,13 +479,13 @@ export default function InvoiceTable(props) {
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
-                  <TableRow hover tabIndex={-1} key={row.num}>
+                  <TableRow hover tabIndex={-1} key={row.id}>
                     <TableCell
                       sx={{ width: 4, padding: 0, boxSizing: 'border-box' }}
                     >
                       <Checkbox
                         color='primary'
-                        onClick={() => handleClick(row.num)}
+                        onClick={() => handleClick(row.id)}
                         checked={isItemSelected}
                         inputProps={{
                           'aria-labelledby': labelId,
@@ -512,7 +512,7 @@ export default function InvoiceTable(props) {
                         padding: 0,
                       }}
                     >
-                      {row.num}
+                      {index + 1}
                     </TableCell>
                     <TableCell
                       align='center'
