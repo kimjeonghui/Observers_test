@@ -455,7 +455,7 @@ export default function AdminCode(props) {
       </Grid>
       <Grid container spacing={3} justifyContent='center' alignItems='center'>
         <Grid item xs={12}>
-          <Paper elevation={3}>
+          <Paper elevation={3} sx={{ width: '100%', overflow: 'hidden' }}>
             <TableContainer>
               <Table>
                 <TableHead>
