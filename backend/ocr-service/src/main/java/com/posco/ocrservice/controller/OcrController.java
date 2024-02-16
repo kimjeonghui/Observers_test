@@ -1,5 +1,10 @@
 package com.posco.ocrservice.controller;
 
+import com.posco.ocrservice.dto.request.OcrDTO;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,6 +21,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,7 +44,7 @@ public class OcrController {
             // 이미지 처리
             // Convert MultipartFile to Base64
             String base64Image = convertMultipartFileToBase64(file);
-            System.out.println(base64Image);
+//            System.out.println(base64Image);
 
             // OCR 분석
             sendPostRequest(base64Image);
@@ -126,13 +134,13 @@ public class OcrController {
                 .bodyToMono(String.class);
 
         try {
-            // 1초(1000 밀리초) 동안 딜레이
-            Thread.sleep(1000); // running 시간 위해 추가
+            Thread.sleep(3000); // running 시간 위해 추가
             responseBody.subscribe(
                     response -> {
                         System.out.println("GET 요청 성공: " + response);
 
                         // 데이터 파싱하여 DB에 저장 & 프론트로 전송
+                        jsonParsing(response);
 
                     },
                     error -> System.err.println("GET 요청 실패: " + error.getMessage())
@@ -140,7 +148,92 @@ public class OcrController {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
     }
 
+    public void jsonParsing(String response) {
+        try {
+            JSONParser jsonParser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(response);
+
+            Object analyzeResultObject = jsonObject.get("analyzeResult");
+            JSONObject analyzeResult = (JSONObject) analyzeResultObject;
+            JSONArray documents = (JSONArray) analyzeResult.get("documents");
+
+            // documents 배열 순회
+            for (Object documentObject : documents) {
+                if (documentObject instanceof JSONObject) {
+                    JSONObject document = (JSONObject) documentObject;
+
+                    // document 내부의 fields 객체 가져오기
+                    JSONObject fields = (JSONObject) document.get("fields");
+
+                    // MerchantName
+                    JSONObject merchantNameObject = (JSONObject) fields.get("MerchantName");
+                    String merchantName = (String) merchantNameObject.get("content");
+                    System.out.println("====MerchantName====");
+                    System.out.println(merchantName);
+
+                    // TransactionDate
+                    JSONObject transactionDateObject = (JSONObject) fields.get("TransactionDate");
+                    String transactionDate = (String) transactionDateObject.get("valueDate");
+                    System.out.println("====TransactionDate====");
+                    System.out.println(transactionDate);
+
+                    // TotalPrice
+                    JSONObject totalObject = (JSONObject) fields.get("Total");
+                    Double totalPrice = (Double) totalObject.get("valueNumber");
+                    System.out.println("====TotalPrice====");
+                    System.out.println(totalPrice);
+
+                    // fields 내부의 Items 객체 가져오기
+                    JSONObject items = (JSONObject) fields.get("Items");
+
+                    // Items 내부의 valueArray 배열 가져오기
+                    JSONArray valueArray = (JSONArray) items.get("valueArray");
+
+                    // valueArray 배열 순회
+                    for (Object itemObject : valueArray) {
+                        if (itemObject instanceof JSONObject) {
+                            JSONObject item = (JSONObject) itemObject;
+                            JSONObject valueObject = (JSONObject) item.get("valueObject");
+
+                            System.out.println();
+                            System.out.println("<<<Item>>>");
+
+                            // Description
+                            JSONObject descriptionObject = (JSONObject) valueObject.get("Description");
+                            String description = (String) descriptionObject.get("content");
+                            System.out.println("===description===");
+                            System.out.println(description);
+
+                            // Price
+                            JSONObject priceObject = (JSONObject) valueObject.get("Price");
+                            Double price = (Double) priceObject.get("valueNumber");
+                            System.out.println("===price===");
+                            System.out.println(price);
+
+                            // Quantity
+                            JSONObject quantityObject = (JSONObject) valueObject.get("Quantity");
+                            Long quantity = (Long) quantityObject.get("valueNumber");
+                            System.out.println("===quantity===");
+                            System.out.println(quantity);
+
+                            // ItemTotalPrice
+                            JSONObject itemTotalPriceObject = (JSONObject) valueObject.get("TotalPrice");
+                            Double itemTotalPrice = (Double) itemTotalPriceObject.get("valueNumber");
+                            System.out.println("===itemTotalPrice===");
+                            System.out.println(itemTotalPrice);
+
+                            System.out.println("------------------------------------");
+
+                        }
+                    }
+                }
+            }
+
+        } catch (ParseException e) {
+            // ParseException이 발생했을 때 처리
+            e.printStackTrace();
+        }
+    }
 }
