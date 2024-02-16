@@ -23,234 +23,6 @@ import {
 import DeleteIcon from '@mui/icons-material/Delete';
 import { visuallyHidden } from '@mui/utils';
 
-const rows = [
-  {
-    ovs_cd: 'HDF27',
-    num: 1,
-    id: 1,
-    fiscal_month: '23.12',
-    tx_date: '2023.11.30',
-    store: 'EFFECTIVO DEL MES ANTERIOR',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'ARS',
-    withdrawal: 20312.47,
-    trans_cd: 'Y010',
-    description: 'EFFECTIVO DEL MES ANTERIOR',
-    trans_amount: null,
-  },
-  {
-    ovs_cd: 'HDF27',
-    num: 2,
-    id: 2,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.27',
-    store: 'YPF',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'ARS',
-    withdrawal: 1190205.87,
-    trans_cd: '1501',
-    description: 'CONBUSTIBLE /LAVADO',
-    trans_amount: null,
-  },
-  {
-    ovs_cd: 'HDF27',
-    num: 3,
-    id: 4,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.27',
-    store: 'MACRO SECURITIES',
-    dep_curr: 'ARS',
-    deposit: 183290.06,
-    wd_curr: 'USD',
-    withdrawal: 1190205.87,
-    trans_cd: 'X100',
-    description: 'CAMBIO',
-    trans_amount: null,
-  },
-  {
-    ovs_cd: 'HDF27',
-    num: 4,
-    id: 5,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.28',
-    store: 'IMP.LEY25413',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'ARS',
-    withdrawal: 2114.98,
-    trans_cd: '1699',
-    description: 'TAX',
-    trans_amount: null,
-  },
-  {
-    ovs_cd: 'HDF27',
-    num: 5,
-    id: 6,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.27',
-    store: 'LUMI PUNA',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'USD',
-    withdrawal: 66046.66,
-    trans_cd: '2505',
-    description: 'CAMPAMENTO/CATERING',
-    trans_amount: null,
-  },
-  {
-    ovs_cd: 'HDF27',
-    num: 6,
-    id: 7,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.13',
-    store: 'IMP.LEY25413',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'USD',
-    withdrawal: 10.73,
-    trans_cd: '1699',
-    description: 'TAX',
-    trans_amount: null,
-  },
-  {
-    ovs_cd: 'HDF27',
-    num: 7,
-    id: 9,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.13',
-    store: 'ESTUDIO HADAD',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'USD',
-    withdrawal: 1788.67,
-    trans_cd: '1699',
-    description: 'TAX',
-    trans_amount: null,
-  },
-  {
-    ovs_cd: 'HDF27',
-    num: 8,
-    id: 10,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.28',
-    store: 'IMP.LEY25413',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'USD',
-    withdrawal: 397.48,
-    trans_cd: '1699',
-    description: 'TAX',
-    trans_amount: null,
-  },
-  {
-    ovs_cd: 'HDF27',
-    num: 9,
-    id: 11,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.27',
-    store: 'DBCR 25413 S/DB TASAGRAL',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'ARS',
-    withdrawal: 287.59,
-    trans_cd: '1699',
-    description: 'TAX',
-    trans_amount: null,
-  },
-  {
-    ovs_cd: 'HDF27',
-    num: 10,
-    id: 12,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.27',
-    store: 'TEF DATANET PGOS AFIP',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'ARS',
-    withdrawal: 38187.18,
-    trans_cd: '1699',
-    description: 'TAX',
-    trans_amount: null,
-  },
-  {
-    ovs_cd: 'HDF27',
-    num: 11,
-    id: 13,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.27',
-    store: 'TEF DATANET PGOS AFIP',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'ARS',
-    withdrawal: 9745.15,
-    trans_cd: '1699',
-    description: 'TAX',
-    trans_amount: null,
-  },
-  {
-    ovs_cd: 'HDF27',
-    num: 12,
-    id: 14,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.23',
-    store: 'LUMI PUNA',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'USD',
-    withdrawal: 6604.02,
-    trans_cd: '2505',
-    description: 'CAMPAMENTO/CATERING',
-    trans_amount: null,
-  },
-  {
-    ovs_cd: 'HDF27',
-    num: 13,
-    id: 15,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.17',
-    store: 'MACRO SECURITIES',
-    dep_curr: 'ARS',
-    deposit: 183290.06,
-    wd_curr: 'USD',
-    withdrawal: 1190205.87,
-    trans_cd: 'X100',
-    description: 'CAMBIO',
-    trans_amount: null,
-  },
-  {
-    ovs_cd: 'HDF27',
-    num: 14,
-    id: 16,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.20',
-    store: 'YPF',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'ARS',
-    withdrawal: 30205.87,
-    trans_cd: '1501',
-    description: 'CONBUSTIBLE /LAVADO',
-    trans_amount: null,
-  },
-  {
-    ovs_cd: 'HDF27',
-    num: 15,
-    id: 17,
-    fiscal_month: '23.12',
-    tx_date: '2023.12.04',
-    store: 'YPF',
-    dep_curr: null,
-    deposit: null,
-    wd_curr: 'ARS',
-    withdrawal: 9205.87,
-    trans_cd: '1501',
-    description: 'CONBUSTIBLE /LAVADO',
-    trans_amount: null,
-  },
-];
-
 function descendingComparator(a, b, orderBy) {
   if (b[orderBy] < a[orderBy]) {
     return -1;
@@ -505,6 +277,7 @@ EnhancedTableToolbar.propTypes = {
 };
 
 export default function InvoiceTable(props) {
+  const { rows, setEviData, setEviModalOpen } = props;
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [selected, setSelected] = useState([]);
@@ -519,7 +292,7 @@ export default function InvoiceTable(props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n) => n.num);
+      const newSelected = rows?.map((n) => n.num);
       setSelected(newSelected);
       return;
     }
@@ -569,8 +342,111 @@ export default function InvoiceTable(props) {
     [order, orderBy, page, rowsPerPage]
   );
 
+  const eviDummy = [
+    {
+      id: 1,
+      data: [
+        {
+          eviId: 1,
+          img: 'https://img000c.feelway.com/201007/ask-07211110240z.jpg',
+        },
+        {
+          eviId: 2,
+          img: 'https://t2.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/1mJ8/image/-CxT8sL_BR60CAf9r8OhJxSCk6o.jpg',
+        },
+        {
+          eviId: 3,
+          img: 'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202011/24/d0874f8a-2b7b-4451-9cb3-f053045c98e3.jpg',
+        },
+      ],
+    },
+    {
+      id: 4,
+      data: [
+        {
+          eviId: 4,
+          img: 'https://img000c.feelway.com/201007/ask-07211110240z.jpg',
+        },
+      ],
+    },
+    {
+      id: 5,
+      data: [
+        {
+          eviId: 5,
+          img: 'https://img000c.feelway.com/201007/ask-07211110240z.jpg',
+        },
+        {
+          eviId: 6,
+          img: 'https://t2.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/1mJ8/image/-CxT8sL_BR60CAf9r8OhJxSCk6o.jpg',
+        },
+      ],
+    },
+    {
+      id: 9,
+      data: [
+        {
+          eviId: 7,
+          img: 'https://t2.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/1mJ8/image/-CxT8sL_BR60CAf9r8OhJxSCk6o.jpg',
+        },
+        {
+          eviId: 8,
+          img: 'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202011/24/d0874f8a-2b7b-4451-9cb3-f053045c98e3.jpg',
+        },
+      ],
+    },
+    {
+      id: 11,
+      data: [
+        {
+          eviId: 1,
+          img: 'https://img000c.feelway.com/201007/ask-07211110240z.jpg',
+        },
+        {
+          eviId: 2,
+          img: 'https://t2.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/1mJ8/image/-CxT8sL_BR60CAf9r8OhJxSCk6o.jpg',
+        },
+        {
+          eviId: 3,
+          img: 'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202011/24/d0874f8a-2b7b-4451-9cb3-f053045c98e3.jpg',
+        },
+      ],
+    },
+    {
+      id: 12,
+      data: [
+        {
+          eviId: 1,
+          img: 'https://img000c.feelway.com/201007/ask-07211110240z.jpg',
+        },
+        {
+          eviId: 2,
+          img: 'https://t2.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/1mJ8/image/-CxT8sL_BR60CAf9r8OhJxSCk6o.jpg',
+        },
+        {
+          eviId: 3,
+          img: 'https://pds.joongang.co.kr/news/component/htmlphoto_mmdata/202011/24/d0874f8a-2b7b-4451-9cb3-f053045c98e3.jpg',
+        },
+      ],
+    },
+  ];
+
   const handleEviModal = (id) => {
-    alert(`증빙 모달 띄울거예요! 이 cell의 id는 ${id} 입니다!`);
+    //id를 바탕으로 API 호출해야함. 더미로 로직만 짜는 중
+
+    let flag = false;
+    for (let i = 0; i < eviDummy.length; i++) {
+      let evi = eviDummy[i];
+      if (evi.id === id) {
+        setEviData(evi.data);
+        flag = true;
+        break;
+      }
+    }
+    if (!flag) {
+      setEviData([]);
+    }
+    setEviModalOpen(true);
   };
 
   return (
@@ -603,13 +479,13 @@ export default function InvoiceTable(props) {
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
-                  <TableRow hover tabIndex={-1} key={row.num}>
+                  <TableRow hover tabIndex={-1} key={row.id}>
                     <TableCell
                       sx={{ width: 4, padding: 0, boxSizing: 'border-box' }}
                     >
                       <Checkbox
                         color='primary'
-                        onClick={() => handleClick(row.num)}
+                        onClick={() => handleClick(row.id)}
                         checked={isItemSelected}
                         inputProps={{
                           'aria-labelledby': labelId,
@@ -636,7 +512,7 @@ export default function InvoiceTable(props) {
                         padding: 0,
                       }}
                     >
-                      {row.num}
+                      {index + 1}
                     </TableCell>
                     <TableCell
                       align='center'
@@ -742,7 +618,7 @@ export default function InvoiceTable(props) {
                           handleEviModal(row.id);
                         }}
                       >
-                        증빙 입력
+                        증빙 조회
                       </Button>
                     </TableCell>
                   </TableRow>

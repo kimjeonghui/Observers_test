@@ -3,7 +3,7 @@ import { Button } from '@mui/material';
 import styled from 'styled-components';
 
 const CustomButton = styled(
-  ({ color, hoverColor, fontColor, size, width, ...rest }) => (
+  ({ color, hoverColor, fontColor, size, width, height, ...rest }) => (
     <Button {...rest} />
   )
 )`
@@ -12,7 +12,8 @@ const CustomButton = styled(
     background-color: ${({ color, theme }) =>
       color || theme.palette.posco_blue_500};
     color: ${({ fontColor, theme }) => fontColor || theme.palette.posco_white};
-    height: ${({ size }) => {
+    height: ${({ size, height }) => {
+      if (height) return height;
       if (size === 'sm') return '47px';
       if (size === 'md') return '50px';
       if (size === 'lg') return '60px';
@@ -37,8 +38,16 @@ const CustomButton = styled(
 `;
 
 export default function ButtonComponent(props) {
-  const { color, fontColor, size, hoverColor, width, fontSize, ...rest } =
-    props;
+  const {
+    color,
+    fontColor,
+    size,
+    hoverColor,
+    width,
+    height,
+    fontSize,
+    ...rest
+  } = props;
   return (
     <CustomButton
       color={color}
@@ -46,6 +55,7 @@ export default function ButtonComponent(props) {
       hoverColor={hoverColor}
       size={size}
       width={width}
+      height={height}
       fontSize={fontSize}
       {...rest}
     >

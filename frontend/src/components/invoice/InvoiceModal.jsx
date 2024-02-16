@@ -13,11 +13,9 @@ import {
 } from '@mui/material';
 import { ModalStrokeBtn, FlexDiv } from './InvoiceStyles';
 import CustomButton from '../global/Button';
-import Input from '../global/Input';
 import ModalInput from '../global/ModalInput';
-import 'react-datepicker/dist/react-datepicker.css';
 
-function InvoiceModal(props) {
+export default function InvoiceModal(props) {
   const { open, setOpen } = props;
   const [steps, setSteps] = useState(1);
   const [dep_curr, setDep_curr] = useState();
@@ -25,8 +23,8 @@ function InvoiceModal(props) {
   //Todo: 거래내역 입력창들에 대한 변동값 만들어줘야함
 
   const handleClose = () => {
-    setSteps(1);
     setOpen(false);
+    setSteps(1);
   };
 
   const handleSteps = (step) => {
@@ -186,7 +184,7 @@ function InvoiceModal(props) {
                   <Select
                     value={wd_curr}
                     label=''
-                    onChange={handleDepChange}
+                    onChange={handleWdChange}
                     sx={{ backgroundColor: '#F5F6FA' }}
                   >
                     <MenuItem value='ARS'>ARS</MenuItem>
@@ -227,7 +225,7 @@ function InvoiceModal(props) {
           </div>
         );
       default:
-        return <div>기본 내용</div>;
+        return <div></div>;
     }
   };
 
@@ -237,5 +235,3 @@ function InvoiceModal(props) {
     </Dialog>
   );
 }
-
-export default InvoiceModal;
