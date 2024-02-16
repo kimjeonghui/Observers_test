@@ -179,7 +179,7 @@ public class OcrController {
                     System.out.println("====TransactionDate====");
                     System.out.println(transactionDate);
 
-                    // Total
+                    // TotalPrice
                     JSONObject totalObject = (JSONObject) fields.get("Total");
                     Double totalPrice = (Double) totalObject.get("valueNumber");
                     System.out.println("====TotalPrice====");
