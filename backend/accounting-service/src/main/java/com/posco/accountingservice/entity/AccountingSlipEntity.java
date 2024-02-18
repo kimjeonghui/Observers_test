@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -59,4 +60,7 @@ public class AccountingSlipEntity {
     @ManyToOne(targetEntity = AccountingSlipInvoiceNumEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "invoice_num")
     private AccountingSlipInvoiceNumEntity accountingSlipInvoiceNumEntity;
+
+    @OneToMany(mappedBy = "accountSlip", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AccountSlipHeaderEntity> accountSlipHeaderEntityList;
 }

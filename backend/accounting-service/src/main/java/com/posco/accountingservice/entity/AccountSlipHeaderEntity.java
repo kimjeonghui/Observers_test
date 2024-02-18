@@ -68,7 +68,7 @@ public class AccountSlipHeaderEntity extends BaseEntity{
     private Integer orgId;
     @ManyToOne(targetEntity= AccountingSlipEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "account_slip_id")
-    private AccountingSlipEntity accountSlipId;
+    private AccountingSlipEntity accountSlip;
 
 
 }
