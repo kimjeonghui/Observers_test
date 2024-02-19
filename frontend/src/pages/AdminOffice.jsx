@@ -19,15 +19,22 @@ import {
   TextField,
   MenuItem,
   Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Button,
 } from '@mui/material';
 
 export default function AdminOffice() {
   const [tableData, setTableData] = useState([]);
   const [selectedOffice, setSelectedOffice] = useState('');
+  const [open, setOpen] = useState(false);
+  const [deleteRow, setDeleteRow] = useState(null);
+  const [openDelete, setOpenDelete] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
-  const [open, setOpen] = useState(false);
 
+  //GET all
   useEffect(() => {
     fetchData();
   }, []);
@@ -44,6 +51,7 @@ export default function AdminOffice() {
       });
   };
 
+  //GET by ovsCd
   const handleChangeOffice = (event) => {
     const selectedOffice = event.target.value;
     setSelectedOffice(selectedOffice);
@@ -52,7 +60,7 @@ export default function AdminOffice() {
       // If '전체' (all) is selected, fetch all references
       fetchData();
     } else {
-      // Fetch reference data for the selected office
+      // Fetch reference data for the selected office (선택한 사무실 보여줌)
       axios
         .get(`http://localhost:8080/admin-office/${selectedOffice}`)
         .then((response) => {
@@ -66,20 +74,12 @@ export default function AdminOffice() {
     }
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - [].length) : 0;
+  //Open Insert Modal for AdminOfficeModal.jsx
   const handleOpenInsert = () => {
     setOpen(true);
   };
 
+  //Data Mapping for AdminOfficeUpdate.jsx
   const [open2Map, setOpen2Map] = useState({});
 
   const handleOpenUpdate = (ovsCd) => {
@@ -95,6 +95,48 @@ export default function AdminOffice() {
       [ovsCd]: false,
     }));
   };
+
+  // Handle deletion confirmation
+  const handleConfirmDelete = () => {
+    if (deleteRow) {
+      // Perform deletion
+      axios
+        .delete(`http://localhost:8080/admin-office/${deleteRow.ovsCd}`)
+        .then((response) => {
+          console.log(response.data);
+          fetchData(); // Refetch data after successful deletion
+          setDeleteRow(null); // Reset deleteRow state
+          setOpenDelete(false); // Close dialog
+        })
+        .catch((error) => {
+          console.error('Error deleting data:', error);
+          // Handle deletion error
+        });
+    }
+  };
+
+  //Open Dialog for deletion confirmation
+  const renderDeleteConfirmationDialog = () => (
+    <Dialog open={openDelete} onClose={() => setOpenDelete(false)}>
+      <DialogContent>정말로 삭제하시겠습니까?</DialogContent>
+      <DialogActions>
+        <Button onClick={handleConfirmDelete}>삭제 강행</Button>
+        <Button onClick={() => setOpenDelete(false)}>취소</Button>
+      </DialogActions>
+    </Dialog>
+  );
+
+  //Page Handling
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - [].length) : 0;
 
   return (
     <div>
@@ -180,7 +222,12 @@ export default function AdminOffice() {
                           />
                         </TableCell>
                         <TableCell>
-                          <DeleteIcon />
+                          <DeleteIcon
+                            onClick={() => {
+                              setDeleteRow(row);
+                              setOpenDelete(true);
+                            }}
+                          />
                         </TableCell>
                       </TableRow>
                     ))}
@@ -208,6 +255,8 @@ export default function AdminOffice() {
           </Paper>
         </Grid>
       </Grid>
+      {/* 어디에 추가하는게 맞는지 모르겠음 */}
+      {renderDeleteConfirmationDialog()}
     </div>
   );
 }
