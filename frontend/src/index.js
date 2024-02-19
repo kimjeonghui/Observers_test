@@ -9,18 +9,20 @@ import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 import { theme } from './components/global/GlobalStyles';
 import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
-
+import { RecoilRoot } from 'recoil';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <StyledEngineProvider injectFirst>
-      <StyledThemeProvider theme={theme}>
-        <MuiThemeProvider theme={theme}>
-          <CssBaseline />
-          <App />
-        </MuiThemeProvider>
-      </StyledThemeProvider>
-    </StyledEngineProvider>
+    <RecoilRoot>
+      <StyledEngineProvider injectFirst>
+        <StyledThemeProvider theme={theme}>
+          <MuiThemeProvider theme={theme}>
+            <CssBaseline />
+            <App />
+          </MuiThemeProvider>
+        </StyledThemeProvider>
+      </StyledEngineProvider>
+    </RecoilRoot>
   </React.StrictMode>
 );
 
