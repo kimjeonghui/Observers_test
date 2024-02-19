@@ -5,6 +5,7 @@ import com.posco.referenceservice.entity.ReferenceEntity;
 import com.posco.referenceservice.repository.ReferenceRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +24,16 @@ public class ReferenceServiceImpl implements ReferenceService {
         return referenceEntities.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getOvsCodeList() {
+        List<String> OvsCodes = new ArrayList<>();
+        List<ReferenceEntity> referenceDTOS = referenceRepository.findAll();
+        for(ReferenceEntity ovsCode: referenceDTOS){
+            OvsCodes.add(ovsCode.getOvsCd());
+        }
+        return OvsCodes;
     }
 
     @Override

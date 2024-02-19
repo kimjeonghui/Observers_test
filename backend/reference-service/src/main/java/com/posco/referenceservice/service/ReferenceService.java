@@ -8,6 +8,8 @@ public interface ReferenceService {
 
     List<ReferenceDTO> getAllReferences();
 
+    List<String> getOvsCodeList();
+
     ReferenceDTO getReferenceByOvsCd(String ovsCd);
 
     ReferenceDTO createReference(ReferenceDTO referenceDTO);

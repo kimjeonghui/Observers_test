@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -20,6 +21,8 @@ public class QReferenceEntity extends EntityPathBase<ReferenceEntity> {
     public static final QReferenceEntity referenceEntity = new QReferenceEntity("referenceEntity");
 
     public final QBaseEntity _super = new QBaseEntity(this);
+
+    public final ListPath<GLCodeEntity, QGLCodeEntity> codeEntityList = this.<GLCodeEntity, QGLCodeEntity>createList("codeEntityList", GLCodeEntity.class, QGLCodeEntity.class, PathInits.DIRECT2);
 
     //inherited
     public final StringPath createdBy = _super.createdBy;
