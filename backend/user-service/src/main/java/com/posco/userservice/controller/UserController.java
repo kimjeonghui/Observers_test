@@ -3,6 +3,7 @@ package com.posco.userservice.controller;
 import com.posco.userservice.dto.request.LoginDTO;
 import com.posco.userservice.dto.request.RegisterDTO;
 import com.posco.userservice.dto.request.UpdateDTO;
+import com.posco.userservice.dto.response.LoginUserDTO;
 import com.posco.userservice.dto.response.TokenDTO;
 import com.posco.userservice.dto.response.UserDTO;
 import com.posco.userservice.entity.UserEntity;
@@ -36,10 +37,10 @@ public class UserController {
     @Operation(summary = "Register user", description = "")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterDTO registerDTO){
         Map<String, Object> resultMap = new HashMap<>();
-        TokenDTO tokenDTO = userService.registerUser(registerDTO);
+        UserEntity user = userService.registerUser(registerDTO);
 
         // 회원 등록 실패
-        if(tokenDTO==null){
+        if(user==null){
            resultMap.put("result", FAIL);
            resultMap.put("msg", "회원 등록 실패");
            return ResponseEntity.internalServerError().body(resultMap);
@@ -48,8 +49,6 @@ public class UserController {
         // 회원 등록 성공
         resultMap.put("result", SUCCESS);
         resultMap.put("msg", "회원 등록 성공");
-        resultMap.put("accessToken", tokenDTO.getAccessToken());
-        resultMap.put("refreshToken", tokenDTO.getRefreshToken());
         return ResponseEntity.ok().body(resultMap);
     }
 
@@ -64,16 +63,15 @@ public class UserController {
             return ResponseEntity.badRequest().body(resultMap);
         }
         // 사용자 ID, PASSWORD 일치 (로그인) 확인
-        TokenDTO tokenDTO = userService.loginUser(loginDTO);
-        if(tokenDTO==null){
+        LoginUserDTO loginUserDTO = userService.loginUser(loginDTO);
+        if(loginUserDTO==null){
             resultMap.put("result", FAIL);
             resultMap.put("msg", "로그인 실패");
             return ResponseEntity.badRequest().body(resultMap);
         }
         resultMap.put("result", SUCCESS);
         resultMap.put("msg", "로그인 성공");
-        resultMap.put("accessToken", tokenDTO.getAccessToken());
-        resultMap.put("refreshToken", tokenDTO.getRefreshToken());
+        resultMap.put("user", loginUserDTO);
         return ResponseEntity.ok().body(resultMap);
     }
 
