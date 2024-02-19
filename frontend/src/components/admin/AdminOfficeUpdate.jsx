@@ -33,7 +33,7 @@ function AdminOfficeModal(props) {
         setTableData(data.referenceList);
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
+        console.error('Failed fetchData Error fetching data:', error);
       });
   };
 
@@ -51,6 +51,13 @@ function AdminOfficeModal(props) {
             ovsCd: data.reference.ovsCd,
             ovsMeaning: data.reference.ovsMeaning,
             ovsCopCd: data.reference.ovsCopCd,
+            glCurr: data.reference.glCurr,
+            locCurr: data.reference.locCurr,
+            transCurr: data.reference.transCurr,
+            locCurr2: data.reference.locCurr2,
+            transCurr2: data.reference.transCurr2,
+            startDate: data.reference.startDate,
+            endDate: data.reference.endDate,
             // Add other properties as needed
           }));
         })
