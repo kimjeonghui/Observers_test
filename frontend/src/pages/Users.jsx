@@ -263,6 +263,7 @@ export default function Users(props) {
               sx={{
                 fontSize: { xs: '12px', sm: '14px', md: '16px' },
                 fontWeight: 600,
+                position: 'left',
               }}
             >
               사무소코드
