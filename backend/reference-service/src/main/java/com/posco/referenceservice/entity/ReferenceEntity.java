@@ -4,6 +4,8 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @AllArgsConstructor
@@ -41,7 +43,7 @@ public class ReferenceEntity extends BaseEntity {
     private String transCurr2;      // 송금 통화2
 
     @Column(nullable = false)
-    private LocalDate startDate;    // 시작일
+    private LocalDate startDate;
 
     @Column
     private LocalDate endDate;      // 만료일
