@@ -3,6 +3,7 @@ package com.posco.userservice.service;
 import com.posco.userservice.dto.request.LoginDTO;
 import com.posco.userservice.dto.request.RegisterDTO;
 import com.posco.userservice.dto.request.UpdateDTO;
+import com.posco.userservice.dto.response.LoginUserDTO;
 import com.posco.userservice.dto.response.TokenDTO;
 import com.posco.userservice.dto.response.UserDTO;
 import com.posco.userservice.entity.UserEntity;
@@ -26,7 +27,7 @@ public class UserServiceImpl implements UserService{
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
     @Override
-    public TokenDTO registerUser(RegisterDTO registerDTO) {
+    public UserEntity registerUser(RegisterDTO registerDTO) {
         UserEntity userEntity = UserEntity.builder()
                 .name(registerDTO.getName())
                 .description(registerDTO.getName())
@@ -38,9 +39,6 @@ public class UserServiceImpl implements UserService{
                 .build();
         userRepository.save(userEntity);
 
-        String accessToken = jwtTokenProvider.createAccessToken(userEntity);
-        String refreshToken = jwtTokenProvider.createRefreshToken(userEntity.getName());
-
         UserEntity newUserEntity = UserEntity.builder()
                 .name(userEntity.getName())
                 .description(userEntity.getDescription())
@@ -48,19 +46,13 @@ public class UserServiceImpl implements UserService{
                 .email(userEntity.getEmail())
                 .ovsCd(userEntity.getOvsCd())
                 .role(userEntity.getRole())
-                .refreshToken(refreshToken)
                 .build();
-        userRepository.save(newUserEntity);
-
-        return TokenDTO.builder()
-                .grantType("Bearer")
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
-                .build();
+        UserEntity user = userRepository.save(newUserEntity);
+        return user;
     }
 
     @Override
-    public TokenDTO loginUser(LoginDTO loginDTO) {
+    public LoginUserDTO loginUser(LoginDTO loginDTO) {
         UserEntity userEntity = userRepository.findById(loginDTO.getName()).orElseThrow();
 //        if(!passwordEncoder.matches(loginDTO.getPassword(), userEntity.getPassword())){
 //            return null;
@@ -82,10 +74,12 @@ public class UserServiceImpl implements UserService{
                 .build();
         userRepository.save(newUserEntity);
 
-        return TokenDTO.builder()
-                .grantType("Bearer")
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
+        return LoginUserDTO.builder()
+                .name(userEntity.getName())
+                .description(userEntity.getDescription())
+                .email(userEntity.getEmail())
+                .ovsCd(userEntity.getOvsCd())
+                .role(userEntity.getRole())
                 .build();
     }
 
