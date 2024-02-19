@@ -77,7 +77,6 @@ function AdminOfficeModal(props) {
       .then((response) => {
         console.log(response.data); // Log response for debugging
         alert('생성 되었습니다.'); // Alert user for successful creation
-        fetchData();
         handleClose();
         // Close the modal after successful creation
       })
@@ -110,7 +109,7 @@ function AdminOfficeModal(props) {
                 />
                 <ModalInput
                   label='법인코드'
-                  placeholder='PH'
+                  placeholder='ex.PH'
                   name='ovsCopCd'
                   value={referenceData.ovsCopCd}
                   onChange={handleChange}
