@@ -173,6 +173,7 @@ export default function AdminOffice() {
                               }))
                             }
                             handleClose={() => handleCloseUpdate(row.ovsCd)}
+                            ovsCd={row.ovsCd} // Ensure row.ovsCd is passed to AdminOfficeUpdate
                           />
                           <EditIcon
                             onClick={() => handleOpenUpdate(row.ovsCd)}
