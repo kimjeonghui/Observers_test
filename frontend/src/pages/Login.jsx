@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useSetRecoilState, useRecoilState } from 'recoil';
 
-import requests from '../api/config';
-import { defaultApi } from '../api/axios';
-
+import requests from '../api/userConfig';
+import { userState, loginState } from '../state/UserState';
 import LoginBgImg from '../assets/login_bg.png';
 import Container from '../components/global/Container';
 import Input from '../components/global/Input';
 import Button from '../components/global/Button';
 import Logo from '../components/global/Logo';
-import axios from 'axios';
 
 const LoginBg = styled.div`
   width: 100vw;
@@ -21,15 +22,23 @@ const LoginBg = styled.div`
 `;
 
 export default function Login(props) {
-  const [name, setName] = useState();
-  const [password, setPassword] = useState();
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const setUser = useSetRecoilState(userState);
+  const [isLogin, setIsLogin] = useRecoilState(loginState);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLogin) {
+      navigate('/');
+    }
+  }, [isLogin]);
+
   const onChangeName = (e) => {
     setName(e.target.value);
-    console.log(name);
   };
   const onChangePassword = (e) => {
     setPassword(e.target.value);
-    console.log(password);
   };
   const handleLogin = async () => {
     axios
@@ -38,8 +47,13 @@ export default function Login(props) {
         password,
       })
       .then((response) => {
-        console.log(response);
+        if (response.status === 200) {
+          setIsLogin(true);
+        }
+        const data = response.data;
+        // console.log(data);
         // response로 받은 유저 정보 상태관리하기
+        setUser(data);
       })
       .catch((err) => {
         console.error(err);
