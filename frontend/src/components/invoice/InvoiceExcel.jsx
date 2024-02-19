@@ -4,7 +4,9 @@ import Button from '../global/Button';
 import ExcelIcon from '../../assets/excel-logo-64.png';
 import { CSVLink } from 'react-csv';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
+import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import * as XLSX from 'xlsx';
+
 export default function InvoiceExcel(props) {
   const columnLabels = [
     '사무소코드',
@@ -21,10 +23,6 @@ export default function InvoiceExcel(props) {
   ];
   const [data, setData] = useState([[], [], [], [], [], [], [], [], [], []]);
   const selectFile = useRef();
-  // onChange states
-  const [excelFile, setExcelFile] = useState(null);
-  const [typeError, setTypeError] = useState(null);
-
   // submit state
   const [excelData, setExcelData] = useState(null);
 
@@ -76,7 +74,6 @@ export default function InvoiceExcel(props) {
     let selectedFile = e.target.files[0];
     if (selectedFile) {
       if (selectedFile && filetypes.includes(selectedFile.type)) {
-        setTypeError(null);
         let reader = new FileReader(selectedFile);
 
         reader.readAsArrayBuffer(selectedFile);
@@ -85,8 +82,7 @@ export default function InvoiceExcel(props) {
           handleFileSubmit(e.target.result);
         };
       } else {
-        setTypeError('Please select only excel file types');
-        setExcelFile(null);
+        alert('Please select only excel file types');
       }
     } else {
       alert('please select your file');
@@ -95,14 +91,12 @@ export default function InvoiceExcel(props) {
 
   // import event
   const handleFileSubmit = (excel) => {
-    console.log(excel);
     if (excel !== null) {
       const workbook = XLSX.read(excel, { type: 'buffer' });
       const worksheetName = workbook.SheetNames[0];
       const worksheet = workbook.Sheets[worksheetName];
-      const data = XLSX.utils.sheet_to_json(worksheet);
-      setExcelData(() => data);
-      tableImportData();
+      const tmpData = XLSX.utils.sheet_to_json(worksheet);
+      setExcelData(() => tmpData);
     }
   };
 
@@ -146,61 +140,78 @@ export default function InvoiceExcel(props) {
   };
 
   // 복붙 데이터
-  const handleData = (e) => {
-    // setData(() => e.target.value);
-    console.log(e);
+  const handleData = () => {
+    let tmpData = [];
+    for (let i = 0; i < data.length; i++) {
+      let tmpArr = {};
+
+      for (let j = 0; j < data[i].length; j++) {
+        let header = headers[j].key;
+        let dataValue = data[i][j].value;
+        tmpArr[header] = dataValue;
+      }
+      tmpData.push(tmpArr);
+    }
+    // Todo:tmpData를 api로 넘기기
   };
 
   return (
     <div>
-      <CSVLink
-        headers={headers}
-        data={sampleData}
-        style={{ decoration: 'none' }}
-        filename='Posco_Oversea_Imprest_Example.csv'
-      >
-        <Button size='sm' color='#006736' hoverColor='#017940'>
-          <img
-            src={ExcelIcon}
-            alt='excel icon'
-            style={{ height: '60%', marginRight: '10px' }}
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <div>
+          <CSVLink
+            headers={headers}
+            data={sampleData}
+            style={{ decoration: 'none' }}
+            filename='Posco_Oversea_Imprest_Example.csv'
+          >
+            <Button size='sm' color='#006736' hoverColor='#017940'>
+              <img
+                src={ExcelIcon}
+                alt='excel icon'
+                style={{ height: '60%', marginRight: '10px' }}
+              />
+              example
+            </Button>
+          </CSVLink>
+          <input
+            ref={selectFile}
+            type='file'
+            style={{ display: 'none' }}
+            required
+            onChange={handleFile}
           />
-          example
-        </Button>
-      </CSVLink>
-      <input
-        ref={selectFile}
-        type='file'
-        style={{ display: 'none' }}
-        required
-        onChange={handleFile}
-      />
-      <Button
-        size='sm'
-        onClick={() => {
-          selectFile.current.click();
-        }}
-      >
-        <LibraryAddIcon sx={{ mr: 1 }} />
-        Add excel
-      </Button>
+          <Button
+            size='sm'
+            onClick={() => {
+              selectFile.current.click();
+            }}
+          >
+            <LibraryAddIcon sx={{ mr: 1 }} />
+            Add excel
+          </Button>
 
-      <Button
-        onClick={() => {
-          addRow();
-        }}
-        size='sm'
-      >
-        행 추가
-      </Button>
-      <div>{typeError && <p>{typeError}</p>}</div>
-      <div>{excelData ? null : <p>No file is uploaded yet!</p>}</div>
+          <Button
+            onClick={() => {
+              addRow();
+            }}
+            size='sm'
+          >
+            행 추가
+          </Button>
+        </div>
+        <Button
+          onClick={() => {
+            handleData();
+          }}
+          size='sm'
+        >
+          <SaveAltIcon sx={{ mr: 1 }} />
+          저장
+        </Button>
+      </div>
       <div style={{ width: '100%', height: '100%', overflow: 'auto' }}>
-        <Spreadsheet
-          columnLabels={columnLabels}
-          data={data}
-          onChange={handleData}
-        />
+        <Spreadsheet columnLabels={columnLabels} data={data} />
       </div>
     </div>
   );
