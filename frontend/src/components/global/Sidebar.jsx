@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useSetRecoilState } from 'recoil';
+
 import {
   Toolbar,
   IconButton,
@@ -9,15 +11,15 @@ import {
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Button,
   Drawer,
   AppBar,
+  Menu,
+  MenuItem,
 } from '@mui/material';
-
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useTheme } from '@emotion/react';
-
+import { userState, loginState } from '../../state/UserState';
 import MenuIcon from '@mui/icons-material/Menu';
 import MailIcon from '@mui/icons-material/Mail';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
@@ -26,6 +28,9 @@ import Logo from '../global/Logo';
 
 function Sidebar(props) {
   const theme = useTheme();
+  const navigate = useNavigate();
+  const setUser = useSetRecoilState(userState);
+  const setIsLogin = useSetRecoilState(loginState);
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const [adminPages, setAdminPages] = useState([
@@ -40,6 +45,8 @@ function Sidebar(props) {
     { name: '대시보드', address: '/ocr', status: false },
     { name: '증빙자료관리', address: '/receipts', status: false },
   ]);
+  const [anchorEl, setAnchorEl] = useState(null);
+  let menuOpen = Boolean(anchorEl);
 
   useEffect(() => {
     const path = location.pathname;
@@ -62,6 +69,20 @@ function Sidebar(props) {
 
   const handleDrawerOpen = () => {
     setOpen((prev) => !prev);
+  };
+
+  const logout = () => {
+    setIsLogin(false);
+    setUser({});
+  };
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+    logout();
+    navigate('/login');
   };
 
   return (
@@ -91,7 +112,7 @@ function Sidebar(props) {
             <MenuIcon />
           </IconButton>
           <Logo url='/home' width='70px' height='30px' />
-          <Box>
+          <Box sx={{ display: 'flex' }}>
             <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
               {adminPages.map((page) =>
                 page.status ? (
@@ -134,6 +155,30 @@ function Sidebar(props) {
                 )
               )}
             </Box>
+            <AccountCircleIcon
+              sx={{ color: theme.palette.posco_gray_500 }}
+              aria-controls={menuOpen}
+              aria-haspopup='true'
+              aria-expanded={menuOpen}
+              onClick={handleClick}
+            />
+            <Menu
+              id='demo-positioned-menu'
+              aria-labelledby='demo-positioned-button'
+              anchorEl={anchorEl}
+              open={menuOpen}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+            >
+              <MenuItem onClick={handleClose}>Logout</MenuItem>
+            </Menu>
           </Box>
         </Toolbar>
       </AppBar>

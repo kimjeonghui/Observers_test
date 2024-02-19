@@ -1,6 +1,8 @@
-import React, { useNavigate } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
+import { loginState } from './state/UserState.jsx';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Invoice from './pages/Invoice';
@@ -21,11 +23,11 @@ import SendImg from './pages/SendImg.jsx';
 import Sidebar from './components/global/Sidebar';
 
 function App() {
-  const isLoginPage = window.location.pathname === '/login';
+  const isLogin = useRecoilValue(loginState);
   return (
     <BrowserRouter>
       <div className='App'>
-        {!isLoginPage && <Sidebar />}
+        {isLogin && <Sidebar />}
 
         <Routes>
           <Route path='/' element={<Home />} />
