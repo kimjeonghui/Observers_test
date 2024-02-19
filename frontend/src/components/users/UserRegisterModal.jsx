@@ -12,8 +12,6 @@ import {
   Select,
   Typography,
   FormControl,
-  TextField,
-  DialogContentText,
 } from '@mui/material';
 
 import ModalInput from '../global/ModalInput';
@@ -65,6 +63,7 @@ function UserRegisterModal(props) {
         password,
         description,
         email,
+        ovsCode,
         role,
       })
       .catch((err) => {
@@ -154,14 +153,13 @@ function UserRegisterModal(props) {
             권한
           </Typography>
           <Select
-            value={ovsCode}
+            value={role}
             label=''
-            onChange={onChangeOvsCode}
+            onChange={onChangeRole}
             sx={SelectStyle}
           >
-            <MenuItem value='ARS'>ARS</MenuItem>
-            <MenuItem value='USD'>USD</MenuItem>
-            <MenuItem value='KRW'>KRW</MenuItem>
+            <MenuItem value='USER'>직원</MenuItem>
+            <MenuItem value='SUPER_USER'>사무소장</MenuItem>
           </Select>
         </FormControl>{' '}
       </DialogContent>
