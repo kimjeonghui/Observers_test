@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import requests from '../api/config';
+import requests from '../api/userConfig';
 
 import Grid from '@mui/material/Grid';
 import Paper from '@mui/material/Paper';
