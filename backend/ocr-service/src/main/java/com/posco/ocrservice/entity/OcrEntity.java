@@ -1,5 +1,6 @@
 package com.posco.ocrservice.entity;
 
+import com.posco.ocrservice.dto.request.OcrDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,10 +32,10 @@ public class OcrEntity extends BaseEntity {
     private String ovsCd;           // 부서 코드
 
     @Column(nullable = false)
-    private LocalDateTime purDate;  // 거래 날짜
+    private String purDate;         // 거래 날짜
 
     @Column(nullable = false)
-    private String store;           // 거래처 명
+    private String storeName;       // 거래처 명
 
     @Column(nullable = false)
     private String description;     // 거래 내용
@@ -46,5 +47,13 @@ public class OcrEntity extends BaseEntity {
     private String currCode;        // 통화 코드
 
     @Column(nullable = false)
-    private BigDecimal totalVal;    // 총 금액
+    private Double totalVal;        // 총 금액
+
+    public static OcrEntity toEntity(OcrDTO ocrDto) {
+        return OcrEntity.builder()
+                .storeName(ocrDto.getStoreName())
+                .purDate(ocrDto.getPurDate())
+                .totalVal(ocrDto.getTotalVal())
+                .build();
+    }
 }

@@ -150,8 +150,8 @@ public class OcrController {
     }
 
     public OcrDTO jsonParsing(String response) {
-        String merchantName = null;
-        String transactionDate = null;
+        String storeName = null;
+        String purDate = null;
         Double totalPrice = null;
 
         try {
@@ -172,15 +172,15 @@ public class OcrController {
 
                     // MerchantName
                     JSONObject merchantNameObject = (JSONObject) fields.get("MerchantName");
-                    merchantName = (String) merchantNameObject.get("content");
+                    storeName = (String) merchantNameObject.get("content");
                     System.out.println("====MerchantName====");
-                    System.out.println(merchantName);
+                    System.out.println(storeName);
 
                     // TransactionDate
                     JSONObject transactionDateObject = (JSONObject) fields.get("TransactionDate");
-                    transactionDate = (String) transactionDateObject.get("valueDate");
+                    purDate = (String) transactionDateObject.get("valueDate");
                     System.out.println("====TransactionDate====");
-                    System.out.println(transactionDate);
+                    System.out.println(purDate);
 
                     // TotalPrice
                     JSONObject totalObject = (JSONObject) fields.get("Total");
@@ -239,7 +239,7 @@ public class OcrController {
             e.printStackTrace();
         }
 
-        OcrDTO dto = new OcrDTO(merchantName, transactionDate, totalPrice);
+        OcrDTO dto = new OcrDTO(storeName, purDate, totalPrice);
         return dto;
     }
 }

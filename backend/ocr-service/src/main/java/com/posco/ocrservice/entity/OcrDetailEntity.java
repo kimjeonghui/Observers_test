@@ -1,6 +1,7 @@
 package com.posco.ocrservice.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.posco.ocrservice.dto.request.OcrDetailDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,16 +24,30 @@ public class OcrDetailEntity {
     @Column(name = "ocr_id", insertable = false, updatable = false, nullable = false)
     private Long ocrId;             // OCR ID
 
+    @Column(nullable = false)
+    private String description;     // 상품명
+
+    @Column(nullable = true)
+    private Double unitPrice;       // 단품 금액
+
+    @Column(nullable = false)
+    private Double sumPrice;        // 상품 별 금액
+
+    private Long count;             // 수량
+
+    // entity
     @ManyToOne(targetEntity = OcrEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "ocr_id")
     @JsonBackReference
     private OcrEntity ocrEntity;
 
-    @Column(nullable = false)
-    private String description;     // 상품명
-
-    @Column(nullable = false)
-    private BigDecimal amount;      // 금액
-
-    private int count;              // 수량
+    public static OcrDetailEntity toEntity(OcrDetailDTO ocrDetailDTO) {
+        return OcrDetailEntity.builder()
+                .ocrDetailId(ocrDetailDTO.getOcrDetailId())
+                .description(ocrDetailDTO.getDescription())
+                .unitPrice(ocrDetailDTO.getUnitPrice())
+                .sumPrice(ocrDetailDTO.getSumPrice())
+                .count(ocrDetailDTO.getCount())
+                .build();
+    }
 }
