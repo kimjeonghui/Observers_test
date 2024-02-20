@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import requests from '../../api/userConfig';
 
@@ -16,14 +16,14 @@ import {
 
 import ModalInput from '../global/ModalInput';
 import axios from 'axios';
-function UserRegisterModal(props) {
-  const { open, setOpen } = props;
-  const { name, setName } = useState('');
-  const { description, setDescription } = useState('');
-  const { password, setPassword } = useState('');
-  const { email, setEmail } = useState('');
-  const { ovsCode, setOvsCode } = useState('');
-  const { role, setRole } = useState('');
+function UserUpdateModal(props) {
+  const { open, setOpen, user } = props;
+  const [name, setName] = useState();
+  const [description, setDescription] = useState();
+  const [password, setPassword] = useState();
+  const [email, setEmail] = useState();
+  const [ovsCode, setOvsCode] = useState();
+  const [role, setRole] = useState();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
 
@@ -65,10 +65,10 @@ function UserRegisterModal(props) {
     setEndDate(e.target.value);
     console.log(endDate);
   };
-  const handleRegister = (e) => {
+  const handleUpdate = (e) => {
     setOpen(false);
     const response = axios
-      .post(requests.POST_REGISTER(), {
+      .post(requests.PUT_UPDATE(), {
         name,
         password,
         description,
@@ -82,49 +82,38 @@ function UserRegisterModal(props) {
         console.error(err);
       });
   };
-
+  useEffect(() => {
+    console.log(user);
+    setName(user ? user.name : '');
+    setDescription(user ? user.description : '');
+    console.log(user ? user.ovsCode : '');
+    setPassword(user ? user.password : '');
+    setOvsCode(user ? user.ovsCode : '');
+    setEmail(user ? user.email : '');
+    setRole(user ? user.role : '');
+    setStartDate(user ? user.startDate : '');
+    setEndDate(user ? user.endDate : '');
+  }, [user]);
   return (
-    <Dialog
-      open={open}
-      onClose={handleClose}
-      //   PaperProps={{
-      //     component: 'form',
-      //     onSubmit: (event) => {
-      //       event.preventDefault();
-      //       const formData = new FormData(event.currentTarget);
-      //       const formJson = Object.fromEntries(formData.entries());
-      //       const email = formJson.email;
-      //       console.log(email);
-      //       handleClose();
-      //     },
-      //   }}
-    >
-      <DialogTitle>사용자 등록</DialogTitle>
+    <Dialog open={open} onClose={handleClose}>
+      <DialogTitle>사용자 정보 수정</DialogTitle>
       <DialogContent>
-        {/* <DialogContentText>
-          To subscribe to this website, please enter your email address here. We
-          will send updates occasionally.
-        </DialogContentText> */}
-        {/* <TextField
-          autoFocus
-          required
-          margin='dense'
-          id='name'
-          name='email'
-          label='Email Address'
-          type='email'
-          fullWidth
-          variant='standard'
-        /> */}
-        <ModalInput label='사번' sx={InputStyle} onChange={onChangeName} />
-        <ModalInput label='이메일' sx={InputStyle} onChange={onChangeEmail} />
+        <ModalInput label='사번' value={name} readOnly={true} sx={InputStyle} />
+        <ModalInput
+          label='이메일'
+          value={email}
+          sx={InputStyle}
+          onChange={onChangeEmail}
+        />
         <ModalInput
           label='이름'
+          value={description}
           sx={InputStyle}
           onChange={onChangeDescription}
         />
         <ModalInput
-          label='비밀번호'
+          label='새 비밀번호'
+          value={password}
           sx={InputStyle}
           onChange={onChangePassword}
         />
@@ -189,7 +178,7 @@ function UserRegisterModal(props) {
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>취소</Button>
-        <Button onClick={handleRegister}>등록</Button>
+        <Button onClick={handleUpdate}>수정</Button>
       </DialogActions>
     </Dialog>
   );
@@ -203,4 +192,4 @@ const SelectStyle = {
   width: '20vw',
   maxWidth: '250px',
 };
-export default UserRegisterModal;
+export default UserUpdateModal;
