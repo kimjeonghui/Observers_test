@@ -18,12 +18,12 @@ import ModalInput from '../global/ModalInput';
 import axios from 'axios';
 function UserRegisterModal(props) {
   const { open, setOpen } = props;
-  const { name, setName } = useState('');
-  const { description, setDescription } = useState('');
-  const { password, setPassword } = useState('');
-  const { email, setEmail } = useState('');
-  const { ovsCode, setOvsCode } = useState('');
-  const { role, setRole } = useState('');
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [ovsCd, setovsCd] = useState('');
+  const [role, setRole] = useState('');
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
 
@@ -31,6 +31,7 @@ function UserRegisterModal(props) {
     setOpen(false);
   };
   const handleClose = () => {
+    setInit();
     setOpen(false);
   };
   const onChangeName = (e) => {
@@ -45,9 +46,9 @@ function UserRegisterModal(props) {
     setDescription(e.target.value);
     console.log(description);
   };
-  const onChangeOvsCode = (e) => {
-    setOvsCode(e.target.value);
-    console.log(ovsCode);
+  const onChangeovsCd = (e) => {
+    setovsCd(e.target.value);
+    console.log(ovsCd);
   };
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -65,15 +66,33 @@ function UserRegisterModal(props) {
     setEndDate(e.target.value);
     console.log(endDate);
   };
+  const setInit = () => {
+    setName('');
+    setDescription('');
+    setPassword('');
+    setovsCd('');
+    setEmail('');
+    setRole('');
+    setStartDate('');
+    setEndDate('');
+  };
   const handleRegister = (e) => {
     setOpen(false);
+    console.log(name);
+    console.log(password);
+    console.log(description);
+    console.log(email);
+    console.log(ovsCd);
+    console.log(role);
+    console.log(startDate);
+    console.log(endDate);
     const response = axios
       .post(requests.POST_REGISTER(), {
         name,
         password,
         description,
         email,
-        ovsCode,
+        ovsCd,
         role,
         startDate,
         endDate,
@@ -81,6 +100,7 @@ function UserRegisterModal(props) {
       .catch((err) => {
         console.error(err);
       });
+    setInit();
   };
 
   return (
@@ -139,9 +159,9 @@ function UserRegisterModal(props) {
             사무소코드
           </Typography>
           <Select
-            value={ovsCode}
+            value={ovsCd}
             label=''
-            onChange={onChangeOvsCode}
+            onChange={onChangeovsCd}
             sx={{
               backgroundColor: '#F5F6FA',
               width: '20vw',
