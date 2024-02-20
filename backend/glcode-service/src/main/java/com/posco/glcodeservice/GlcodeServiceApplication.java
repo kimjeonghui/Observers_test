@@ -1,4 +1,5 @@
-package com.posco.referenceservice;
+package com.posco.glcodeservice;
+
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,15 +14,15 @@ import java.util.TimeZone;
 @EnableCaching
 @SpringBootApplication
 @EnableJpaAuditing
-public class ReferenceServiceApplication {
+public class GlcodeServiceApplication {
 
     @PostConstruct
     public void started() {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     }
     public static void main(String[] args) {
-        SpringApplication.run(ReferenceServiceApplication.class, args);
+        SpringApplication.run(GlcodeServiceApplication.class, args);
 
-        System.out.println("Hello world! ReferenceService");
+        System.out.println("Hello world! GlcodeService");
     }
 }

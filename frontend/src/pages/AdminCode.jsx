@@ -424,7 +424,7 @@ export default function AdminCode(props) {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
   return (
-    <div>
+    <div style={{ padding: '10px 36px' }}>
       <Typography variant='h4' gutterBottom>
         식별코드 관리
       </Typography>
