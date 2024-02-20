@@ -68,7 +68,7 @@ function UserUpdateModal(props) {
   const handleUpdate = (e) => {
     setOpen(false);
     const response = axios
-      .post(requests.PUT_UPDATE(), {
+      .put(requests.PUT_UPDATE(), {
         name,
         password,
         description,
@@ -83,10 +83,8 @@ function UserUpdateModal(props) {
       });
   };
   useEffect(() => {
-    console.log(user);
     setName(user ? user.name : '');
     setDescription(user ? user.description : '');
-    console.log(user ? user.ovsCode : '');
     setPassword(user ? user.password : '');
     setOvsCode(user ? user.ovsCode : '');
     setEmail(user ? user.email : '');
