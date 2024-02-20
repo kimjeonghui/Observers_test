@@ -258,19 +258,12 @@ export default function Users(props) {
   };
 
   const handleDeleteUser = (deleteName) => {
-    axios
-      .delete(requests.DELETE_USER('posco2'), {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Baerer ' + requests.GET_TOKEN(),
-        },
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+    axios.delete(requests.DELETE_USER(deleteName)).catch((err) => {
+      console.error(err);
+    });
   };
   return (
-    <div>
+    <div style={{ padding: '10px 36px' }}>
       <UserRegisterModal open={registerOpen} setOpen={setRegisterOpen} />
       <UserUpdateModal open={updateOpen} setOpen={setUpdateOpen} user={user} />
       <h2>사용자 관리</h2>
