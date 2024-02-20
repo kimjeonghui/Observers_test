@@ -4,8 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @AllArgsConstructor
@@ -49,6 +47,9 @@ public class ReferenceEntity extends BaseEntity {
     private LocalDate endDate;      // 만료일
 
     @OneToMany(mappedBy = "referenceEntity", cascade = CascadeType.REMOVE)
-    private List<GLCodeEntity> codeEntityList;
+    private List<GLCodeEntity> glCodeEntityList;
+
+    @OneToMany(mappedBy = "referenceEntity", cascade = CascadeType.REMOVE)
+    private List<PeriodStatusEntity> periodStatusEntityList;
 
 }
