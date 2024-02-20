@@ -38,12 +38,12 @@ public class UserController {
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterDTO registerDTO){
         Map<String, Object> resultMap = new HashMap<>();
         UserEntity user = userService.registerUser(registerDTO);
-
+        log.info("registerDTO"+registerDTO.toString());
         // 회원 등록 실패
         if(user==null){
            resultMap.put("result", FAIL);
            resultMap.put("msg", "회원 등록 실패");
-           return ResponseEntity.internalServerError().body(resultMap);
+           return ResponseEntity.badRequest().body(resultMap);
         }
 
         // 회원 등록 성공
@@ -118,16 +118,15 @@ public class UserController {
             resultMap.put("msg", "유효하지 않은 사용자입니다.");
             return ResponseEntity.badRequest().body(resultMap);
         }
-        TokenDTO tokenDTO = userService.updateUser(updateDTO);
-        if(tokenDTO==null){
+        LoginUserDTO loginUserDTO = userService.updateUser(updateDTO);
+        if(loginUserDTO==null){
             resultMap.put("result", FAIL);
             resultMap.put("msg", "회원 수정 실패");
             return ResponseEntity.badRequest().body(resultMap);
         }
         resultMap.put("result", SUCCESS);
         resultMap.put("msg", "회원 수정 성공");
-        resultMap.put("accessToken", tokenDTO.getAccessToken());
-        resultMap.put("refreshToken", tokenDTO.getRefreshToken());
+        resultMap.put("user", loginUserDTO);
         return ResponseEntity.ok().body(resultMap);
     }
 

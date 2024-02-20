@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -24,4 +25,8 @@ public class RegisterDTO {
     private String ovsCd;
 
     private String role;
+
+    private String startDate;
+
+    private String endDate;
 }
