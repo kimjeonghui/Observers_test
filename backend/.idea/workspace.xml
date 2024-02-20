@@ -4,7 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3405cefa-4deb-4615-91f9-b1aaf4696ad4" name="Changes" comment="" />
+    <list default="true" id="3405cefa-4deb-4615-91f9-b1aaf4696ad4" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ocr-service/src/main/java/com/posco/ocrservice/controller/OcrController.java" beforeDir="false" afterPath="$PROJECT_DIR$/ocr-service/src/main/java/com/posco/ocrservice/controller/OcrController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/summary-service/src/main/java/com/posco/summaryservice/entity/SummaryEntity.java" beforeDir="false" afterPath="$PROJECT_DIR$/summary-service/src/main/java/com/posco/summaryservice/entity/SummaryEntity.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/summary-service/src/main/java/com/posco/summaryservice/service/SummaryServiceImpl.java" beforeDir="false" afterPath="$PROJECT_DIR$/summary-service/src/main/java/com/posco/summaryservice/service/SummaryServiceImpl.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -53,12 +58,18 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
-    "last_opened_file_path": "C:/Users/BIT/POSCO/pobservers-user-service/backend/user-service/build.gradle",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
+    "last_opened_file_path": "/Users/soeun_shin/Observers/backend",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
-  <component name="RunManager" selected="Application.UserServiceApplication">
+  <component name="RunManager" selected="Gradle.user-service [dependencies]">
     <configuration name="UserServiceApplication" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="11" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
@@ -111,8 +122,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1705883911511</updated>
+      <workItem from="1708405574560" duration="157000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
