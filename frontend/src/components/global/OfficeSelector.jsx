@@ -4,7 +4,7 @@ import { MenuItem, Select, FormControl, Typography } from '@mui/material';
 
 import { userState } from '../../state/UserState';
 export default function OfficeSelector(props) {
-  const { curV, handleCurVChange } = props;
+  const { curV, setCurV } = props;
   const user = useRecoilValue(userState);
   const [role, setRole] = useState('user');
   const [selectV, setSelectV] = useState('');
@@ -29,6 +29,10 @@ export default function OfficeSelector(props) {
     { ovsCd: 'HDF03', ovsMeaning: '캐나다' },
     { ovsCd: 'HDF04', ovsMeaning: '중국' },
   ];
+
+  const handleCurVChange = (e) => {
+    setCurV(e.target.value);
+  };
 
   return (
     <FormControl sx={{ minWidth: 120 }} size='small'>
@@ -58,12 +62,11 @@ export default function OfficeSelector(props) {
         </Select>
       ) : (
         <Select
-          value={selectV}
-          label=''
-          onChange={handleCurVChange}
-          sx={{ backgroundColor: '#F5F6FA' }}
+          value=''
+          displayEmpty
+          inputProps={{ 'aria-label': 'Without label' }}
         >
-          <MenuItem value={selectV}>{selectV}</MenuItem>
+          <MenuItem value=''>{selectV}</MenuItem>
         </Select>
       )}
     </FormControl>

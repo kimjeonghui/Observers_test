@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import Table from '@mui/material/Table';
@@ -116,11 +116,18 @@ const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 //   createData('Brazil', 'BR', 210147125, 8515767),
 // ];
 export default function Summary(props) {
+  const [curV, setCurV] = useState();
   const user = useRecoilValue(userState);
+
+  useEffect(() => {
+    if (user.ovsCd) setCurV(user.ovsCd);
+  }, []);
   return (
-    <div>
-      <h2>월 총괄표</h2>
-      <OfficeSelector curV={user.ovsCd} />
+    <div style={{ padding: '10px 36px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h2>월 총괄표</h2>
+        <OfficeSelector curV={curV} setCurV={setCurV} />
+      </div>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer sx={{ maxHeight: 700 }}>
           <Table sx={{ minWidth: 700 }} stickyHeader aria-label='sticky table'>
@@ -149,8 +156,8 @@ export default function Summary(props) {
           </TableRow> */}
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
-                <TableRow key={row.topic}>
+              {rows.map((row, idx) => (
+                <TableRow key={idx}>
                   <TableCell>{row.topic}</TableCell>
                   <TableCell align='center'>{row.desc}</TableCell>
                   <TableCell align='center'>{row.qty}</TableCell>
