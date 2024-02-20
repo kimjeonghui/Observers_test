@@ -1,4 +1,6 @@
 import * as React from 'react';
+import { useRecoilValue } from 'recoil';
+
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,7 +8,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import OfficeSelector from '../components/global/OfficeSelector';
 
+import { userState } from '../state/UserState';
 const TAX_RATE = 0.07;
 
 function ccyFormat(num) {
@@ -112,9 +116,11 @@ const invoiceTotal = invoiceTaxes + invoiceSubtotal;
 //   createData('Brazil', 'BR', 210147125, 8515767),
 // ];
 export default function Summary(props) {
+  const user = useRecoilValue(userState);
   return (
     <div>
       <h2>월 총괄표</h2>
+      <OfficeSelector curV={user.ovsCd} />
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer sx={{ maxHeight: 700 }}>
           <Table sx={{ minWidth: 700 }} stickyHeader aria-label='sticky table'>
