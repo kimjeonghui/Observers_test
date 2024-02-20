@@ -22,7 +22,7 @@ function UserUpdateModal(props) {
   const [description, setDescription] = useState();
   const [password, setPassword] = useState();
   const [email, setEmail] = useState();
-  const [ovsCode, setOvsCode] = useState();
+  const [ovsCd, setovsCd] = useState();
   const [role, setRole] = useState();
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
@@ -31,6 +31,7 @@ function UserUpdateModal(props) {
     setOpen(false);
   };
   const handleClose = () => {
+    setInit();
     setOpen(false);
   };
   const onChangeName = (e) => {
@@ -45,9 +46,9 @@ function UserUpdateModal(props) {
     setDescription(e.target.value);
     console.log(description);
   };
-  const onChangeOvsCode = (e) => {
-    setOvsCode(e.target.value);
-    console.log(ovsCode);
+  const onChangeovsCd = (e) => {
+    setovsCd(e.target.value);
+    console.log(ovsCd);
   };
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -65,6 +66,16 @@ function UserUpdateModal(props) {
     setEndDate(e.target.value);
     console.log(endDate);
   };
+  const setInit = () => {
+    setName('');
+    setDescription('');
+    setPassword('');
+    setovsCd('');
+    setEmail('');
+    setRole('');
+    setStartDate('');
+    setEndDate('');
+  };
   const handleUpdate = (e) => {
     setOpen(false);
     const response = axios
@@ -73,20 +84,20 @@ function UserUpdateModal(props) {
         password,
         description,
         email,
-        ovsCode,
+        ovsCd,
         role,
-        startDate,
         endDate,
       })
       .catch((err) => {
         console.error(err);
       });
+    setInit();
   };
   useEffect(() => {
     setName(user ? user.name : '');
     setDescription(user ? user.description : '');
     setPassword(user ? user.password : '');
-    setOvsCode(user ? user.ovsCode : '');
+    setovsCd(user ? user.ovsCd : '');
     setEmail(user ? user.email : '');
     setRole(user ? user.role : '');
     setStartDate(user ? user.startDate : '');
@@ -96,7 +107,13 @@ function UserUpdateModal(props) {
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>사용자 정보 수정</DialogTitle>
       <DialogContent>
-        <ModalInput label='사번' value={name} readOnly={true} sx={InputStyle} />
+        <ModalInput
+          label='사번'
+          value={name}
+          readOnly={true}
+          sx={InputStyle}
+          disabled
+        />
         <ModalInput
           label='이메일'
           value={email}
@@ -126,9 +143,9 @@ function UserUpdateModal(props) {
             사무소코드
           </Typography>
           <Select
-            value={ovsCode}
+            value={ovsCd}
             label=''
-            onChange={onChangeOvsCode}
+            onChange={onChangeovsCd}
             sx={{
               backgroundColor: '#F5F6FA',
               width: '20vw',

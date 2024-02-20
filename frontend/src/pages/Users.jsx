@@ -41,7 +41,7 @@ export default function Users(props) {
     description,
     email,
     ovsName,
-    ovsCode,
+    ovsCd,
     startDate,
     endDate,
     role
@@ -51,7 +51,7 @@ export default function Users(props) {
       description,
       email,
       ovsName,
-      ovsCode,
+      ovsCd,
       startDate,
       endDate,
       role,
@@ -229,13 +229,13 @@ export default function Users(props) {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [ovsCode, setOvsCode] = useState('');
+  const [ovsCd, setovsCd] = useState('');
   const [registerOpen, setRegisterOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
   const [user, setUser] = useState();
 
   const handleChange = (event) => {
-    setOvsCode(event.target.value);
+    setovsCd(event.target.value);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -291,7 +291,7 @@ export default function Users(props) {
               사무소코드
             </Typography>
             <Select
-              value={ovsCode}
+              value={ovsCd}
               label=''
               onChange={handleChange}
               sx={{
