@@ -50,8 +50,8 @@ export default function Login(props) {
         if (response.status === 200) {
           setIsLogin(true);
         }
-        const data = response.data;
-        // console.log(data);
+        const data = response.data.user;
+        console.log(data);
         // response로 받은 유저 정보 상태관리하기
         setUser(data);
       })
@@ -87,6 +87,7 @@ export default function Login(props) {
               widthV='20'
               heightV='5'
               label='비밀번호'
+              type='password'
               value={password}
               onChange={onChangePassword}
               sx={{ mb: '60px' }}
