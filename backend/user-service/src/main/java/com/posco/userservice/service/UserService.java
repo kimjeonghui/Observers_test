@@ -14,7 +14,7 @@ public interface UserService {
     UserEntity registerUser(RegisterDTO registerDTO);
     LoginUserDTO loginUser(LoginDTO loginDTO);
     boolean checkExistName(String name);
-    TokenDTO updateUser(UpdateDTO updateDTO);
+    LoginUserDTO updateUser(UpdateDTO updateDTO);
     void deleteUser(String name);
     List<UserDTO> getUserList();
     UserDTO getUser(String name);

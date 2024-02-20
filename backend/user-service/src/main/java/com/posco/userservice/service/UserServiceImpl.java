@@ -15,6 +15,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.text.DateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +33,9 @@ public class UserServiceImpl implements UserService{
     private final PasswordEncoder passwordEncoder;
     @Override
     public UserEntity registerUser(RegisterDTO registerDTO) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime start = LocalDateTime.of(LocalDate.from(LocalDateTime.parse(registerDTO.getStartDate()+" 00:00:00", formatter)), LocalTime.of(0, 0, 0));
+        LocalDateTime end = LocalDateTime.of(LocalDate.from(LocalDateTime.parse(registerDTO.getEndDate()+" 00:00:00", formatter)), LocalTime.of(23, 59, 59));
         UserEntity userEntity = UserEntity.builder()
                 .name(registerDTO.getName())
                 .description(registerDTO.getName())
@@ -36,18 +44,20 @@ public class UserServiceImpl implements UserService{
                 .email(registerDTO.getEmail())
                 .ovsCd(registerDTO.getOvsCd())
                 .role(registerDTO.getRole())
+                .startDate(start)
+                .endDate(end)
                 .build();
-        userRepository.save(userEntity);
+        UserEntity user = userRepository.save(userEntity);
 
-        UserEntity newUserEntity = UserEntity.builder()
-                .name(userEntity.getName())
-                .description(userEntity.getDescription())
-                .password(userEntity.getPassword())
-                .email(userEntity.getEmail())
-                .ovsCd(userEntity.getOvsCd())
-                .role(userEntity.getRole())
-                .build();
-        UserEntity user = userRepository.save(newUserEntity);
+//        UserEntity newUserEntity = UserEntity.builder()
+//                .name(userEntity.getName())
+//                .description(userEntity.getDescription())
+//                .password(userEntity.getPassword())
+//                .email(userEntity.getEmail())
+//                .ovsCd(userEntity.getOvsCd())
+//                .role(userEntity.getRole())
+//                .build();
+//        UserEntity user = userRepository.save(newUserEntity);
         return user;
     }
 
@@ -60,19 +70,19 @@ public class UserServiceImpl implements UserService{
         if(!loginDTO.getPassword().equals(userEntity.getPassword())){
             return null;
         }
-        String accessToken = jwtTokenProvider.createAccessToken(userEntity);
-        String refreshToken = jwtTokenProvider.createRefreshToken(userEntity.getName());
-
-        UserEntity newUserEntity = UserEntity.builder()
-                .name(userEntity.getName())
-                .description(userEntity.getDescription())
-                .password(userEntity.getPassword())
-                .email(userEntity.getEmail())
-                .ovsCd(userEntity.getOvsCd())
-                .role(userEntity.getRole())
-                .refreshToken(refreshToken)
-                .build();
-        userRepository.save(newUserEntity);
+//        String accessToken = jwtTokenProvider.createAccessToken(userEntity);
+//        String refreshToken = jwtTokenProvider.createRefreshToken(userEntity.getName());
+//
+//        UserEntity newUserEntity = UserEntity.builder()
+//                .name(userEntity.getName())
+//                .description(userEntity.getDescription())
+//                .password(userEntity.getPassword())
+//                .email(userEntity.getEmail())
+//                .ovsCd(userEntity.getOvsCd())
+//                .role(userEntity.getRole())
+//                .refreshToken(refreshToken)
+//                .build();
+//        userRepository.save(newUserEntity);
 
         return LoginUserDTO.builder()
                 .name(userEntity.getName())
@@ -90,40 +100,45 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public TokenDTO updateUser(UpdateDTO updateDTO) {
+    public LoginUserDTO updateUser(UpdateDTO updateDTO) {
         UserEntity userEntity = userRepository.findByName(updateDTO.getName());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDateTime end = LocalDateTime.of(LocalDate.from(LocalDateTime.parse(updateDTO.getEndDate(), formatter)), LocalTime.of(23, 59, 59));
+
         UserEntity updateUser = UserEntity.builder()
                 .name(updateDTO.getName())
                 .description(updateDTO.getDescription())
-                .password(userEntity.getPassword())
-                .email(userEntity.getEmail())
-                .ovsCd(userEntity.getOvsCd())
+                .password(updateDTO.getPassword()==null?userEntity.getPassword():updateDTO.getPassword())
+                .email(updateDTO.getEmail()==null?userEntity.getEmail():updateDTO.getEmail())
+                .ovsCd(updateDTO.getOvsCd()==null?userEntity.getOvsCd():updateDTO.getOvsCd())
                 .role(updateDTO.getRole())
                 .startDate(userEntity.getStartDate())
-                .endDate(updateDTO.getEndDate())
+                .endDate(end)
                 .build();
 //        userRepository.save(updateUser);
 
-        String accessToken = jwtTokenProvider.createAccessToken(updateUser);
-        String refreshToken = jwtTokenProvider.createRefreshToken(updateUser.getName());
+//        String accessToken = jwtTokenProvider.createAccessToken(updateUser);
+//        String refreshToken = jwtTokenProvider.createRefreshToken(updateUser.getName());
+//
+//        UserEntity newUserEntity = UserEntity.builder()
+//                .name(updateUser.getName())
+//                .description(updateUser.getDescription())
+//                .password(updateUser.getPassword())
+//                .email(updateUser.getEmail())
+//                .ovsCd(updateUser.getOvsCd())
+//                .role(updateUser.getRole())
+//                .refreshToken(refreshToken)
+//                .startDate(updateUser.getStartDate())
+//                .endDate(updateUser.getEndDate())
+//                .build();
+        userRepository.save(updateUser);
 
-        UserEntity newUserEntity = UserEntity.builder()
+        return LoginUserDTO.builder()
                 .name(updateUser.getName())
                 .description(updateUser.getDescription())
-                .password(updateUser.getPassword())
                 .email(updateUser.getEmail())
                 .ovsCd(updateUser.getOvsCd())
                 .role(updateUser.getRole())
-                .refreshToken(refreshToken)
-                .startDate(updateUser.getStartDate())
-                .endDate(updateUser.getEndDate())
-                .build();
-        userRepository.save(updateUser);
-
-        return TokenDTO.builder()
-                .grantType("Bearer")
-                .accessToken(accessToken)
-                .refreshToken(refreshToken)
                 .build();
     }
 
