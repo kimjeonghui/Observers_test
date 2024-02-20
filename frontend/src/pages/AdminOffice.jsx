@@ -139,7 +139,7 @@ export default function AdminOffice() {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - [].length) : 0;
 
   return (
-    <div>
+    <div style={{ padding: '10px 36px' }}>
       <Typography variant='h4' gutterBottom>
         사무소 관리
       </Typography>
@@ -164,7 +164,7 @@ export default function AdminOffice() {
           </TextField>
         </Grid>
         <Grid item xs={6} textAlign='right'>
-          <AdminOfficeDialog />
+          {/* <AdminOfficeDialog /> */}
           <AdminOfficeModal open={open} setOpen={setOpen} />
           <CustomButton onClick={handleOpenInsert} size='sm'>
             생성
