@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import requests from '../api/userConfig';
 
@@ -262,6 +262,22 @@ export default function Users(props) {
       console.error(err);
     });
   };
+
+  const handlegetUsers = () => {
+    axios
+      .get(requests.GET_USERS())
+      .then((res) => {
+        setTableData(res.data.userList);
+        console.log(tableData);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  useEffect(() => {
+    handlegetUsers();
+  }, []);
   return (
     <div style={{ padding: '10px 36px' }}>
       <UserRegisterModal open={registerOpen} setOpen={setRegisterOpen} />
@@ -336,14 +352,18 @@ export default function Users(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {tableData.map((row) => (
                 <TableRow key={row.name}>
                   <TableCell>{row.name}</TableCell>
                   <TableCell align='center'>{row.description}</TableCell>
                   <TableCell align='center'>{row.email}</TableCell>
                   <TableCell align='center'>{row.ovsName}</TableCell>
-                  <TableCell align='center'>{row.startDate}</TableCell>
-                  <TableCell align='center'>{row.endDate}</TableCell>
+                  <TableCell align='center'>
+                    {(row.startDate + '').substring(0, 10)}
+                  </TableCell>
+                  <TableCell align='center'>
+                    {(row.endDate + '').substring(0, 10)}
+                  </TableCell>
                   <TableCell align='center'>{row.role}</TableCell>
                   <TableCell align='center'>
                     <div onClick={() => handleUpdateOpen(row)}>

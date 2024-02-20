@@ -12,6 +12,9 @@ const requests = {
   POST_LOGIN() {
     return this.base_url + `/users/login`;
   },
+  GET_USERS() {
+    return this.base_url + `/users`;
+  },
   PUT_UPDATE() {
     return this.base_url + `/users`;
   },
