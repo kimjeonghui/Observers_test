@@ -7,5 +7,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("gl-code")
-public class GlcodeController {
+public class GLCodeController {
 }
