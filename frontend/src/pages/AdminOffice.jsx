@@ -4,6 +4,8 @@ import AdminOfficeDialog from '../components/admin/AdminOfficeDialog';
 import AdminOfficeModal from '../components/admin/AdminOfficeModal';
 import AdminOfficeUpdate from '../components/admin/AdminOfficeUpdate';
 import CustomButton from '../components/global/Button';
+import ExcelIcon from '../assets/excel-logo-64.png';
+import { CSVLink } from 'react-csv';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {
@@ -164,6 +166,21 @@ export default function AdminOffice() {
           </TextField>
         </Grid>
         <Grid item xs={6} textAlign='right'>
+          <CSVLink
+            data={tableData}
+            // headers={TableHead}
+            style={{ decoration: 'none' }}
+            filename='Posco_Oversea_Imprest.csv'
+          >
+            <CustomButton size='sm' color='#006736' hoverColor='#017940'>
+              <img
+                src={ExcelIcon}
+                alt='excel icon'
+                style={{ height: '60%', marginRight: '10px' }}
+              />
+              export
+            </CustomButton>
+          </CSVLink>
           {/* <AdminOfficeDialog /> */}
           <AdminOfficeModal open={open} setOpen={setOpen} />
           <CustomButton onClick={handleOpenInsert} size='sm'>
