@@ -1,5 +1,6 @@
 package com.posco.referenceservice.service;
 
+import com.posco.referenceservice.dto.OvsCodeDTO;
 import com.posco.referenceservice.dto.ReferenceDTO;
 import com.posco.referenceservice.entity.ReferenceEntity;
 import com.posco.referenceservice.repository.ReferenceRepository;
@@ -27,11 +28,15 @@ public class ReferenceServiceImpl implements ReferenceService {
     }
 
     @Override
-    public List<String> getOvsCodeList() {
-        List<String> OvsCodes = new ArrayList<>();
+    public List<OvsCodeDTO> getOvsCodeList() {
+        List<OvsCodeDTO> OvsCodes = new ArrayList<>();
         List<ReferenceEntity> referenceDTOS = referenceRepository.findAll();
         for(ReferenceEntity ovsCode: referenceDTOS){
-            OvsCodes.add(ovsCode.getOvsCd());
+            OvsCodeDTO ovsCodeDTO = OvsCodeDTO.builder()
+                    .OvsCd(ovsCode.getOvsCd())
+                    .OvsMeaning(ovsCode.getOvsMeaning())
+                    .build();
+            OvsCodes.add(ovsCodeDTO);
         }
         return OvsCodes;
     }
