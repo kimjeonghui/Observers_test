@@ -9,5 +9,5 @@ import java.util.List;
 public interface OcrRepository extends JpaRepository<OcrEntity, Long> {
     OcrEntity findByFiscalMonth(LocalDateTime fiscalMonth);
 
-    List<OcrEntity> findAllByOvsCd(String ovsCd);
+    List<OcrEntity> findAllByOcrId(String ocrId);
 }
