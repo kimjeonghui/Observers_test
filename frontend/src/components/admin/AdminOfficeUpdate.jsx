@@ -139,7 +139,7 @@ function AdminOfficeModal(props) {
               onChange={handleChange}
             />
             <ModalInput
-              label='[기본]송금통화'
+              label='(추가)송금통화'
               name='transCurr2'
               value={referenceData.transCurr2}
               onChange={handleChange}
