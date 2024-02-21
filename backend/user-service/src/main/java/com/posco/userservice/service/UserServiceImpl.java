@@ -102,8 +102,8 @@ public class UserServiceImpl implements UserService{
     @Override
     public LoginUserDTO updateUser(UpdateDTO updateDTO) {
         UserEntity userEntity = userRepository.findByName(updateDTO.getName());
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDateTime end = LocalDateTime.of(LocalDate.from(LocalDateTime.parse(updateDTO.getEndDate(), formatter)), LocalTime.of(23, 59, 59));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime end = LocalDateTime.of(LocalDate.from(LocalDateTime.parse(updateDTO.getEndDate()+" 00:00:00", formatter)), LocalTime.of(23, 59, 59));
 
         UserEntity updateUser = UserEntity.builder()
                 .name(updateDTO.getName())
