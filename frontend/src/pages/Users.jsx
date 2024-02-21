@@ -278,6 +278,12 @@ export default function Users(props) {
   useEffect(() => {
     handlegetUsers();
   }, []);
+
+  useEffect(() => {
+    return () => {
+      handlegetUsers();
+    };
+  }, [updateOpen]);
   return (
     <div style={{ padding: '10px 36px' }}>
       <UserRegisterModal open={registerOpen} setOpen={setRegisterOpen} />

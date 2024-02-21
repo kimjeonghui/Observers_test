@@ -78,7 +78,7 @@ function UserUpdateModal(props) {
   };
   const handleUpdate = (e) => {
     setOpen(false);
-    const response = axios
+    axios
       .put(requests.PUT_UPDATE(), {
         name,
         password,
@@ -100,8 +100,8 @@ function UserUpdateModal(props) {
     setovsCd(user ? user.ovsCd : '');
     setEmail(user ? user.email : '');
     setRole(user ? user.role : '');
-    setStartDate(user ? user.startDate : '');
-    setEndDate(user ? user.endDate : '');
+    setStartDate(user ? (user.startDate + '').substring(0, 10) : '');
+    setEndDate(user ? (user.endDate + '').substring(0, 10) : '');
   }, [user]);
   return (
     <Dialog open={open} onClose={handleClose}>
