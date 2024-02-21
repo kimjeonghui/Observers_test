@@ -1,5 +1,6 @@
 package com.posco.referenceservice.service;
 
+import com.posco.referenceservice.dto.OvsCodeDTO;
 import com.posco.referenceservice.dto.ReferenceDTO;
 
 import java.util.List;
@@ -8,7 +9,7 @@ public interface ReferenceService {
 
     List<ReferenceDTO> getAllReferences();
 
-    List<String> getOvsCodeList();
+    List<OvsCodeDTO> getOvsCodeList();
 
     ReferenceDTO getReferenceByOvsCd(String ovsCd);
 

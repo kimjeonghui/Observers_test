@@ -1,5 +1,6 @@
 package com.posco.referenceservice.controller;
 
+import com.posco.referenceservice.dto.OvsCodeDTO;
 import com.posco.referenceservice.dto.ReferenceDTO;
 import com.posco.referenceservice.service.ReferenceService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -48,7 +49,7 @@ public class ReferenceController {
     @Operation(summary = "사무소 코드 리스트 가져오기", description = "")
     public ResponseEntity getOvsCodeList(){
         Map<String, Object> resultMap = new HashMap<>();
-        List<String> ovsList = referenceService.getOvsCodeList();
+        List<OvsCodeDTO> ovsList = referenceService.getOvsCodeList();
 
         if(ovsList.isEmpty()){
             resultMap.put("result", FAIL);

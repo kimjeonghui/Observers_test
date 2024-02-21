@@ -22,8 +22,6 @@ public class QReferenceEntity extends EntityPathBase<ReferenceEntity> {
 
     public final QBaseEntity _super = new QBaseEntity(this);
 
-    public final ListPath<GLCodeEntity, QGLCodeEntity> codeEntityList = this.<GLCodeEntity, QGLCodeEntity>createList("codeEntityList", GLCodeEntity.class, QGLCodeEntity.class, PathInits.DIRECT2);
-
     //inherited
     public final StringPath createdBy = _super.createdBy;
 
@@ -31,6 +29,8 @@ public class QReferenceEntity extends EntityPathBase<ReferenceEntity> {
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
     public final DatePath<java.time.LocalDate> endDate = createDate("endDate", java.time.LocalDate.class);
+
+    public final ListPath<GLCodeEntity, QGLCodeEntity> glCodeEntityList = this.<GLCodeEntity, QGLCodeEntity>createList("glCodeEntityList", GLCodeEntity.class, QGLCodeEntity.class, PathInits.DIRECT2);
 
     public final StringPath glCurr = createString("glCurr");
 
@@ -49,6 +49,8 @@ public class QReferenceEntity extends EntityPathBase<ReferenceEntity> {
     public final StringPath ovsCopCd = createString("ovsCopCd");
 
     public final StringPath ovsMeaning = createString("ovsMeaning");
+
+    public final ListPath<PeriodStatusEntity, QPeriodStatusEntity> periodStatusEntityList = this.<PeriodStatusEntity, QPeriodStatusEntity>createList("periodStatusEntityList", PeriodStatusEntity.class, QPeriodStatusEntity.class, PathInits.DIRECT2);
 
     public final DatePath<java.time.LocalDate> startDate = createDate("startDate", java.time.LocalDate.class);
 
