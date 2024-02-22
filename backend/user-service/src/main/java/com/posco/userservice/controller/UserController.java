@@ -91,7 +91,7 @@ public class UserController {
         return ResponseEntity.ok().body(resultMap);
     }
 
-    @GetMapping("/{userName}")
+    @GetMapping("/detail/{userName}")
     @Operation(summary = "Get one user", description = "")
     public ResponseEntity<?> getUser(@PathVariable String userName){
         Map<String, Object> resultMap = new HashMap<>();
@@ -105,6 +105,22 @@ public class UserController {
         resultMap.put("result", SUCCESS);
         resultMap.put("msg", "사용자 상세 정보 가져오기 성공");
         resultMap.put("user", user);
+        return ResponseEntity.ok().body(resultMap);
+    }
+
+    @GetMapping("/{ovsCd}")
+    @Operation(summary = "Get userList By ovsCode", description = "")
+    public ResponseEntity<?> getUserListByOvsCode(@PathVariable String ovsCd){
+        Map<String, Object> resultMap = new HashMap<>();
+        List<UserDTO> userDTOList = userService.getUserListByOvsCode(ovsCd);
+//        if(userDTOList.isEmpty()){
+//            resultMap.put("result", FAIL);
+//            resultMap.put("msg", "해당 사무소에 소속된 사용자가 없습니다.");
+//            return ResponseEntity.badRequest().body(resultMap);
+//        }
+        resultMap.put("result", SUCCESS);
+        resultMap.put("msg", "사용자 리스트 가져오기 성공");
+        resultMap.put("userList", userDTOList);
         return ResponseEntity.ok().body(resultMap);
     }
 
