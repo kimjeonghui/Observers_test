@@ -101,6 +101,26 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public List<UserDTO> getUserListByOvsCode(String ovsCd) {
+        List<UserEntity> userEntityList = userRepository.findAllByOvsCd(ovsCd);
+        List<UserDTO> userDTOList = new ArrayList<>();
+        for(UserEntity userEntity: userEntityList){
+            UserDTO userDTO = UserDTO.builder()
+                    .name(userEntity.getName())
+                    .description(userEntity.getDescription())
+                    .email(userEntity.getEmail())
+                    .ovsCd(userEntity.getOvsCd())
+                    .ovsMeaning(userEntity.getOvsMeaning())
+                    .role(userEntity.getRole())
+                    .startDate(userEntity.getStartDate())
+                    .endDate(userEntity.getEndDate())
+                    .build();
+            userDTOList.add(userDTO);
+        }
+        return userDTOList;
+    }
+
+    @Override
     public LoginUserDTO updateUser(UpdateDTO updateDTO) {
         UserEntity userEntity = userRepository.findByName(updateDTO.getName());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
