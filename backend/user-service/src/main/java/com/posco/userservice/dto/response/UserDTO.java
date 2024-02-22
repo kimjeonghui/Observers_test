@@ -16,6 +16,7 @@ public class UserDTO {
     private String description;
     private String email;
     private String ovsCd;
+    private String ovsMeaning;
     private LocalDateTime startDate;
     private LocalDateTime endDate;
     private String role;

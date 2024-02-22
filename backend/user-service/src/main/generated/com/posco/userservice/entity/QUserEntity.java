@@ -43,6 +43,8 @@ public class QUserEntity extends EntityPathBase<UserEntity> {
 
     public final StringPath ovsCd = createString("ovsCd");
 
+    public final StringPath ovsMeaning = createString("ovsMeaning");
+
     public final StringPath password = createString("password");
 
     public final StringPath refreshToken = createString("refreshToken");

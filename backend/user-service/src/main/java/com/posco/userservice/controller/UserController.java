@@ -132,20 +132,20 @@ public class UserController {
 
     @DeleteMapping("/{name}")
     @Operation(summary = "Delete user", description = "")
-    public ResponseEntity<?> deleteUser(HttpServletRequest httpServletRequest, @PathVariable String name){
+    public ResponseEntity<?> deleteUser(@PathVariable String name){
         Map<String, Object> resultMap = new HashMap<>();
 
-        if(httpServletRequest.getHeader("Authorization")==null){
-            resultMap.put("result", FAIL);
-            resultMap.put("msg", "토큰이 없습니다.");
-            return ResponseEntity.badRequest().body(resultMap);
-        }
-        String role = JwtTokenProvider.getRoleByAccessToken(httpServletRequest);
-        if(!role.equals("ADMIN")){
-            resultMap.put("result", FAIL);
-            resultMap.put("msg", "삭제 권한이 없습니다.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(resultMap);
-        }
+//        if(httpServletRequest.getHeader("Authorization")==null){
+//            resultMap.put("result", FAIL);
+//            resultMap.put("msg", "토큰이 없습니다.");
+//            return ResponseEntity.badRequest().body(resultMap);
+//        }
+//        String role = JwtTokenProvider.getRoleByAccessToken(httpServletRequest);
+//        if(!role.equals("ADMIN")){
+//            resultMap.put("result", FAIL);
+//            resultMap.put("msg", "삭제 권한이 없습니다.");
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(resultMap);
+//        }
         if(userService.checkExistName(name)){
             resultMap.put("result", FAIL);
             resultMap.put("msg", "사용자가 존재하지 않습니다.");

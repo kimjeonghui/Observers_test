@@ -24,6 +24,8 @@ public class UpdateDTO {
 
     private String ovsCd;
 
+    private String ovsMeaning;
+
     private String role;
 
     private String endDate;

@@ -16,5 +16,6 @@ public class LoginUserDTO {
     private String description;
     private String email;
     private String ovsCd;
+    private String ovsMeaning;
     private String role;
 }
