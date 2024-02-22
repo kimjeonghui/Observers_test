@@ -1,6 +1,5 @@
-package com.posco.referenceservice.entity;
+package com.posco.invoiceservice.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,26 +16,23 @@ import java.util.List;
 @Table(name = "pos_ovs_gl_code")
 public class GLCodeEntity extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long glCodeId;
-
     @Column
     private String tranCd;              // 식별 코드
 
     @Column(nullable = false)
     private String accountName;         // 계정명
 
-    @Column(nullable = false)
+    @Column
     private Long account;               // 계정 코드
 
-    @Column(nullable = false)
+    @Column
     private Long subAccount;            // 보조 계정
 
     @Column(nullable = false)
     private Long depositCd;             // 입출금 구분
 
     @Column(nullable = false)
-    private String deptReqFlag;           // 부서 코드 필수 여부
+    private Long deptReqFlag;           // 부서 코드 필수 여부
 
     @Column
     private String description;         // 적요 설명
@@ -56,16 +52,10 @@ public class GLCodeEntity extends BaseEntity{
     @Column(name = "ovs_cd", insertable = false, updatable = false)
     private String ovsCd;               // 사무소 코드
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ovs_cd", referencedColumnName = "ovs_cd")
+    @OneToMany(mappedBy = "glCodeEntity", cascade = CascadeType.REMOVE)
+    private List<SummaryContentsEntity> summaryContentsEntities;
+
+    @ManyToOne(targetEntity = ReferenceEntity.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "ovs_cd")
     private ReferenceEntity referenceEntity;
-
-//    @OneToMany(mappedBy = "glCodeEntity", cascade = CascadeType.REMOVE)
-//    private List<SummaryContentsEntity> summaryContentsEntities;
-
-//    @ManyToOne(targetEntity = ReferenceEntity.class, fetch = FetchType.LAZY)
-//    @JoinColumn(name = "ovs_cd")
-//    private ReferenceEntity referenceEntity;
-
-
 }

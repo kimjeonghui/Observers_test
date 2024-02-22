@@ -8,12 +8,6 @@ export default function Input(props) {
     height: heightV + 'vh',
   };
   return (
-    <TextField
-      id='standard-basic'
-      label={label}
-      variant='standard'
-      style={inputStyle}
-      {...rest}
-    />
+    <TextField label={label} variant='standard' style={inputStyle} {...rest} />
   );
 }

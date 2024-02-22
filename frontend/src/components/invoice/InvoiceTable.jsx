@@ -503,7 +503,7 @@ export default function InvoiceTable(props) {
                         padding: 0,
                       }}
                     >
-                      {row.ovs_cd}
+                      {row.ovsCd}
                     </TableCell>
                     <TableCell
                       align='center'
@@ -521,7 +521,7 @@ export default function InvoiceTable(props) {
                         padding: 0,
                       }}
                     >
-                      {row.fiscal_month}
+                      {row.fiscalMonth}
                     </TableCell>
                     <TableCell
                       align='center'
@@ -530,7 +530,7 @@ export default function InvoiceTable(props) {
                         padding: 0,
                       }}
                     >
-                      {row.tx_date}
+                      {row.txDate}
                     </TableCell>
                     <TableCell
                       align='center'
@@ -548,7 +548,7 @@ export default function InvoiceTable(props) {
                         padding: 0,
                       }}
                     >
-                      {row.dep_curr}
+                      {row.depCurr}
                     </TableCell>
                     <TableCell
                       align='center'
@@ -566,7 +566,7 @@ export default function InvoiceTable(props) {
                         padding: 0,
                       }}
                     >
-                      {row.wd_curr}
+                      {row.wdCurr}
                     </TableCell>
                     <TableCell
                       align='center'
@@ -584,7 +584,7 @@ export default function InvoiceTable(props) {
                         padding: 0,
                       }}
                     >
-                      {row.trans_cd}
+                      {row.transCd}
                     </TableCell>
                     <TableCell
                       align='center'
@@ -602,7 +602,7 @@ export default function InvoiceTable(props) {
                         padding: 0,
                       }}
                     >
-                      {row.trans_amount}
+                      {row.transAmount}
                     </TableCell>
                     <TableCell
                       align='center'

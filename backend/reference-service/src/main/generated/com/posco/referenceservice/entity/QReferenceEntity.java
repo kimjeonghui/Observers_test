@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -30,8 +29,6 @@ public class QReferenceEntity extends EntityPathBase<ReferenceEntity> {
 
     public final DatePath<java.time.LocalDate> endDate = createDate("endDate", java.time.LocalDate.class);
 
-    public final ListPath<GLCodeEntity, QGLCodeEntity> glCodeEntityList = this.<GLCodeEntity, QGLCodeEntity>createList("glCodeEntityList", GLCodeEntity.class, QGLCodeEntity.class, PathInits.DIRECT2);
-
     public final StringPath glCurr = createString("glCurr");
 
     //inherited
@@ -49,8 +46,6 @@ public class QReferenceEntity extends EntityPathBase<ReferenceEntity> {
     public final StringPath ovsCopCd = createString("ovsCopCd");
 
     public final StringPath ovsMeaning = createString("ovsMeaning");
-
-    public final ListPath<PeriodStatusEntity, QPeriodStatusEntity> periodStatusEntityList = this.<PeriodStatusEntity, QPeriodStatusEntity>createList("periodStatusEntityList", PeriodStatusEntity.class, QPeriodStatusEntity.class, PathInits.DIRECT2);
 
     public final DatePath<java.time.LocalDate> startDate = createDate("startDate", java.time.LocalDate.class);
 

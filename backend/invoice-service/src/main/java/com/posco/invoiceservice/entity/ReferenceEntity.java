@@ -1,6 +1,9 @@
-package com.posco.referenceservice.entity;
+package com.posco.invoiceservice.entity;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -10,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Getter
-@Setter
 @Entity
 @Table(name = "pos_ovs_cost_center")
 public class ReferenceEntity extends BaseEntity {
@@ -41,15 +43,12 @@ public class ReferenceEntity extends BaseEntity {
     private String transCurr2;      // 송금 통화2
 
     @Column(nullable = false)
-    private LocalDate startDate;
+    private LocalDate startDate;    // 시작일
 
     @Column
     private LocalDate endDate;      // 만료일
-//
-//    @OneToMany(mappedBy = "referenceEntity", cascade = CascadeType.REMOVE)
-//    private List<GLCodeEntity> glCodeEntityList;
-//
-//    @OneToMany(mappedBy = "referenceEntity", cascade = CascadeType.REMOVE)
-//    private List<PeriodStatusEntity> periodStatusEntityList;
+
+    @OneToMany(mappedBy = "referenceEntity", cascade = CascadeType.REMOVE)
+    private List<GLCodeEntity> codeEntityList;
 
 }
