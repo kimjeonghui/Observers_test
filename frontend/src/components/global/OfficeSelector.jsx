@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { MenuItem, Select, FormControl, Typography } from '@mui/material';
-
+import axios from 'axios';
 import { userState } from '../../state/UserState';
 export default function OfficeSelector(props) {
   const { curV, setCurV } = props;
   const user = useRecoilValue(userState);
   const [role, setRole] = useState('user');
   const [selectV, setSelectV] = useState('');
+  const [ovsCdList, setovsCdList] = useState([]);
   useEffect(() => {
     if (user.role === 'ADMIN' || user.role === 'SYSTEM_ADMIN') setRole('admin');
+    handlegetOvsCode();
   }, []);
   useEffect(() => {
     if (curV) {
@@ -19,6 +21,18 @@ export default function OfficeSelector(props) {
     }
   }, [curV]);
 
+  const handlegetOvsCode = () => {
+    axios
+      .get(`http://localhost:8086/admin-office/codeList`)
+      .then((res) => {
+        console.log(res);
+        setovsCdList(res.data.ovsCodeList);
+        console.log(ovsCdList);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   //Todo: 사무소코드 가져오는 API
   const officeCode = [
     { ovsCd: 'HDF32', ovsMeaning: '유럽' },
@@ -52,7 +66,7 @@ export default function OfficeSelector(props) {
           onChange={handleCurVChange}
           sx={{ backgroundColor: '#F5F6FA' }}
         >
-          {officeCode?.map((office) => {
+          {ovsCdList?.map((office) => {
             return (
               <MenuItem key={office.ovsCd} value={office.ovsCd}>
                 {office.ovsMeaning}

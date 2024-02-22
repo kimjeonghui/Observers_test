@@ -13,14 +13,15 @@ import TablePagination from '@mui/material/TablePagination';
 import { createSvgIcon } from '@mui/material/utils';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import Select from '@mui/material/Select';
-import Typography from '@mui/material/Typography';
-import MenuItem from '@mui/material/MenuItem';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 import FormControl from '@mui/material/FormControl';
 import UserRegisterModal from '../components/users/UserRegisterModal';
 import UserUpdateModal from '../components/users/UserUpdateModal';
 import Button from '../components/global/Button';
 import Input from '../components/global/Input';
+import OfficeSelector from '../components/global/OfficeSelector';
 import axios from 'axios';
 
 export default function Users(props) {
@@ -232,10 +233,14 @@ export default function Users(props) {
   const [ovsCd, setovsCd] = useState('');
   const [registerOpen, setRegisterOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [user, setUser] = useState();
+  const [ovsCdList, setovsCdList] = useState([]);
+  const [getState, setGetState] = useState(false);
+  const [deleteName, setDeleteName] = useState('');
 
-  const handleChange = (event) => {
-    setovsCd(event.target.value);
+  const handleDeleteClose = (event) => {
+    setDeleteOpen(false);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -257,16 +262,28 @@ export default function Users(props) {
     setUpdateOpen(true);
   };
 
-  const handleDeleteUser = (deleteName) => {
-    axios.delete(requests.DELETE_USER(deleteName)).catch((err) => {
-      console.error(err);
-    });
+  const handleDeleteDialog = (name) => {
+    setDeleteName(name);
+    setDeleteOpen(true);
+  };
+
+  const handleDeleteUser = () => {
+    axios
+      .delete(requests.DELETE_USER(deleteName))
+      .then(() => {
+        setGetState(!getState);
+        setDeleteOpen(false);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   const handlegetUsers = () => {
     axios
       .get(requests.GET_USERS())
       .then((res) => {
+        console.log(res);
         setTableData(res.data.userList);
         console.log(tableData);
       })
@@ -275,53 +292,55 @@ export default function Users(props) {
       });
   };
 
+  const handlegetOvsCode = () => {
+    axios
+      .get(`http://localhost:8086/admin-office/codeList`)
+      .then((res) => {
+        setovsCdList(res.data.ovsCodeList);
+        console.log(ovsCdList);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   useEffect(() => {
     handlegetUsers();
+    // handlegetOvsCode();
   }, []);
 
   useEffect(() => {
-    return () => {
-      handlegetUsers();
-    };
-  }, [updateOpen]);
+    handlegetUsers();
+  }, [getState]);
   return (
     <div style={{ padding: '10px 36px' }}>
-      <UserRegisterModal open={registerOpen} setOpen={setRegisterOpen} />
-      <UserUpdateModal open={updateOpen} setOpen={setUpdateOpen} user={user} />
+      <UserRegisterModal
+        open={registerOpen}
+        setOpen={setRegisterOpen}
+        getState={getState}
+        setGetState={setGetState}
+      />
+      <UserUpdateModal
+        open={updateOpen}
+        setOpen={setUpdateOpen}
+        getState={getState}
+        setGetState={setGetState}
+        user={user}
+      />
+      <Dialog open={deleteOpen} onClose={handleDeleteClose}>
+        <DialogContent>삭제하시겠습니까?</DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteUser}>삭제</Button>
+          <Button onClick={handleDeleteClose}>취소</Button>
+        </DialogActions>
+      </Dialog>
       <h2>사용자 관리</h2>
       <Grid container spacing={3}>
         <Grid item xs={6}>
           <Input widthV='20' heightV='5' label='Search' />
         </Grid>
         <Grid item xs={6} textAlign='right'>
-          <FormControl sx={{ minWidth: 120 }} size='small'>
-            <Typography
-              my={1}
-              sx={{
-                fontSize: { xs: '12px', sm: '14px', md: '16px' },
-                fontWeight: 600,
-                textAlign: 'left',
-              }}
-            >
-              사무소코드
-            </Typography>
-            <Select
-              value={ovsCd}
-              label=''
-              onChange={handleChange}
-              sx={{
-                backgroundColor: '#F5F6FA',
-                width: '20vw',
-                maxWidth: '250px',
-                marginRight: '2vw',
-                textAlign: 'left',
-              }}
-            >
-              <MenuItem value='ARS'>ARS</MenuItem>
-              <MenuItem value='USD'>USD</MenuItem>
-              <MenuItem value='KRW'>KRW</MenuItem>
-            </Select>
-          </FormControl>
+          <OfficeSelector curV={ovsCd} setCurV={setovsCd} />
           <Button size='sm' onClick={handleRegisterOpen}>
             <PlusIcon color='white' />
           </Button>
@@ -363,7 +382,7 @@ export default function Users(props) {
                   <TableCell>{row.name}</TableCell>
                   <TableCell align='center'>{row.description}</TableCell>
                   <TableCell align='center'>{row.email}</TableCell>
-                  <TableCell align='center'>{row.ovsName}</TableCell>
+                  <TableCell align='center'>{row.ovsMeaning}</TableCell>
                   <TableCell align='center'>
                     {(row.startDate + '').substring(0, 10)}
                   </TableCell>
@@ -377,7 +396,7 @@ export default function Users(props) {
                     </div>
                   </TableCell>
                   <TableCell align='center'>
-                    <div onClick={() => handleDeleteUser(row.name)}>
+                    <div onClick={() => handleDeleteDialog(row.name)}>
                       <DeleteIcon sx={{ cursor: 'pointer' }} />
                     </div>
                   </TableCell>
