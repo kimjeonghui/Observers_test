@@ -15,6 +15,9 @@ const requests = {
   GET_USERS() {
     return this.base_url + `/users`;
   },
+  GET_USERS_BY_OVSCD(ovsCd) {
+    return this.base_url + `/users/${ovsCd}`;
+  },
   PUT_UPDATE() {
     return this.base_url + `/users`;
   },
