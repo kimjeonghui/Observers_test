@@ -41,13 +41,13 @@ public class OcrDetailEntity {
     @JsonBackReference
     private OcrEntity ocrEntity;
 
-    public static OcrDetailEntity toEntity(OcrDetailDTO ocrDetailDTO) {
-        return OcrDetailEntity.builder()
-                .ocrDetailId(ocrDetailDTO.getOcrDetailId())
-                .description(ocrDetailDTO.getDescription())
-                .unitPrice(ocrDetailDTO.getUnitPrice())
-                .sumPrice(ocrDetailDTO.getSumPrice())
-                .count(ocrDetailDTO.getCount())
+    public static OcrDetailDTO toDTO(OcrDetailEntity ocrDetailEntity) {
+        return OcrDetailDTO.builder()
+                .ocrDetailId(ocrDetailEntity.getOcrDetailId())
+                .description(ocrDetailEntity.getDescription())
+                .unitPrice(ocrDetailEntity.getUnitPrice())
+                .sumPrice(ocrDetailEntity.getSumPrice())
+                .count(ocrDetailEntity.getCount())
                 .build();
     }
 }

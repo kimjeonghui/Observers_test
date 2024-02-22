@@ -7,8 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -23,37 +21,26 @@ public class OcrEntity extends BaseEntity {
     private Long ocrId;             // 식별자
 
     @Column(nullable = false)
-    private String receiptDir;      // 영수증 경로
-
-    @Column(nullable = false)
-    private String coCd;            // 회사 코드
-
-    @Column(nullable = false)
-    private String ovsCd;           // 부서 코드
-
-    @Column(nullable = false)
     private String purDate;         // 거래 날짜
 
     @Column(nullable = false)
     private String storeName;       // 거래처 명
 
     @Column(nullable = false)
-    private String description;     // 거래 내용
-
-    @Column(nullable = false)
-    private Long invoiceDataId;     // 거래 자료 아이디
-
-    @Column(nullable = false)
-    private String currCode;        // 통화 코드
-
-    @Column(nullable = false)
     private Double totalVal;        // 총 금액
 
-    public static OcrEntity toEntity(OcrDTO ocrDto) {
-        return OcrEntity.builder()
-                .storeName(ocrDto.getStoreName())
-                .purDate(ocrDto.getPurDate())
-                .totalVal(ocrDto.getTotalVal())
+    public static OcrDTO toDTO(OcrEntity ocrEntity) {
+        return OcrDTO.builder()
+                .storeName(ocrEntity.getStoreName())
+                .purDate(ocrEntity.getPurDate())
+                .totalVal(ocrEntity.getTotalVal())
                 .build();
+//        return new OcrDTO(ocrEntity.getStoreName(), ocrEntity.getPurDate(), ocrEntity.getTotalVal());
+    }
+
+    @Override
+    public String toString() {
+        return "ReceiptOCR { \n" +
+                "storeName = " + storeName + "\n" + "purDate = " + purDate + "\n" + "totalVal = " + totalVal + " }";
     }
 }

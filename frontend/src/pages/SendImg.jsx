@@ -3,6 +3,7 @@ import axios from 'axios';
 
 const ImageUpload = () => {
   const [file, setFile] = useState(null);
+  // const [response, setResponse] = useState(null);
 
   const handleFileChange = (e) => {
     setFile(e.target.files[0]);
@@ -19,14 +20,9 @@ const ImageUpload = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-
-      if (response.status === 200) {
-        console.log('Image uploaded successfully!');
-      } else {
-        console.error('Failed to upload image.');
-      }
+      console.log(response);
     } catch (error) {
-      console.error('Error uploading image:', error);
+      console.error('FE) Error uploading image:', error);
     }
   };
 

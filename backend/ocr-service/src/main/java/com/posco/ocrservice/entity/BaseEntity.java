@@ -27,5 +27,5 @@ public abstract class BaseEntity {
     private LocalDateTime lastUpdatedDate;  // 수정일
 
     @LastModifiedBy
-    private String lastModifiedBy;          // 수정자
+    private String lastUpdatedBy;          // 수정자
 }
