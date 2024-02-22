@@ -43,11 +43,11 @@ public class UserServiceImpl implements UserService{
                 .password(registerDTO.getPassword())
                 .email(registerDTO.getEmail())
                 .ovsCd(registerDTO.getOvsCd())
+                .ovsMeaning(registerDTO.getOvsMeaning())
                 .role(registerDTO.getRole())
                 .startDate(start)
                 .endDate(end)
                 .build();
-        UserEntity user = userRepository.save(userEntity);
 
 //        UserEntity newUserEntity = UserEntity.builder()
 //                .name(userEntity.getName())
@@ -58,7 +58,7 @@ public class UserServiceImpl implements UserService{
 //                .role(userEntity.getRole())
 //                .build();
 //        UserEntity user = userRepository.save(newUserEntity);
-        return user;
+        return userRepository.save(userEntity);
     }
 
     @Override
@@ -89,6 +89,7 @@ public class UserServiceImpl implements UserService{
                 .description(userEntity.getDescription())
                 .email(userEntity.getEmail())
                 .ovsCd(userEntity.getOvsCd())
+                .ovsMeaning(userEntity.getOvsMeaning())
                 .role(userEntity.getRole())
                 .build();
     }
@@ -111,6 +112,7 @@ public class UserServiceImpl implements UserService{
                 .password(updateDTO.getPassword()==null?userEntity.getPassword():updateDTO.getPassword())
                 .email(updateDTO.getEmail()==null?userEntity.getEmail():updateDTO.getEmail())
                 .ovsCd(updateDTO.getOvsCd()==null?userEntity.getOvsCd():updateDTO.getOvsCd())
+                .ovsMeaning(updateDTO.getOvsMeaning())
                 .role(updateDTO.getRole())
                 .startDate(userEntity.getStartDate())
                 .endDate(end)
@@ -138,6 +140,7 @@ public class UserServiceImpl implements UserService{
                 .description(updateUser.getDescription())
                 .email(updateUser.getEmail())
                 .ovsCd(updateUser.getOvsCd())
+                .ovsMeaning(updateUser.getOvsMeaning())
                 .role(updateUser.getRole())
                 .build();
     }
@@ -158,6 +161,7 @@ public class UserServiceImpl implements UserService{
                     .description(userEntity.getDescription())
                     .email(userEntity.getEmail())
                     .ovsCd(userEntity.getOvsCd())
+                    .ovsMeaning(userEntity.getOvsMeaning())
                     .role(userEntity.getRole())
                     .startDate(userEntity.getStartDate())
                     .endDate(userEntity.getEndDate())
@@ -176,6 +180,7 @@ public class UserServiceImpl implements UserService{
                 .description(userEntity.getDescription())
                 .email(userEntity.getEmail())
                 .ovsCd(userEntity.getOvsCd())
+                .ovsMeaning(userEntity.getOvsMeaning())
                 .role(userEntity.getRole())
                 .startDate(userEntity.getStartDate())
                 .endDate(userEntity.getEndDate())

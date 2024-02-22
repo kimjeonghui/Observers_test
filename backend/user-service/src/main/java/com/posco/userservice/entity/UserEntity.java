@@ -34,6 +34,9 @@ public class UserEntity extends BaseEntity{
     @Column
     private String ovsCd;               // 사무소 코드
 
+    @Column
+    private String ovsMeaning;          // 사무소 명
+
     @Column(updatable = false)
     private LocalDateTime startDate;    // 시작일
 
