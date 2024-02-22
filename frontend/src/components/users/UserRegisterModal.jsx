@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import requests from '../../api/userConfig';
 
@@ -17,15 +17,17 @@ import {
 import ModalInput from '../global/ModalInput';
 import axios from 'axios';
 function UserRegisterModal(props) {
-  const { open, setOpen } = props;
+  const { open, setOpen, getState, setGetState } = props;
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [ovsCd, setovsCd] = useState('');
+  const [ovsCd, setOvsCd] = useState('');
+  const [ovsMeaning, setOvsMeaning] = useState('');
   const [role, setRole] = useState('');
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
+  const [ovsCdList, setovsCdList] = useState([]);
 
   const handleOpen = (e) => {
     setOpen(false);
@@ -46,9 +48,14 @@ function UserRegisterModal(props) {
     setDescription(e.target.value);
     console.log(description);
   };
-  const onChangeovsCd = (e) => {
-    setovsCd(e.target.value);
+  const onChangeOvsCd = (e) => {
+    setOvsCd(e.target.value.ovsCd);
+    setOvsMeaning(e.target.value.ovsMeaning);
     console.log(ovsCd);
+  };
+  const onChangeOvsMeaning = (meaning) => {
+    setOvsMeaning(meaning);
+    console.log(ovsMeaning);
   };
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -70,7 +77,8 @@ function UserRegisterModal(props) {
     setName('');
     setDescription('');
     setPassword('');
-    setovsCd('');
+    setOvsCd('');
+    setOvsMeaning('');
     setEmail('');
     setRole('');
     setStartDate('');
@@ -78,30 +86,51 @@ function UserRegisterModal(props) {
   };
   const handleRegister = (e) => {
     setOpen(false);
-    console.log(name);
-    console.log(password);
-    console.log(description);
-    console.log(email);
-    console.log(ovsCd);
-    console.log(role);
-    console.log(startDate);
-    console.log(endDate);
-    const response = axios
+    // console.log(name);
+    // console.log(password);
+    // console.log(description);
+    // console.log(email);
+    // console.log(ovsCd);
+    // console.log(role);
+    // console.log(startDate);
+    // console.log(endDate);
+    axios
       .post(requests.POST_REGISTER(), {
         name,
         password,
         description,
         email,
         ovsCd,
+        ovsMeaning,
         role,
         startDate,
         endDate,
+      })
+      .then(() => {
+        setGetState(!getState);
       })
       .catch((err) => {
         console.error(err);
       });
     setInit();
   };
+  const handlegetOvsCode = () => {
+    axios
+      .get(`http://localhost:8086/admin-office/codeList`)
+      .then((res) => {
+        setovsCdList(res.data.ovsCodeList);
+        console.log(ovsCdList);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  // const handleChange = (event) => {
+  //   setOvsCd(event.target.value);
+  // };
+  useEffect(() => {
+    handlegetOvsCode();
+  }, []);
 
   return (
     <Dialog
@@ -154,6 +183,7 @@ function UserRegisterModal(props) {
             sx={{
               fontSize: { xs: '12px', sm: '14px', md: '16px' },
               fontWeight: 600,
+              textAlign: 'left',
             }}
           >
             사무소코드
@@ -161,17 +191,22 @@ function UserRegisterModal(props) {
           <Select
             value={ovsCd}
             label=''
-            onChange={onChangeovsCd}
+            onChange={onChangeOvsCd}
             sx={{
               backgroundColor: '#F5F6FA',
               width: '20vw',
               maxWidth: '250px',
               marginRight: '2vw',
+              textAlign: 'left',
             }}
           >
-            <MenuItem value='ARS'>ARS</MenuItem>
-            <MenuItem value='USD'>USD</MenuItem>
-            <MenuItem value='KRW'>KRW</MenuItem>
+            {ovsCdList.map((row, index) => (
+              <MenuItem key={index} value={row}>
+                {row.ovsMeaning}
+              </MenuItem>
+            ))}
+            {/* <MenuItem value='USD'>USD</MenuItem>
+            <MenuItem value='KRW'>KRW</MenuItem> */}
           </Select>
         </FormControl>
         <FormControl sx={{ minWidth: 120 }} size='small'>
@@ -192,6 +227,7 @@ function UserRegisterModal(props) {
           >
             <MenuItem value='USER'>직원</MenuItem>
             <MenuItem value='SUPER_USER'>사무소장</MenuItem>
+            <MenuItem value='ADMIN'>관리자</MenuItem>
           </Select>
         </FormControl>{' '}
         <ModalInput

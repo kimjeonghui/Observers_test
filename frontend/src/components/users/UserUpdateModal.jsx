@@ -17,7 +17,7 @@ import {
 import ModalInput from '../global/ModalInput';
 import axios from 'axios';
 function UserUpdateModal(props) {
-  const { open, setOpen, user } = props;
+  const { open, setOpen, getState, setGetState, user } = props;
   const [name, setName] = useState();
   const [description, setDescription] = useState();
   const [password, setPassword] = useState();
@@ -88,9 +88,13 @@ function UserUpdateModal(props) {
         role,
         endDate,
       })
+      .then(() => {
+        setGetState(!getState);
+      })
       .catch((err) => {
         console.error(err);
       });
+    // setGetState(!getState);
     setInit();
   };
   useEffect(() => {
