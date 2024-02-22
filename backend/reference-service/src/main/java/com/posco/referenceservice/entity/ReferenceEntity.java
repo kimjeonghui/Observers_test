@@ -45,11 +45,11 @@ public class ReferenceEntity extends BaseEntity {
 
     @Column
     private LocalDate endDate;      // 만료일
-
-    @OneToMany(mappedBy = "referenceEntity", cascade = CascadeType.REMOVE)
-    private List<GLCodeEntity> glCodeEntityList;
-
-    @OneToMany(mappedBy = "referenceEntity", cascade = CascadeType.REMOVE)
-    private List<PeriodStatusEntity> periodStatusEntityList;
+//
+//    @OneToMany(mappedBy = "referenceEntity", cascade = CascadeType.REMOVE)
+//    private List<GLCodeEntity> glCodeEntityList;
+//
+//    @OneToMany(mappedBy = "referenceEntity", cascade = CascadeType.REMOVE)
+//    private List<PeriodStatusEntity> periodStatusEntityList;
 
 }
