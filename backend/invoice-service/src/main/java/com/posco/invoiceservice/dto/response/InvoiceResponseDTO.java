@@ -6,23 +6,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Builder
 public class InvoiceResponseDTO {
-    //Todo: 여기 내걸로 수정해야함!
-    private String ovsCd;
-    private String ovsName;
-    private LocalDateTime fiscalMonth;
-    private String majorCt;         // 대분류
-    private String mediumCt;        // 중분류
-    private String minorCt;         // 소분류
-    private String locCurr;         // 현지 통화
-    private BigDecimal loc;         // 현지 통화 금액
-    private String transCurr;       // 송금 통화
-    private BigDecimal trans;       // 송금 통화 금액
-    private String note;            // 비고
+    private Long invoiceId;            // 거래 내역 id
+    private String ovsCd;               // 사무실 코드
+    private String fiscalMonth;  // 회계 년월
+    private LocalDate txDate;       // 거래 일자
+    private String store;               // 거래 처명
+    private String depCurr;             // 입금 통화
+    private BigDecimal deposit;         // 입금 금액
+    private String wdCurr;              // 출금 통화
+    private BigDecimal withdrawal;      // 출금 금액
+    private String tranCd;             // 식별 코드
+    private String description;         // 거래 내역
+
+    private BigDecimal transAmount;     // 환산 금액
+    private String status;              // 상태
+    private Long ocrId;                 // ocr 연결 id
+    private List<EvidenceDTO> evidenceDirs;   // 증빙 자료 경로들
 }
+
+

@@ -1,16 +1,25 @@
 package com.posco.invoiceservice.controller;
 
+import com.posco.invoiceservice.dto.request.GetInvoiceListDTO;
 import com.posco.invoiceservice.dto.request.InvoiceDTO;
+import com.posco.invoiceservice.dto.response.InvoiceResponseDTO;
 import com.posco.invoiceservice.service.InvoiceService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
 @RequestMapping("/invoice")
-@Tag(name = "[SUMMARY] Month Summary API")
+@Tag(name = "[INVOICE] Invoice API")
 @Slf4j
 @RequiredArgsConstructor
 public class InvoiceController {
@@ -41,11 +50,19 @@ public class InvoiceController {
 //        return ResponseEntity.ok().body(resultMap);
 //    }
 //
-//    @GetMapping("/{ovsCd}")
-//    public ResponseEntity<?> getSummary (@PathVariable String ovsCd){
-//        Map<String, Object> resultMap = new HashMap<>();
-//        List<SummaryResponseDTO> responseDTOList = summaryService.getSummaryContents(ovsCd);
-//
-//        return ResponseEntity.ok().body(resultMap);
-//    }
+    @GetMapping
+    public ResponseEntity<?> getInvoiceList (@Valid @RequestBody GetInvoiceListDTO getInvoiceListDTO){
+        Map<String, Object> resultMap = new HashMap<>();
+        List<InvoiceResponseDTO> responseDTOList = invoiceService.getInvoiceList(getInvoiceListDTO.getOvsCd(),getInvoiceListDTO.getFiscalMonth());
+
+        if(responseDTOList.isEmpty()){
+            resultMap.put("result",FAIL);
+            resultMap.put("msg","당월 거래가 없습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
+        resultMap.put("result",SUCCESS);
+        resultMap.put("msg","당월 거래 리스트 호출을 성공했습니다.");
+        resultMap.put("invoiceList", responseDTOList);
+        return ResponseEntity.ok().body(resultMap);
+    }
 }

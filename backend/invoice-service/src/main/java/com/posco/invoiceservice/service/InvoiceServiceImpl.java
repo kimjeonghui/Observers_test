@@ -1,15 +1,17 @@
 package com.posco.invoiceservice.service;
 
 import com.posco.invoiceservice.dto.request.InvoiceDTO;
+import com.posco.invoiceservice.dto.response.EvidenceDTO;
 import com.posco.invoiceservice.dto.response.InvoiceResponseDTO;
+import com.posco.invoiceservice.entity.EvidenceDataEntity;
 import com.posco.invoiceservice.entity.InvoiceDataEntity;
+import com.posco.invoiceservice.repository.EvidenceRepository;
 import com.posco.invoiceservice.repository.InvoiceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,37 +22,76 @@ import java.util.List;
 @Slf4j
 public class InvoiceServiceImpl implements InvoiceService {
     private final InvoiceRepository invoiceRepository;
+    private final EvidenceRepository evidenceRepository;
 
     // 당월거래입력
     @Override
     public InvoiceDataEntity createInvoice(InvoiceDTO invoiceDTO) {
-        LocalDateTime fiscalMonth = invoiceDTO.getFiscalMonth();
-        LocalDateTime newTime = LocalDateTime.of(fiscalMonth.getYear(), fiscalMonth.getMonth(), 1, 0, 0, 0);
-        InvoiceDataEntity invoiceEntity = invoiceRepository.findByFiscalMonth(newTime);
-        InvoiceDataEntity saveInvoiceEntity = null;
-        if(invoiceEntity==null){
-            invoiceEntity = InvoiceDataEntity.builder()
-                    .ovsCd(invoiceDTO.getOvsCd())
-                    .fiscalMonth(newTime)
-                    .build();
-            saveInvoiceEntity = invoiceRepository.save(invoiceEntity);
-        }else{
-            saveInvoiceEntity = invoiceEntity;
-        }
-        return saveInvoiceEntity;
+        String status = "draft";
+
+        InvoiceDataEntity invoiceEntity = InvoiceDataEntity.builder()
+                .ovsCd(invoiceDTO.getOvsCd())
+                .fiscalMonth(invoiceDTO.getFiscalMonth())
+                .txDate(invoiceDTO.getTxDate())
+                .store(invoiceDTO.getStore())
+                .depCurr(invoiceDTO.getDepCurr())
+                .deposit(invoiceDTO.getDeposit())
+                .wdCurr(invoiceDTO.getWdCurr())
+                .withdrawal(invoiceDTO.getWithdrawal())
+                .tranCd(invoiceDTO.getTranCd())
+                .description(invoiceDTO.getDescription())
+//                .transAmount() Todo:환율가져와서 계산해야함
+                .status(status)
+//                .exchangeRate() Todo:환율가져와
+                .build();
+
+        return invoiceRepository.save(invoiceEntity);
     }
 
 
     @Override
-    public List<InvoiceResponseDTO> getInvoiceList(String ovsCd) {
-        List<InvoiceDataEntity> invoiceEntities = InvoiceRepository.findAllByOvsCd(ovsCd);
+    public List<InvoiceResponseDTO> getInvoiceList(String ovsCd, String fiscalMonth) {
+        List<InvoiceDataEntity> invoiceEntities = invoiceRepository.findAllByOvsCdAndFiscalMonth(ovsCd,fiscalMonth);
         List<InvoiceResponseDTO> invoiceResponseDTOList = new ArrayList<>();
-        //Todo: 여기에 invoiceList 사무소 코드로 불러오는거 넣기
+
+        for(InvoiceDataEntity invoiceEntity: invoiceEntities){
+            // 증빙자료 리스트 만드는 for 문
+            List<EvidenceDataEntity> evidenceEntities = evidenceRepository.findALLByInvoiceDataId(invoiceEntity.getInvoiceDataId());
+            List<EvidenceDTO> evidenceDTOList = new ArrayList<>();
+            for(EvidenceDataEntity evidenceEntity: evidenceEntities){
+                EvidenceDTO evidenceDTO = EvidenceDTO.builder()
+                        .evidenceId(evidenceEntity.getEvidenceId())
+                        .evidenceDir(evidenceEntity.getEvidenceDir())
+                        .invoiceDataId(evidenceEntity.getInvoiceDataId())
+                        .build();
+                evidenceDTOList.add(evidenceDTO);
+            }
+
+            InvoiceResponseDTO invoiceResponseDTO = InvoiceResponseDTO.builder()
+                    .invoiceId(invoiceEntity.getInvoiceDataId())
+                    .ovsCd(invoiceEntity.getOvsCd())
+                    .fiscalMonth(invoiceEntity.getFiscalMonth())
+                    .txDate(invoiceEntity.getTxDate())
+                    .store(invoiceEntity.getStore())
+                    .depCurr(invoiceEntity.getDepCurr())
+                    .deposit(invoiceEntity.getDeposit())
+                    .wdCurr(invoiceEntity.getWdCurr())
+                    .withdrawal(invoiceEntity.getWithdrawal())
+                    .tranCd(invoiceEntity.getTranCd())
+                    .description(invoiceEntity.getDescription())
+                    .transAmount(invoiceEntity.getTransAmount())
+                    .status(invoiceEntity.getStatus())
+                    .ocrId(invoiceEntity.getOcrId())
+                    .evidenceDirs(evidenceDTOList)
+                    .build();
+            invoiceResponseDTOList.add(invoiceResponseDTO);
+        }
         return invoiceResponseDTOList;
     }
 
     @Override
-    public InvoiceResponseDTO getInvoice(String ovsCd) {
+    public InvoiceResponseDTO getInvoice(Long invoiceId) {
+        List<EvidenceDataEntity> evidenceEntities = evidenceRepository.findALLByInvoiceDataId(invoiceId);
         return null;
     }
 }
