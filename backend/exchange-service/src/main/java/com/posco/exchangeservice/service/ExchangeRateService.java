@@ -12,4 +12,6 @@ public interface ExchangeRateService {
 
     List<ExchangeRateDTO> getExchangeRateByToCurr(String toCurr);
 
+    List<ExchangeRateDTO> getExchangeRateByFromAndToCurr(String fromCurr, String toCurr);
+
 }

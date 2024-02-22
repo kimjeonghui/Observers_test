@@ -85,6 +85,25 @@ public class ExchangeRateController {
         return ResponseEntity.ok().body(resultMap);
     }
 
+    @GetMapping("/{fromCurr}/{toCurr}")
+    @Operation(summary = "Get exchange rates by fromCurr and toCurr", description = "Get a list of exchange rates by fromCurr and toCurr.")
+    public ResponseEntity<?> getExchangeRateByFromAndToCurr(@PathVariable String fromCurr, @PathVariable String toCurr) {
+        Map<String, Object> resultMap = new HashMap<>();
+        List<ExchangeRateDTO> exchangeRates = exchangeRateService.getExchangeRateByFromAndToCurr(fromCurr, toCurr);
+
+        if (exchangeRates.isEmpty()) {
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "No exchange rates found for the given fromCurr and toCurr combination.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
+
+        resultMap.put("result", SUCCESS);
+        resultMap.put("msg", "Exchange rates retrieved successfully for the given fromCurr and toCurr combination.");
+        resultMap.put("exchangeRates", exchangeRates);
+
+        return ResponseEntity.ok().body(resultMap);
+    }
+
 
 
 
