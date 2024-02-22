@@ -37,7 +37,7 @@ function App() {
           <Route path='/receipts/:id' element={<ReceiptsMonth />} />
           <Route path='/receipts/:id/:id' element={<ReceiptsDetail />} />
           <Route path='/ocr' element={<Ocr />} />
-          <Route path='/ocr-call' element={<OcrCall />} /> {/* 테스트용 */}
+          {/* <Route path='/ocr-call' element={<OcrCall />} /> */}
           <Route path='/send-img' element={<SendImg />} /> {/* 테스트용 */}
           <Route
             path='/manager/accounting-slip'

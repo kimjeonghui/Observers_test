@@ -1,10 +1,13 @@
 package com.posco.ocrservice.controller;
 
 import com.posco.ocrservice.dto.request.OcrDTO;
+import com.posco.ocrservice.entity.OcrEntity;
+import com.posco.ocrservice.repository.OcrRepository;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -33,6 +36,8 @@ public class OcrController {
     @Value("${ocr.get.url.1}") String OCR_GET_URI1;
     @Value("${ocr.get.url.2}") String OCR_GET_URI2;
 
+    @Autowired
+    private OcrRepository ocrRepository;
 
     // 이미지 받아오기
     @PostMapping("/upload")
@@ -136,11 +141,24 @@ public class OcrController {
                     response -> {
                         System.out.println("GET 요청 성공: " + response);
 
-                        // 데이터 파싱하여 DB에 저장 & 프론트로 전송
-                        OcrDTO dto = jsonParsing(response);
-                        System.out.println(dto.getStoreName());
-                        System.out.println(dto.getPurDate());
-                        System.out.println(dto.getTotalPrice());
+                        // 데이터 파싱하여 DB에 저장
+                        OcrDTO ocrDTO = jsonParsing(response);
+
+                        // DTO를 Entity로 변환
+                        OcrEntity ocrEntity = ocrDTO.toEntity(ocrDTO);
+//                        System.out.println(ocrEntity.toString());
+
+                        // Repository에게 Entity를 DB로 저장하게 함
+                        OcrEntity ocrSaved = ocrRepository.save(ocrEntity);
+//                        System.out.println("----");
+                        System.out.println(ocrSaved.toString());
+
+                        // 프론트로 전송
+
+                        // 확인용
+//                        System.out.println(ocrDTO.getStoreName());
+//                        System.out.println(ocrDTO.getPurDate());
+//                        System.out.println(ocrDTO.getTotalVal());
                     },
                     error -> System.err.println("GET 요청 실패: " + error.getMessage())
             );

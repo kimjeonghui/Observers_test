@@ -18,13 +18,13 @@ public class OcrDetailDTO {
     private Double sumPrice;        // 상품 총 금액
     private Long count;             // 개수
 
-    public static OcrDetailDTO toDTO(OcrDetailEntity ocrDetailEntity) {
-        return OcrDetailDTO.builder()
-                .ocrDetailId(ocrDetailEntity.getOcrDetailId())
-                .description(ocrDetailEntity.getDescription())
-                .unitPrice(ocrDetailEntity.getUnitPrice())
-                .sumPrice(ocrDetailEntity.getSumPrice())
-                .count(ocrDetailEntity.getCount())
+    public static OcrDetailEntity toEntity(OcrDetailDTO ocrDetailDTO) {
+        return OcrDetailEntity.builder()
+                .ocrDetailId(ocrDetailDTO.getOcrDetailId())
+                .description(ocrDetailDTO.getDescription())
+                .unitPrice(ocrDetailDTO.getUnitPrice())
+                .sumPrice(ocrDetailDTO.getSumPrice())
+                .count(ocrDetailDTO.getCount())
                 .build();
     }
 }

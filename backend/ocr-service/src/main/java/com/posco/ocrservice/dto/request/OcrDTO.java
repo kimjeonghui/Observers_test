@@ -16,11 +16,17 @@ public class OcrDTO {
     private String purDate;         // 거래 일자
     private Double totalVal;      // 총 금액
 
-    public static OcrDTO toDTO(OcrEntity ocrEntity) {
-        return OcrDTO.builder()
-                .storeName(ocrEntity.getStoreName())
-                .purDate(ocrEntity.getPurDate())
-                .totalVal(ocrEntity.getTotalVal())
+    @Override
+    public String toString() {
+        return "ReceiptOCR { \n" +
+                "storeName = " + storeName + "\n" + "purDate = " + purDate + "\n" + "totalVal = " + totalVal + " }";
+    }
+
+    public static OcrEntity toEntity(OcrDTO ocrDto) {
+        return OcrEntity.builder()
+                .purDate(ocrDto.getPurDate())
+                .storeName(ocrDto.getStoreName())
+                .totalVal(ocrDto.getTotalVal())
                 .build();
     }
 }
