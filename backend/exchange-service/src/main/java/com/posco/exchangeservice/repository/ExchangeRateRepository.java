@@ -9,5 +9,6 @@ public interface ExchangeRateRepository extends JpaRepository<ExchangeRateEntity
 
     List<ExchangeRateEntity> findByFromCurr(String fromCurr);
     List<ExchangeRateEntity> findByToCurr(String toCurr);
+    List<ExchangeRateEntity> findByFromCurrAndToCurr(String fromCurr, String toCurr);
 
 }

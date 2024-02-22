@@ -42,6 +42,15 @@ public class ExchangeRateServiceImpl implements ExchangeRateService{
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<ExchangeRateDTO> getExchangeRateByFromAndToCurr(String fromCurr, String toCurr) {
+        List<ExchangeRateEntity> exchangeRateEntities = exchangeRateRepository.findByFromCurrAndToCurr(fromCurr, toCurr);
+        return exchangeRateEntities.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+
     private ExchangeRateDTO convertToDTO(ExchangeRateEntity exchangeRateEntity) {
         return ExchangeRateDTO.builder()
                 .exchangeId(exchangeRateEntity.getExchangeId())
