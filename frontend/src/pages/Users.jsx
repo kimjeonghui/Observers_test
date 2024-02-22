@@ -27,16 +27,6 @@ import axios from 'axios';
 export default function Users(props) {
   const [tableData, setTableData] = useState([]);
 
-  // const handleAddRow = () => {
-  //   // Implement logic to add a new row to the table
-  //   // You might want to fetch data from an API or add a dummy row
-  //   // For now, let's add a dummy row with random data
-  //   const newRow = Array.from(
-  //     { length: 10 },
-  //     (_, index) => `Data ${index + 1}`
-  //   );
-  //   setTableData((prevData) => [...prevData, newRow]);
-  // };
   function createRow(
     name,
     description,
@@ -230,7 +220,7 @@ export default function Users(props) {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [ovsCd, setovsCd] = useState('');
+  const [ovsCd, setOvsCd] = useState('');
   const [registerOpen, setRegisterOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
@@ -292,12 +282,12 @@ export default function Users(props) {
       });
   };
 
-  const handlegetOvsCode = () => {
+  const handlegetByOvsCode = () => {
     axios
-      .get(`http://localhost:8086/admin-office/codeList`)
+      .get(requests.GET_USERS_BY_OVSCD(ovsCd))
       .then((res) => {
-        setovsCdList(res.data.ovsCodeList);
-        console.log(ovsCdList);
+        setTableData(res.data.userList);
+        console.log(tableData);
       })
       .catch((err) => {
         console.log(err);
@@ -312,6 +302,11 @@ export default function Users(props) {
   useEffect(() => {
     handlegetUsers();
   }, [getState]);
+
+  useEffect(() => {
+    handlegetByOvsCode();
+  }, [ovsCd]);
+
   return (
     <div style={{ padding: '10px 36px' }}>
       <UserRegisterModal
@@ -340,7 +335,7 @@ export default function Users(props) {
           <Input widthV='20' heightV='5' label='Search' />
         </Grid>
         <Grid item xs={6} textAlign='right'>
-          <OfficeSelector curV={ovsCd} setCurV={setovsCd} />
+          <OfficeSelector curV={ovsCd} setCurV={setOvsCd} />
           <Button size='sm' onClick={handleRegisterOpen}>
             <PlusIcon color='white' />
           </Button>
