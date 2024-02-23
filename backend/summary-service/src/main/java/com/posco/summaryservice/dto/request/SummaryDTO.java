@@ -28,5 +28,5 @@ public class SummaryDTO {
     private String description;         // 거래 내역
     private BigDecimal transAmount;     // 환산 금액
     private String tranCd;             // 식별 코드
-    private LocalDateTime fiscalMonth;  // 회계 년월
+    private String fiscalMonth;  // 회계 년월
 }
