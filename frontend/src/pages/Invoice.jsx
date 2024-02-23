@@ -80,7 +80,12 @@ export default function Invoice(props) {
 
   return (
     <div style={{ padding: '10px 36px' }}>
-      <InvoiceModal open={inputModalopen} setOpen={setInputModalOpen} />
+      <InvoiceModal
+        open={inputModalopen}
+        setOpen={setInputModalOpen}
+        user={user}
+        getInvoiceData={getInvoiceData}
+      />
       <InvoiceEviModal
         open={eviModalopen}
         setOpen={setEviModalOpen}

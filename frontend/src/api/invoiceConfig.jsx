@@ -5,6 +5,9 @@ const requests = {
   GET_IVOICE_LIST(ovsCd, fiscalMonth) {
     return this.base_url + `/invoice/${ovsCd}/${fiscalMonth}`;
   },
+  POST_INVOICE() {
+    return this.base_url + `/invoice`;
+  },
 };
 
 export default requests;
