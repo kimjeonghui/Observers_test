@@ -40,7 +40,7 @@ export default function Login(props) {
   const onChangePassword = (e) => {
     setPassword(e.target.value);
   };
-  const handleLogin = async () => {
+  const handleLogin = () => {
     axios
       .post(requests.POST_LOGIN(), {
         name,
