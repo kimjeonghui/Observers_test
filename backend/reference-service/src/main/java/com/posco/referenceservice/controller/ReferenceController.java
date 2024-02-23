@@ -75,7 +75,7 @@ public class ReferenceController {
         }
 
         resultMap.put("result", SUCCESS);
-        resultMap.put("msg", "Reference retrieved successfully.");
+        resultMap.put("msg", "Selected Reference retrieved successfully.");
         resultMap.put("reference", reference);
 
         return ResponseEntity.ok().body(resultMap);

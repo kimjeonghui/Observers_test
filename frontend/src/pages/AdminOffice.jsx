@@ -4,6 +4,8 @@ import AdminOfficeDialog from '../components/admin/AdminOfficeDialog';
 import AdminOfficeModal from '../components/admin/AdminOfficeModal';
 import AdminOfficeUpdate from '../components/admin/AdminOfficeUpdate';
 import CustomButton from '../components/global/Button';
+import ExcelIcon from '../assets/excel-logo-64.png';
+import { CSVLink } from 'react-csv';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {
@@ -41,7 +43,7 @@ export default function AdminOffice() {
 
   const fetchData = () => {
     axios
-      .get('http://localhost:8080/admin-office')
+      .get('http://localhost:8086/admin-office')
       .then((response) => {
         const { data } = response;
         setTableData(data.referenceList);
@@ -62,7 +64,7 @@ export default function AdminOffice() {
     } else {
       // Fetch reference data for the selected office (선택한 사무실 보여줌)
       axios
-        .get(`http://localhost:8080/admin-office/${selectedOffice}`)
+        .get(`http://localhost:8086/admin-office/${selectedOffice}`)
         .then((response) => {
           const { data } = response;
           setTableData([data.reference]);
@@ -101,7 +103,7 @@ export default function AdminOffice() {
     if (deleteRow) {
       // Perform deletion
       axios
-        .delete(`http://localhost:8080/admin-office/${deleteRow.ovsCd}`)
+        .delete(`http://localhost:8086/admin-office/${deleteRow.ovsCd}`)
         .then((response) => {
           console.log(response.data);
           fetchData(); // Refetch data after successful deletion
@@ -164,6 +166,21 @@ export default function AdminOffice() {
           </TextField>
         </Grid>
         <Grid item xs={6} textAlign='right'>
+          <CSVLink
+            data={tableData}
+            // headers={TableHead}
+            style={{ decoration: 'none' }}
+            filename='Posco_Oversea_Imprest.csv'
+          >
+            <CustomButton size='sm' color='#006736' hoverColor='#017940'>
+              <img
+                src={ExcelIcon}
+                alt='excel icon'
+                style={{ height: '60%', marginRight: '10px' }}
+              />
+              export
+            </CustomButton>
+          </CSVLink>
           {/* <AdminOfficeDialog /> */}
           <AdminOfficeModal open={open} setOpen={setOpen} />
           <CustomButton onClick={handleOpenInsert} size='sm'>

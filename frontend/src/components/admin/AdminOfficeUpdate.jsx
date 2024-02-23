@@ -27,7 +27,7 @@ function AdminOfficeModal(props) {
 
   const fetchData = () => {
     axios
-      .get('http://localhost:8080/admin-office')
+      .get('http://localhost:8086/admin-office')
       .then((response) => {
         const { data } = response;
         setTableData(data.referenceList);
@@ -42,7 +42,7 @@ function AdminOfficeModal(props) {
   useEffect(() => {
     if (open) {
       axios
-        .get(`http://localhost:8080/admin-office/${ovsCd}`)
+        .get(`http://localhost:8086/admin-office/${ovsCd}`)
         .then((response) => {
           const { data } = response;
           // Update only specific properties of referenceData
@@ -77,7 +77,7 @@ function AdminOfficeModal(props) {
 
   const handleUpdate = () => {
     axios
-      .post(`http://localhost:8080/admin-office`, referenceData)
+      .post(`http://localhost:8086/admin-office`, referenceData)
       .then((response) => {
         console.log(response.data);
         alert('업데이트 되었습니다.');
@@ -139,7 +139,7 @@ function AdminOfficeModal(props) {
               onChange={handleChange}
             />
             <ModalInput
-              label='[기본]송금통화'
+              label='(추가)송금통화'
               name='transCurr2'
               value={referenceData.transCurr2}
               onChange={handleChange}

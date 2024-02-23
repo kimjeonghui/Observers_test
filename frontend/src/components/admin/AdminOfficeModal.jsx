@@ -32,7 +32,7 @@ function AdminOfficeModal(props) {
 
   const fetchData = () => {
     axios
-      .get('http://localhost:8080/admin-office')
+      .get('http://localhost:8086/admin-office')
       .then((response) => {
         const { data } = response;
         setTableData(data.referenceList);
@@ -73,7 +73,7 @@ function AdminOfficeModal(props) {
       return; // Stop the function execution if ovsCd already exists
     }
     axios
-      .post('http://localhost:8080/admin-office', referenceData)
+      .post('http://localhost:8086/admin-office', referenceData)
       .then((response) => {
         console.log(response.data); // Log response for debugging
         alert('생성 되었습니다.'); // Alert user for successful creation

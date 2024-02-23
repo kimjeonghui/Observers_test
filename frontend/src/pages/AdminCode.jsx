@@ -14,6 +14,11 @@ import {
   MenuItem,
   TextField,
 } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import CustomButton from '../components/global/Button';
+import ExcelIcon from '../assets/excel-logo-64.png';
+import { CSVLink } from 'react-csv';
 
 const rows = [
   {
@@ -450,7 +455,23 @@ export default function AdminCode(props) {
         </Grid>
         <Grid item xs={6} textAlign='right'>
           {/* <Button size='sm'>추가</Button> */}
-          <AdminCodeDialog />
+          <CSVLink
+            data={rows}
+            // headers={TableHead}
+            style={{ decoration: 'none' }}
+            filename='Posco_Oversea_Imprest.csv'
+          >
+            <CustomButton size='sm' color='#006736' hoverColor='#017940'>
+              <img
+                src={ExcelIcon}
+                alt='excel icon'
+                style={{ height: '60%', marginRight: '10px' }}
+              />
+              export
+            </CustomButton>
+          </CSVLink>
+          {/* <AdminCodeDialog /> */}
+          <CustomButton size='sm'>추가</CustomButton>
         </Grid>
       </Grid>
       <Grid container spacing={3} justifyContent='center' alignItems='center'>
@@ -489,6 +510,12 @@ export default function AdminCode(props) {
                         <TableCell>{row.major_ct}</TableCell>
                         <TableCell>{row.medium_ct}</TableCell>
                         <TableCell>{row.minor_ct}</TableCell>
+                        <TableCell>
+                          <EditIcon />
+                        </TableCell>
+                        <TableCell>
+                          <DeleteIcon />
+                        </TableCell>
                       </TableRow>
                     ))}
                   {emptyRows > 0 && (
