@@ -1,5 +1,6 @@
 package com.posco.accountingservice.entity;
 
+import com.posco.accountingservice.dto.response.AccountingSlipDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +18,7 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "pos_ovs_accounting_slip")
-public class AccountingSlipEntity {
+public class AccountingSlipEntity extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountSlipId; //식별자
@@ -55,11 +56,9 @@ public class AccountingSlipEntity {
     @Column
     private LocalDate txDate; //거래일자
 
-    @Column
-    private String groupId; //OAM-YYMM-부서코드
-
     @ManyToOne(targetEntity = AccountingSlipInvoiceNumEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "invoice_num")
+    @Getter
     private AccountingSlipInvoiceNumEntity accountingSlipInvoiceNumEntity;  //송장번호
 
     @OneToOne(mappedBy = "accountingSlip", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -67,4 +66,22 @@ public class AccountingSlipEntity {
 
     @OneToOne(mappedBy = "accountingSlip", cascade = CascadeType.ALL, orphanRemoval = true)
     private AccountingSlipLineEntity accountingSlipLineEntity;
+
+    public static AccountingSlipDTO toDto(AccountingSlipEntity accountingSlip, InvoiceDataEntity invoiceDataEntity){
+        return AccountingSlipDTO.builder().account(accountingSlip.getAccount())
+                .accountSlipId(accountingSlip.getAccountSlipId())
+                .txCd(accountingSlip.getTxCd())
+                .drCr(accountingSlip.getDrCr())
+                .txNum(accountingSlip.getTxNum())
+                .amount(accountingSlip.getAmount())
+                .currCode(accountingSlip.getCurrCode())
+                .krwAmount(accountingSlip.getKrwAmount())
+                .exchangeRate(accountingSlip.getExchangeRate())
+                .description(accountingSlip.getDescription())
+                .txDate(accountingSlip.getTxDate())
+                .invoiceNum(accountingSlip.getAccountingSlipInvoiceNumEntity().getInvoiceNum())
+                .createdBy(invoiceDataEntity.getCreatedBy())
+                .createdDate(invoiceDataEntity.getCreatedDate())
+                .build();
+    }
 }
