@@ -28,7 +28,7 @@ public class InvoiceServiceImpl implements InvoiceService {
     @Override
     public InvoiceDataEntity createInvoice(InvoiceDTO invoiceDTO) {
         String status = "draft";
-
+        
         InvoiceDataEntity invoiceEntity = InvoiceDataEntity.builder()
                 .ovsCd(invoiceDTO.getOvsCd())
                 .fiscalMonth(invoiceDTO.getFiscalMonth())
