@@ -43,7 +43,7 @@ export default function AdminOffice() {
 
   const fetchData = () => {
     axios
-      .get('http://localhost:8080/admin-office')
+      .get('http://localhost:8086/admin-office')
       .then((response) => {
         const { data } = response;
         setTableData(data.referenceList);
@@ -64,7 +64,7 @@ export default function AdminOffice() {
     } else {
       // Fetch reference data for the selected office (선택한 사무실 보여줌)
       axios
-        .get(`http://localhost:8080/admin-office/${selectedOffice}`)
+        .get(`http://localhost:8086/admin-office/${selectedOffice}`)
         .then((response) => {
           const { data } = response;
           setTableData([data.reference]);
@@ -103,7 +103,7 @@ export default function AdminOffice() {
     if (deleteRow) {
       // Perform deletion
       axios
-        .delete(`http://localhost:8080/admin-office/${deleteRow.ovsCd}`)
+        .delete(`http://localhost:8086/admin-office/${deleteRow.ovsCd}`)
         .then((response) => {
           console.log(response.data);
           fetchData(); // Refetch data after successful deletion
