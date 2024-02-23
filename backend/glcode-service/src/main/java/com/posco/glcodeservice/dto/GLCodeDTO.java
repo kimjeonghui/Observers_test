@@ -1,9 +1,6 @@
 package com.posco.glcodeservice.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -11,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class GLCodeDTO {
 
+    @Setter
     private Long glCodeId;
     private String ovsCd;
     private String tranCd;
