@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -130,6 +131,57 @@ public class GLCodeController {
         resultMap.put("msg", "GLCode deleted successfully.");
 
         return ResponseEntity.ok().body(resultMap);
+    }
+
+
+    // 수정이 필요하다 작동불가
+    @PutMapping
+    @Operation(summary = "Update a GLCode by Transaction Code", description = "Update an existing GLCode using its Transaction Code.")
+    public ResponseEntity<?> updateGLCode(@Valid @RequestBody GLCodeDTO updatedGLCodeDTO) {
+        Map<String, Object> resultMap = new HashMap<>();
+
+        // Check if the GLCode with the provided ID exists
+        GLCodeDTO existingGLCode = glCodeService.getGLCodeByTranCd(updatedGLCodeDTO.getTranCd());
+        if (existingGLCode == null) {
+            resultMap.put("result", "FAIL");
+            resultMap.put("msg", "GLCode not found for transaction code: " + updatedGLCodeDTO.getTranCd());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
+
+        // Update the existing GLCode with the provided data
+        GLCodeDTO updatedGLCode = glCodeService.updateGLCode(updatedGLCodeDTO);
+        if (updatedGLCode == null) {
+            resultMap.put("result", "FAIL");
+            resultMap.put("msg", "Failed to update GLCode for transaction code: " + updatedGLCodeDTO.getTranCd());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resultMap);
+        }
+
+        resultMap.put("result", "SUCCESS");
+        resultMap.put("msg", "GLCode updated successfully.");
+        resultMap.put("glCode", updatedGLCode);
+
+        return ResponseEntity.ok().body(resultMap);
+    }
+
+
+    @PutMapping("/{glCodeId}")
+    @Operation(summary = "Update a GLCode by ID", description = "Update an existing GLCode using its ID.")
+    public ResponseEntity<?> updateGLCode(@PathVariable Long glCodeId, @RequestBody GLCodeDTO updatedGLCodeDTO) {
+        // Set the glCodeId for the updatedGLCodeDTO
+        updatedGLCodeDTO.setGlCodeId(glCodeId);
+
+        // Call the service to update the GLCode
+        GLCodeDTO updatedGLCode = glCodeService.updateGLCode(updatedGLCodeDTO);
+
+        if (updatedGLCode == null) {
+            // Handle the case where the GLCode with the provided ID does not exist
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body("GLCode with ID " + glCodeId + " not found.");
+        }
+
+        // Return a success response with the updated GLCode
+        return ResponseEntity.ok()
+                .body("GLCode with ID " + glCodeId + " updated successfully.");
     }
 
 }
