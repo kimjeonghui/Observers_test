@@ -32,13 +32,7 @@ public class SummaryContentsEntity extends BaseEntity{
     private String minorCt;         // 소분류
 
     @Column
-    private String locCurr;         // 현지 통화
-
-    @Column
     private BigDecimal loc;         // 현지 통화 금액
-
-    @Column
-    private String transCurr;       // 송금 통화
 
     @Column
     private BigDecimal trans;       // 송금 통화 금액

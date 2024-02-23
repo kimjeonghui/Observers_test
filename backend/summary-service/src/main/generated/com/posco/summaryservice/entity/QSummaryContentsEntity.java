@@ -40,8 +40,6 @@ public class QSummaryContentsEntity extends EntityPathBase<SummaryContentsEntity
 
     public final NumberPath<java.math.BigDecimal> loc = createNumber("loc", java.math.BigDecimal.class);
 
-    public final StringPath locCurr = createString("locCurr");
-
     public final StringPath majorCt = createString("majorCt");
 
     public final StringPath mediumCt = createString("mediumCt");
@@ -59,8 +57,6 @@ public class QSummaryContentsEntity extends EntityPathBase<SummaryContentsEntity
     public final StringPath tranCd = createString("tranCd");
 
     public final NumberPath<java.math.BigDecimal> trans = createNumber("trans", java.math.BigDecimal.class);
-
-    public final StringPath transCurr = createString("transCurr");
 
     public QSummaryContentsEntity(String variable) {
         this(SummaryContentsEntity.class, forVariable(variable), INITS);

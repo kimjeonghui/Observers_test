@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/summaries")
+@RequestMapping("/summary")
 @Tag(name = "[SUMMARY] Month Summary API")
 @Slf4j
 @RequiredArgsConstructor
@@ -51,11 +52,22 @@ public class SummaryController {
         return ResponseEntity.ok().body(resultMap);
     }
 
-    @GetMapping("/{ovsCd}")
-    public ResponseEntity<?> getSummary (@PathVariable String ovsCd){
+    @GetMapping("/{ovsCd}/{fiscalMonth}")
+    public ResponseEntity<?> getSummary (@PathVariable String ovsCd, @PathVariable String fiscalMonth){
         Map<String, Object> resultMap = new HashMap<>();
-        List<SummaryResponseDTO> responseDTOList = summaryService.getSummaryContents(ovsCd);
-
+        SummaryResponseDTO responseDTO = summaryService.getSummaryContents(ovsCd, fiscalMonth);
+        if(responseDTO==null){
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "해당 월의 월 총괄표가 없습니다.");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(resultMap);
+        }else if(responseDTO.getContents().isEmpty()){
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "해당 월의 월 총괄표 내용이 없습니다.");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(resultMap);
+        }
+        resultMap.put("result", SUCCESS);
+        resultMap.put("msg", "월 총괄표 리스트 가져오기 성공");
+        resultMap.put("summary", responseDTO);
         return ResponseEntity.ok().body(resultMap);
     }
 }
