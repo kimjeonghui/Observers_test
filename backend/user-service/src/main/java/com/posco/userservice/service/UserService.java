@@ -15,6 +15,10 @@ public interface UserService {
     LoginUserDTO loginUser(LoginDTO loginDTO);
     boolean checkExistName(String name);
     List<UserDTO> getUserListByOvsCode(String ovsCd);
+//    List<UserDTO> getUserListByName(String name);
+//    List<UserDTO> getUserListByDescription(String description);
+//    List<UserDTO> getUserListByEmail(String email);
+    List<UserDTO> searchUserList(String subject, String value);
     LoginUserDTO updateUser(UpdateDTO updateDTO);
     void deleteUser(String name);
     List<UserDTO> getUserList();

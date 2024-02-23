@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -118,6 +119,32 @@ public class UserController {
 //            resultMap.put("msg", "해당 사무소에 소속된 사용자가 없습니다.");
 //            return ResponseEntity.badRequest().body(resultMap);
 //        }
+        resultMap.put("result", SUCCESS);
+        resultMap.put("msg", "사용자 리스트 가져오기 성공");
+        resultMap.put("userList", userDTOList);
+        return ResponseEntity.ok().body(resultMap);
+    }
+
+    @GetMapping("/search/{subject}/{value}")
+    @Operation(summary = "Get userList By searchBar", description = "")
+    public ResponseEntity<?> getUserListByOvsCode(@PathVariable String subject, @PathVariable String value){
+        Map<String, Object> resultMap = new HashMap<>();
+        List<UserDTO> userDTOList = userService.searchUserList(subject, value);
+
+//        if(subject.equals("name")){
+//            userDTOList = userService.getUserListByName(value);
+//        } else if(subject.equals("description")){
+//            userDTOList = userService.getUserListByDescription(value);
+//        } else if(subject.equals("email")){
+//            userDTOList = userService.getUserListByEmail(value);
+//        } else{
+//            userService.getUserListByRole(value);
+//        }
+        if(userDTOList.isEmpty()){
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "해당 조건에 소속된 사용자가 없습니다.");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(resultMap);
+        }
         resultMap.put("result", SUCCESS);
         resultMap.put("msg", "사용자 리스트 가져오기 성공");
         resultMap.put("userList", userDTOList);

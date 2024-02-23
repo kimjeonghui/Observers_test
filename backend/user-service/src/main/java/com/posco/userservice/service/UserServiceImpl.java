@@ -121,6 +121,37 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public List<UserDTO> searchUserList(String subject, String value) {
+        List<UserEntity> userEntityList = null;
+        List<UserDTO> userDTOList = new ArrayList<>();
+        if(subject.equals("name")){
+            log.info("이름으로 찾음");
+            userEntityList = userRepository.findAllByName(value);
+        } else if(subject.equals("description")){
+            userEntityList = userRepository.findAllByDescription(value);
+        } else if(subject.equals("email")){
+            userEntityList = userRepository.findAllByEmail(value);
+        } else{
+            userEntityList = userRepository.findAllByRole(value);
+        }
+        for(UserEntity userEntity : userEntityList){
+            UserDTO userDTO = UserDTO.builder()
+                    .name(userEntity.getName())
+                    .description(userEntity.getDescription())
+                    .email(userEntity.getEmail())
+                    .ovsCd(userEntity.getOvsCd())
+                    .ovsMeaning(userEntity.getOvsMeaning())
+                    .role(userEntity.getRole())
+                    .startDate(userEntity.getStartDate())
+                    .endDate(userEntity.getEndDate())
+                    .build();
+            userDTOList.add(userDTO);
+        }
+        log.info("length"+userDTOList.size());
+        return userDTOList;
+    }
+
+    @Override
     public LoginUserDTO updateUser(UpdateDTO updateDTO) {
         UserEntity userEntity = userRepository.findByName(updateDTO.getName());
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
