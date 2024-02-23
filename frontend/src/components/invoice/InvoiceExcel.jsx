@@ -19,7 +19,6 @@ export default function InvoiceExcel(props) {
     '출금금액',
     '식별코드',
     '거래내역',
-    '환산금액',
   ];
   const [data, setData] = useState([[], [], [], [], [], [], [], [], [], []]);
   const selectFile = useRef();
