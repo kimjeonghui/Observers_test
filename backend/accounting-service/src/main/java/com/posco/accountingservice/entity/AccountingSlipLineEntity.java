@@ -19,26 +19,33 @@ import java.time.LocalDateTime;
 public class AccountingSlipLineEntity extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long accountSlipId;
+    private Long accountSlipLineId; //라인발번
 
-    @ManyToOne(targetEntity = AccountingSlipInvoiceNumEntity.class, fetch = FetchType.LAZY)
+    @OneToOne(targetEntity = AccountingSlipInvoiceNumEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "account_slip_header")
-    private AccountSlipHeaderEntity accountHeader;
+    private AccountSlipHeaderEntity accountHeader; //헤더발번
 
     @Column(nullable = false)
     @ColumnDefault("ITEM")
-    private String lineTypeLookupCode;
+    private String lineTypeLookupCode; //라인 타입 조회 코드
     @Column(nullable = false)
-    private BigDecimal amount;
+    private BigDecimal amount; //금액
     @Column(nullable = false)
-    private LocalDateTime accountingDate;
+    private LocalDateTime accountingDate; //회계반영일
     @Column(nullable = false)
-    private String description;
+    private String description; //적요
     @Column(nullable = false)
     private String distCodeConcatenated;
-    private String attribute15 = accountHeader.getInvoiceNum();
+    private String attribute15;//송장번호
     @Column(nullable = false)
     @ColumnDefault("4")
     private Integer ordId;
+
+    @OneToOne(targetEntity= AccountingSlipEntity.class, fetch = FetchType.LAZY)
+    @JoinColumn(name = "account_slip_id")
+    private AccountingSlipEntity accountingSlip;
+//    @ManyToOne
+//    @JoinColumn(name ="accounting_slip_invoice_num")
+//    private AccountingSlipInvoiceNumEntity accountingSlipInvoiceNum;
 
 }

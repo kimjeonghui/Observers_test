@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,7 +23,9 @@ public class InvoiceDataEntity extends BaseEntity{
     private Long invoiceDataId;
 
     @Column
-    private LocalDateTime txDate;       //
+    private Float exchangeRage;
+    @Column
+    private LocalDate txDate;       //
 
     @Column
     private String store;               // 거래처명
@@ -59,6 +62,9 @@ public class InvoiceDataEntity extends BaseEntity{
 
     @Column
     private Long ocrId;                 // OCR ID
+
+    @OneToOne(mappedBy = "invoiceDataEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private AccountingSlipInvoiceNumEntity accountingSlipInvoiceNum;
 
     @OneToMany(mappedBy = "invoiceDataEntity", cascade = CascadeType.REMOVE)
     private List<EvidenceDataEntity> evidenceDataEntityList;

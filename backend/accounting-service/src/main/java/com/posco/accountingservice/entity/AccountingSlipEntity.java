@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -19,48 +20,51 @@ import java.util.List;
 public class AccountingSlipEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long accountSlipId;
+    private Long accountSlipId; //식별자
 
     @Column(nullable = false)
-    private String tranCd;
+    private String txCd; //삭별코드
 
     @Column(nullable = false)
-    private Long drCr;
+    private Long drCr; //차대
 
     @Column(nullable = false)
-    private Long tranNum;
+    private Long txNum; //거래순번
 
     @Column(nullable = false)
-    private BigDecimal amount;
+    private BigDecimal amount; //금액
 
     @Column(nullable = false)
-    private String currCode;
+    private String currCode; //통화코드
 
     @Column(nullable = false)
-    private BigDecimal krwAmount;
+    private BigDecimal krwAmount; //원화금액
 
     @Column(nullable = false)
-    private Float exchangeRate;
+    private Float exchangeRate; //환율
 
     @Column(nullable = false)
-    private String ovsCd;
+    private String ovsCd; //사무소코드
 
     @Column(nullable = false)
-    private Long account;
+    private String account; //계정코드
 
     @Column(columnDefinition = "TEXT", nullable = false)
-    private String description;
-
-    @Column(name = "invoice_num", insertable = false, updatable = false, nullable = false)
-    private Long invoiceNum;
+    private String description; //거래내역
 
     @Column
-    private LocalDateTime txDate;
+    private LocalDate txDate; //거래일자
+
+    @Column
+    private String groupId; //OAM-YYMM-부서코드
 
     @ManyToOne(targetEntity = AccountingSlipInvoiceNumEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "invoice_num")
-    private AccountingSlipInvoiceNumEntity accountingSlipInvoiceNumEntity;
+    private AccountingSlipInvoiceNumEntity accountingSlipInvoiceNumEntity;  //송장번호
 
-    @OneToMany(mappedBy = "accountSlip", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<AccountSlipHeaderEntity> accountSlipHeaderEntityList;
+    @OneToOne(mappedBy = "accountingSlip", cascade = CascadeType.ALL, orphanRemoval = true)
+    private AccountSlipHeaderEntity accountSlipHeader; //헤더
+
+    @OneToOne(mappedBy = "accountingSlip", cascade = CascadeType.ALL, orphanRemoval = true)
+    private AccountingSlipLineEntity accountingSlipLineEntity;
 }
