@@ -7,10 +7,9 @@ import java.util.List;
 
 public interface GLCodeRepository extends JpaRepository<GLCodeEntity, String>, GLCodeRepositoryCustom {
 
+    GLCodeEntity findByGlCodeId(Long glCodeId);
     GLCodeEntity findByTranCd(String tranCd);
-
     List<GLCodeEntity> findByMajorCt(String majorCt);
 
-    GLCodeEntity findByGlCodeId(Long glCodeId);
 
 }

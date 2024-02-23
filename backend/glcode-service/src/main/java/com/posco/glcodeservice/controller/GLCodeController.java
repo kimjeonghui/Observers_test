@@ -45,7 +45,7 @@ public class GLCodeController {
         return ResponseEntity.ok().body(resultMap);
     }
 
-    @GetMapping("/{majorCt}")
+    @GetMapping("/major/{majorCt}")
     @Operation(summary = "Get GLCode by majorCt", description = "Get a general ledge code by major criteria")
     public ResponseEntity<?> getGLCodeByMajorCT(@PathVariable String majorCt){
         Map<String, Object> resultMap = new HashMap<>();
@@ -58,7 +58,26 @@ public class GLCodeController {
         }
 
         resultMap.put("result", SUCCESS);
-        resultMap.put("msg", "Selected GLCode was retrieved successfully.");
+        resultMap.put("msg", "Major Category - Selected GLCode was retrieved successfully.");
+        resultMap.put("glCodes", glCode);
+
+        return ResponseEntity.ok().body(resultMap);
+    }
+
+    @GetMapping("/{tranCd}")
+    @Operation(summary = "Get GLCode by tranCd", description = "Get a general ledge code by transaction code")
+    public ResponseEntity<?> getGLCodeByTranCd(@PathVariable String tranCd){
+        Map<String, Object> resultMap = new HashMap<>();
+        GLCodeDTO glCode = glCodeService.getGLCodeByTranCd(tranCd);
+
+        if(glCode == null){
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "No tranCd found for tranCd." + tranCd);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
+
+        resultMap.put("result", SUCCESS);
+        resultMap.put("msg", "Transaction Code - Selected GLCode was retrieved successfully.");
         resultMap.put("glCodes", glCode);
 
         return ResponseEntity.ok().body(resultMap);
@@ -77,7 +96,7 @@ public class GLCodeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(resultMap);
     }
 
-    @DeleteMapping("/tranCd/{tranCd}")
+    @DeleteMapping("/delete/{tranCd}")
     @Operation(summary = "Delete glCode by tranCd", description = "Delete a general ledge code by transcation code")
     public ResponseEntity<?> deleteGLCodeByTranCd(@PathVariable String tranCd) {
         Map<String, Object> resultMap = new HashMap<>();
