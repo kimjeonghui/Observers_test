@@ -25,15 +25,13 @@ export default function OfficeSelector(props) {
     axios
       .get(`http://localhost:8086/admin-office/codeList`)
       .then((res) => {
-        console.log(res);
         setovsCdList(res.data.ovsCodeList);
-        console.log(ovsCdList);
       })
       .catch((err) => {
         console.log(err);
       });
   };
-  //Todo: 사무소코드 가져오는 API
+
   const officeCode = [
     { ovsCd: 'HDF32', ovsMeaning: '유럽' },
     { ovsCd: 'HDF13', ovsMeaning: '브뤼셀' },

@@ -22,6 +22,7 @@ import UserUpdateModal from '../components/users/UserUpdateModal';
 import Button from '../components/global/Button';
 import Input from '../components/global/Input';
 import OfficeSelector from '../components/global/OfficeSelector';
+import UserSearch from '../components/users/UserSearch';
 import axios from 'axios';
 
 export default function Users(props) {
@@ -330,9 +331,10 @@ export default function Users(props) {
         </DialogActions>
       </Dialog>
       <h2>사용자 관리</h2>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} sx={{ marginTop: '5px' }}>
         <Grid item xs={6}>
-          <Input widthV='20' heightV='5' label='Search' />
+          {/* <Input widthV='20' heightV='5' label='Search' /> */}
+          <UserSearch setTableData={setTableData} />
         </Grid>
         <Grid item xs={6} textAlign='right'>
           <OfficeSelector curV={ovsCd} setCurV={setOvsCd} />
@@ -372,7 +374,7 @@ export default function Users(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {tableData.map((row) => (
+              {tableData?.map((row) => (
                 <TableRow key={row.name}>
                   <TableCell>{row.name}</TableCell>
                   <TableCell align='center'>{row.description}</TableCell>
