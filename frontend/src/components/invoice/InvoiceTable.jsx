@@ -474,7 +474,6 @@ export default function InvoiceTable(props) {
               rowCount={rows.length}
             />
             <TableBody>
-              {/* {visibleRows.map((row, index) => { */}
               {visibleRows.map((row, index) => {
                 const isItemSelected = isSelected(row.invoiceId);
                 const labelId = `enhanced-table-checkbox-${index}`;
@@ -585,7 +584,7 @@ export default function InvoiceTable(props) {
                         padding: 0,
                       }}
                     >
-                      {row.transCd}
+                      {row.tranCd}
                     </TableCell>
                     <TableCell
                       align='center'

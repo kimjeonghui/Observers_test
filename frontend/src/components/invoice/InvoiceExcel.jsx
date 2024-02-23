@@ -9,8 +9,6 @@ import * as XLSX from 'xlsx';
 
 export default function InvoiceExcel(props) {
   const columnLabels = [
-    '사무소코드',
-    '회계월',
     '거래일자',
     '거래처명',
     '입금통화',
@@ -30,8 +28,6 @@ export default function InvoiceExcel(props) {
   }, [excelData]);
 
   const headers = [
-    { label: '사무소코드', key: 'ovs_cd' },
-    { label: '회계월', key: 'fiscal_month' },
     { label: '거래일자', key: 'tx_date' },
     { label: '거래처명', key: 'store' },
     { label: '입금통화', key: 'dep_curr' },
@@ -40,15 +36,10 @@ export default function InvoiceExcel(props) {
     { label: '출금금액', key: 'withdrawal' },
     { label: '식별코드', key: 'trans_cd' },
     { label: '거래내역', key: 'description' },
-    { label: '환산금액', key: 'trans_amount' },
   ];
   const sampleData = [
     {
-      ovs_cd: '',
-      num: 1,
-      id: 1,
-      fiscal_month: 'YY.MM',
-      tx_date: 'YYYY.MM.DD',
+      tx_date: 'YYYY-MM-DD',
       store: '',
       dep_curr: '',
       deposit: '',
@@ -56,8 +47,6 @@ export default function InvoiceExcel(props) {
       withdrawal: '',
       trans_cd: '',
       description: '',
-      trans_amount: '',
-      status: 'open',
     },
   ];
 
@@ -154,6 +143,10 @@ export default function InvoiceExcel(props) {
     // Todo:tmpData를 api로 넘기기
   };
 
+  const handleDataSubmit = () => {
+    console.log(excelData);
+  };
+
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -205,7 +198,7 @@ export default function InvoiceExcel(props) {
           }}
           size='sm'
         >
-          <SaveAltIcon sx={{ mr: 1 }} />
+          <SaveAltIcon sx={{ mr: 1 }} onClick={handleDataSubmit} />
           저장
         </Button>
       </div>
