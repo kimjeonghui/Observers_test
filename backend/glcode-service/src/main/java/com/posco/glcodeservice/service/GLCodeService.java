@@ -10,6 +10,8 @@ public interface GLCodeService {
 
     List<GLCodeDTO> getGLCodeByMajorCT(String majorCt);
 
+    GLCodeDTO getGLCodeByTranCd(String tranCd);
+
     GLCodeDTO createGLCode(GLCodeDTO glCodeDTO);
 
     boolean deleteGLCodeByTranCd(String transCd);
