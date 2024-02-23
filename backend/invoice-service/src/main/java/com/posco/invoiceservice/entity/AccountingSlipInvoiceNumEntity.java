@@ -14,17 +14,20 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "pos_ovs_accounting_slip_invoice_num")
-public class AccountingSlipInvoiceNumEntity {
+public class AccountingSlipInvoiceNumEntity extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long invoiceNum;
-
-    @Column(name = "invoice_data_id", insertable = false, updatable = false)
-    private Long invoiceDataId;
-
+    private Integer num;
+    @Column(nullable = false)
+    private String invoiceNum;
     @OneToOne(targetEntity = InvoiceDataEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "invoice_data_id")
     private InvoiceDataEntity invoiceDataEntity;
+    @Column(nullable = false)
+    private String ovsCd;
+
+    @Column(nullable = false)
+    private String fiscalMonth;
 
     @OneToMany(mappedBy = "accountingSlipInvoiceNumEntity", cascade = CascadeType.REMOVE)
     private List<AccountingSlipEntity> accountingSlipEntityList;

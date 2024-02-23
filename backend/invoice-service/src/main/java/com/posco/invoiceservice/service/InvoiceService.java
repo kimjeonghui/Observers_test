@@ -10,10 +10,8 @@ import java.util.List;
 public interface InvoiceService {
     InvoiceDataEntity createInvoice(InvoiceDTO invoiceDTO);
 
-    InvoiceResponseDTO getInvoice(String ovsCd);
+    List<InvoiceResponseDTO> getInvoiceList(String ovsCd, String fiscalMonth);
 
-    List<InvoiceResponseDTO> getInvoiceList(String ovsCd);
-
-
+    InvoiceResponseDTO getInvoice(Long invoiceId);
 
 }
