@@ -27,9 +27,11 @@ public class GLCodeServiceImpl implements GLCodeService{
     }
 
     @Override
-    public GLCodeDTO getGLCodeByMajorCT(String majorCt) {
-        GLCodeEntity glCodeEntity = glCodeRepository.findByMajorCt(majorCt);
-        return (glCodeEntity !=null) ? convertToDTO(glCodeEntity) : null;
+    public List<GLCodeDTO> getGLCodeByMajorCT(String majorCt) {
+        List<GLCodeEntity> glCodeMajorCtEntity = glCodeRepository.findByMajorCt(majorCt);
+        return glCodeMajorCtEntity.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -40,8 +42,18 @@ public class GLCodeServiceImpl implements GLCodeService{
     }
 
     @Override
-    public boolean deleteGLCodeByTransCd(String transCd) {
-        GLCodeEntity glCodeEntity = glCodeRepository.findByTransCd(transCd);
+    public boolean deleteGLCodeByTranCd(String tranCd) {
+        GLCodeEntity glCodeEntity = glCodeRepository.findByTranCd(tranCd);
+        if (glCodeEntity != null) {
+            glCodeRepository.delete(glCodeEntity);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteGLCodeById(Long glCodeId) {
+        GLCodeEntity glCodeEntity = glCodeRepository.findByGlCodeId(glCodeId);
         if (glCodeEntity != null) {
             glCodeRepository.delete(glCodeEntity);
             return true;
