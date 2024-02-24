@@ -52,7 +52,6 @@ export default function InvoiceModal(props) {
   //거래내역 입력창들에 대한 변동값
 
   const handleTxDateChange = (e) => {
-    console.log('날짜', e.target.value);
     setTxDate(e.target.value);
   };
 
@@ -132,7 +131,6 @@ export default function InvoiceModal(props) {
       tranCd,
       description,
     };
-    console.log('data', data);
     if (checkInvoiceForm(data)) {
       axios
         .post(requests.POST_INVOICE(), {
