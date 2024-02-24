@@ -155,7 +155,7 @@ export default function Invoice(props) {
           />
         </div>
       ) : (
-        <InvoiceExcel />
+        <InvoiceExcel user={user} />
       )}
     </div>
   );

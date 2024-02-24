@@ -48,6 +48,35 @@ public class InvoiceServiceImpl implements InvoiceService {
         return invoiceRepository.save(invoiceEntity);
     }
 
+    @Override
+    public List<InvoiceDataEntity> createInvoiceList(List<InvoiceDTO> invoiceDTOList) {
+        String status = "draft";
+        List<InvoiceDataEntity> invoiceEntities = new ArrayList<>();
+
+        for (InvoiceDTO invoiceDTO : invoiceDTOList) {
+            log.info("data "+ invoiceDTO);
+            InvoiceDataEntity invoiceEntity = InvoiceDataEntity.builder()
+                    .ovsCd(invoiceDTO.getOvsCd())
+                    .fiscalMonth(invoiceDTO.getFiscalMonth())
+                    .txDate(invoiceDTO.getTxDate())
+                    .store(invoiceDTO.getStore())
+                    .depCurr(invoiceDTO.getDepCurr())
+                    .deposit(invoiceDTO.getDeposit())
+                    .wdCurr(invoiceDTO.getWdCurr())
+                    .withdrawal(invoiceDTO.getWithdrawal())
+                    .tranCd(invoiceDTO.getTranCd())
+                    .description(invoiceDTO.getDescription())
+                    // .transAmount() Todo: 환율 가져와서 계산해야함
+                    .status(status)
+                    // .exchangeRate() Todo: 환율 가져와서 설정
+                    .build();
+
+            invoiceEntities.add(invoiceEntity);
+        }
+
+        return invoiceRepository.saveAll(invoiceEntities);
+    }
+
 
     @Override
     public List<InvoiceResponseDTO> getInvoiceList(String ovsCd, String fiscalMonth) {

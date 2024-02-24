@@ -45,6 +45,24 @@ public class InvoiceController {
         return ResponseEntity.ok().body(resultMap);
     }
 
+    @PostMapping("/list")
+//    @Operation(summary = "Insert summary", description = "")
+    public ResponseEntity<?> createInvoiceList (@Valid @RequestBody List<InvoiceDTO> invoiceDTOList){
+        Map<String, Object> resultMap = new HashMap<>();
+        System.out.println("들어온 데이터 "+ invoiceDTOList);
+
+        List<InvoiceDataEntity>invoiceEntity = invoiceService.createInvoiceList(invoiceDTOList);
+        if(invoiceEntity==null){
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "당월 거래 입력 실패");
+            return ResponseEntity.badRequest().body(resultMap);
+        }
+
+        resultMap.put("result", SUCCESS);
+        resultMap.put("msg", "당월 거래 입력 성공");
+        return ResponseEntity.ok().body(resultMap);
+    }
+
     @GetMapping("/{ovsCd}/{fiscalMonth}")
     public ResponseEntity<?> getInvoiceList (@PathVariable String ovsCd, @PathVariable String fiscalMonth){//@RequestBody GetInvoiceListDTO getInvoiceListDTO){
         Map<String, Object> resultMap = new HashMap<>();

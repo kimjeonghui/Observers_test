@@ -8,6 +8,9 @@ const requests = {
   POST_INVOICE() {
     return this.base_url + `/invoice`;
   },
+  POST_INVOICE_LIST() {
+    return this.base_url + `/invoice/list`;
+  },
 };
 
 export default requests;

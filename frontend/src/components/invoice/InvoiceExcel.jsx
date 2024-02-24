@@ -6,8 +6,12 @@ import { CSVLink } from 'react-csv';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import * as XLSX from 'xlsx';
+import axios from 'axios';
+
+import requests from '../../api/invoiceConfig';
 
 export default function InvoiceExcel(props) {
+  const { user } = props;
   const columnLabels = [
     '거래일자',
     '거래처명',
@@ -28,13 +32,13 @@ export default function InvoiceExcel(props) {
   }, [excelData]);
 
   const headers = [
-    { label: '거래일자', key: 'tx_date' },
+    { label: '거래일자', key: 'txDate' },
     { label: '거래처명', key: 'store' },
-    { label: '입금통화', key: 'dep_curr' },
+    { label: '입금통화', key: 'depCurr' },
     { label: '입금금액', key: 'deposit' },
-    { label: '출금통화', key: 'wd_curr' },
+    { label: '출금통화', key: 'wdCurr' },
     { label: '출금금액', key: 'withdrawal' },
-    { label: '식별코드', key: 'trans_cd' },
+    { label: '식별코드', key: 'tranCd' },
     { label: '거래내역', key: 'description' },
   ];
   const sampleData = [
@@ -90,7 +94,13 @@ export default function InvoiceExcel(props) {
 
   const formatDate = (date) => {
     const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
-    return new Intl.DateTimeFormat('ko-KR', options).format(date);
+    const formattedDate = new Intl.DateTimeFormat('ko-KR', options).format(
+      date
+    );
+
+    let newDate = formattedDate.replace(/[.\s]+/g, '-');
+    newDate = newDate.slice(0, -1);
+    return newDate;
   };
 
   const tableImportData = () => {
@@ -127,9 +137,18 @@ export default function InvoiceExcel(props) {
     setData([...tmpData]);
   };
 
-  // 복붙 데이터
-  const handleData = () => {
+  // 시트에 있는 데이터 백으로 보내기 전 데이터 전처리
+  const handlePreprocessingData = () => {
     let tmpData = [];
+    const today = new Date();
+    let fiscalMonth = today.getFullYear().toString() + '-';
+    let month = today.getMonth();
+    const ovsCd = user.ovsCd;
+    if (month >= 9) {
+      fiscalMonth += (today.getMonth() + 1).toString();
+    } else {
+      fiscalMonth += '0' + (today.getMonth() + 1).toString();
+    }
     for (let i = 0; i < data.length; i++) {
       let tmpArr = {};
 
@@ -138,13 +157,24 @@ export default function InvoiceExcel(props) {
         let dataValue = data[i][j].value;
         tmpArr[header] = dataValue;
       }
+      tmpArr.ovsCd = ovsCd;
+      tmpArr.fiscalMonth = fiscalMonth;
       tmpData.push(tmpArr);
     }
-    // Todo:tmpData를 api로 넘기기
+    return tmpData;
   };
 
   const handleDataSubmit = () => {
-    console.log(excelData);
+    const newData = handlePreprocessingData();
+    console.log(newData);
+    axios
+      .post(requests.POST_INVOICE_LIST(), newData)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
   };
 
   return (
@@ -194,16 +224,20 @@ export default function InvoiceExcel(props) {
         </div>
         <Button
           onClick={() => {
-            handleData();
+            handleDataSubmit();
           }}
           size='sm'
         >
-          <SaveAltIcon sx={{ mr: 1 }} onClick={handleDataSubmit} />
+          <SaveAltIcon sx={{ mr: 1 }} />
           저장
         </Button>
       </div>
       <div style={{ width: '100%', height: '100%', overflow: 'auto' }}>
-        <Spreadsheet columnLabels={columnLabels} data={data} />
+        <Spreadsheet
+          columnLabels={columnLabels}
+          data={data}
+          onChange={setData}
+        />
       </div>
     </div>
   );
