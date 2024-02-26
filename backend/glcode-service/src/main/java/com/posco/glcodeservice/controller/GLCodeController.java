@@ -97,6 +97,20 @@ public class GLCodeController {
         return ResponseEntity.status(HttpStatus.CREATED).body(resultMap);
     }
 
+    @PostMapping("/list")
+    @Operation(summary = "Create GLCodes using list", description = "Create new general ledger codes all at once by having a list inserted.")
+    public ResponseEntity<?> createGLCodeList(@Valid @RequestBody List<GLCodeDTO> glCodeDTOList) {
+        List<GLCodeDTO> createdGLCodes = glCodeService.createGLCodeList(glCodeDTOList);
+
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("result", SUCCESS);
+        resultMap.put("msg", "GLCodes created successfully.");
+        resultMap.put("glCodes", createdGLCodes);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(resultMap);
+    }
+
+
     @DeleteMapping("/delete/{tranCd}")
     @Operation(summary = "Delete glCode by tranCd", description = "Delete a general ledge code by transcation code")
     public ResponseEntity<?> deleteGLCodeByTranCd(@PathVariable String tranCd) {

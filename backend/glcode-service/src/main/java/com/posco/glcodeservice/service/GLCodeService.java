@@ -14,6 +14,8 @@ public interface GLCodeService {
 
     GLCodeDTO createGLCode(GLCodeDTO glCodeDTO);
 
+    List<GLCodeDTO> createGLCodeList(List<GLCodeDTO> glCodeDTOList);
+
     boolean deleteGLCodeByTranCd(String transCd);
 
     boolean deleteGLCodeById(Long glCodeId);
