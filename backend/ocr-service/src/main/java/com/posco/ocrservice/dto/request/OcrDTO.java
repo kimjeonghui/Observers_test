@@ -17,8 +17,8 @@ public class OcrDTO {
 
     @Override
     public String toString() {
-        return "ReceiptOCR { \n" +
-                "storeName = " + storeName + "\n" + "purDate = " + purDate + "\n" + "totalVal = " + totalVal + " }";
+        return "Receipt { \n" +
+                "storeName = " + storeName + "\n" + "purDate = " + purDate + "\n" + "totalVal = " + totalVal + " }\n";
     }
 
     public static OcrEntity toEntity(OcrDTO ocrDto) {

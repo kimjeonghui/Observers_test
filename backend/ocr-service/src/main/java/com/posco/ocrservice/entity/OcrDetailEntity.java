@@ -46,7 +46,7 @@ public class OcrDetailEntity {
 
     @Override
     public String toString() {
-        return "ReceiptOCR { \n" +
+        return "Receipt { \n" +
                 "description = " + description + "\n" + "unitPrice = " + unitPrice + "\n" + "sumPrice = " + sumPrice + "\n" + "count = " + count + " }";
     }
 }

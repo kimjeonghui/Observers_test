@@ -44,7 +44,7 @@ public class OcrEntity extends BaseEntity {
 
     @Override
     public String toString() {
-        return "ReceiptOCR { \n" +
+        return "Receipt { \n" +
                 "storeName = " + storeName + "\n" + "purDate = " + purDate + "\n" + "totalVal = " + totalVal + " }";
     }
 }
