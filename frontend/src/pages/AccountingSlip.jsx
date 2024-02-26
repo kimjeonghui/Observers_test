@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { userState } from '../state/UserState';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import ApprovalTable from '../components/accoutingSlip/ApprovalTable';
@@ -8,15 +9,16 @@ import {
 } from '../components/accoutingSlip/AccountingSlipStyles';
 import AccountingSlipTable from '../components/accoutingSlip/AccountingSlipTable';
 import requests from '../api/invoiceConfig';
-import { userState } from '../state/UserState';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 
 export default function AccountingSlip(props) {
-  const [activeTab, setActiveTab] = useState('회계전표');
+  const user = useRecoilValue(userState);
+  const [activeTab, setActiveTab] = useState(
+    user.role === 'SUPER_USER' ? '결재 승인' : '회계전표'
+  );
   const [selectDate, setSelectDate] = useState(new Date());
   const [invoiceData, setInvoiceData] = useState([]);
-  const user = useRecoilValue(userState);
 
   useEffect(() => {
     getInvoiceData();

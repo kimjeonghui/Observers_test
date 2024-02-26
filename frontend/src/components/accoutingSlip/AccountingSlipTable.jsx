@@ -1,15 +1,13 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
+import axios from 'axios';
+import { useRecoilValue } from 'recoil';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
 import DatePicker from 'react-datepicker';
-import Button from '../global/Button';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
+import AccountingSlipCalender from './AccountingSlipCalender';
 import MenuItem from '@mui/material/MenuItem';
 import 'react-datepicker/dist/react-datepicker.css';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+
 import {
   Box,
   Table,
@@ -29,11 +27,12 @@ import {
   // Button,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { visuallyHidden } from '@mui/utils';
 import { useTheme } from '@emotion/react';
 import AccountingSlipSearch from './AccountingSlipSearch';
 import ManagerRejectBtn from './ManagerRejectBtn';
 import ManagerImportBtn from './ManagerImportBtn';
+import { userState } from '../../state/UserState';
+import requests from '../../api/accountingSlipConfig';
 
 const rows = [
   {
@@ -294,14 +293,14 @@ function stableSort(array, comparator) {
 // 1111111
 const headCells = [
   {
-    id: 'invoice_num',
+    id: 'invoiceNum',
     numeric: false,
     disablePadding: true,
     label: 'INVOICE_NUM',
     minWidth: 230,
   },
   {
-    id: 'drcr',
+    id: 'drCr',
     numeric: false,
     disablePadding: false,
     label: '차대',
@@ -315,21 +314,21 @@ const headCells = [
     minWidth: 150,
   },
   {
-    id: 'krw_amount',
+    id: 'krwAmount',
     numeric: false,
     disablePadding: true,
     label: '원화금액',
     minWidth: 150,
   },
   {
-    id: 'excange_rate',
+    id: 'exchangeRate',
     numeric: false,
     disablePadding: true,
     label: '환율',
     minWidth: 100,
   },
   {
-    id: 'cost_center',
+    id: 'ovsCd',
     numeric: false,
     disablePadding: true,
     label: '사무소',
@@ -350,38 +349,45 @@ const headCells = [
     minWidth: 200,
   },
   {
-    id: 'created_by',
+    id: 'createdBy',
     numeric: false,
     disablePadding: true,
     label: '생성자',
     minWidth: 150,
   },
   {
-    id: 'creation_date',
+    id: 'createdDate',
     numeric: false,
     disablePadding: true,
     label: '생성날짜',
     minWidth: 150,
   },
   {
-    id: 'group_id',
+    id: 'groupId',
     numeric: false,
     disablePadding: true,
     label: '그룹아이디',
     minWidth: 180,
   },
   {
-    id: 'tx_num',
+    id: 'txNum',
     numeric: false,
     disablePadding: true,
     label: '거래순번',
     minWidth: 80,
   },
   {
-    id: 'tx_cd',
+    id: 'txCd',
     numeric: false,
     disablePadding: true,
     label: '식별코드',
+    minWidth: 95,
+  },
+  {
+    id: 'txDate',
+    numeric: false,
+    disablePadding: true,
+    label: '거래날짜',
     minWidth: 95,
   },
 ];
@@ -492,10 +498,44 @@ const groupBy = (array, key) => {
 };
 
 export default function AccountingSlipTable(props) {
+  const user = useRecoilValue(userState);
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
+  const [fiscalMonth, setFiscalMonth] = useState();
+  const [accountingSlip, setAccountingSlip] = useState([]);
+  const [selectDate, setSelectDate] = useState(new Date());
+  const [selectedOffice, setSelectedOffice] = useState(user.ovsCd || 'HDF13');
+  useEffect(() => {
+    getAccountingSlip();
+  }, [fiscalMonth, selectedOffice]);
+  useEffect(() => {
+    handleFiscalMonth();
+  }, [year, currentMonth]);
+
+  const handleFiscalMonth = () => {
+    if (currentMonth < 10) setFiscalMonth(year + '-0' + currentMonth);
+    else setFiscalMonth(year + '-' + currentMonth);
+  };
+  const getAccountingSlip = () => {
+    handleFiscalMonth();
+    axios
+      .get(requests.GET_ACCOUNTING_SLIP(selectedOffice, fiscalMonth))
+      .then((response) => {
+        if (response.status === 200) {
+          const data = response.data;
+          setAccountingSlip(data);
+        } else {
+          setAccountingSlip([]);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -517,62 +557,20 @@ export default function AccountingSlipTable(props) {
 
   const visibleRows = useMemo(
     () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
+      stableSort(accountingSlip, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
-    [order, orderBy, page, rowsPerPage]
+    [order, orderBy, page, rowsPerPage, accountingSlip]
   );
-  const groupedVisibleRows = groupBy(visibleRows, 'invoice_num');
-  const currentDate = new Date();
-  const [year, setYear] = useState(currentDate.getFullYear());
-  const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth() + 1);
-  // dateRange는 [startDate, endDate] 형태의 배열을 값 가짐
+  const groupedVisibleRows = groupBy(visibleRows, 'invoiceNum');
   const [dateRange, setDateRange] = useState([null, null]);
   //dateRange 변수를 startDate와 endDate 프로퍼티로 전달
   const [startDate, endDate] = dateRange;
   const theme = useTheme();
 
-  const getMonthString = (monthNumber) => {
-    const monthNames = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-
-    return monthNames[monthNumber - 1];
-  };
-  const currentMonthString = getMonthString(currentMonth);
-  const onClickPreBtn = () => {
-    setCurrentMonth((prevMonth) => {
-      const newMonth = (prevMonth - 1 + 12) % 12 || 12;
-      if (newMonth === 12) {
-        setYear((prevYear) => prevYear - 1);
-      }
-      return newMonth;
-    });
-  };
-
-  const onClickNextBtn = () => {
-    setCurrentMonth((prevMonth) => {
-      const newMonth = (prevMonth + 1) % 12 || 12;
-      if (newMonth === 1) {
-        setYear((prevYear) => prevYear + 1);
-      }
-      return newMonth;
-    });
-  };
-  const [selectedOffice, setSelectedOffice] = useState('');
   const handleChangeOffice = (event) => {
+    if (user.ovsCd != null) return;
     const selectedValue = event.target.value;
     setSelectedOffice(selectedValue);
     // Logic to filter data based on selected office
@@ -606,7 +604,6 @@ export default function AccountingSlipTable(props) {
         onChange={handleChangeOffice}
         //fullWidth
       >
-        <MenuItem value='all'>전체</MenuItem>
         <MenuItem value='HDF13'>브뤼셀</MenuItem>
         <MenuItem value='HDF32'>유럽</MenuItem>
         <MenuItem value='HDF27'>아르헨티나</MenuItem>
@@ -621,27 +618,12 @@ export default function AccountingSlipTable(props) {
           marginTop: '16px',
         }}
       >
-        <Button
-          onClick={onClickPreBtn}
-          width='50px'
-          color={theme.palette.posco_white}
-          fontColor={theme.palette.posco_black}
-          hoverColor={theme.palette.posco_gray_100}
-        >
-          <ChevronLeftIcon />
-        </Button>
-        <Typography sx={{ paddingX: '32px', fontSize: '28px' }}>
-          {currentMonthString} , {year}
-        </Typography>
-        <Button
-          onClick={onClickNextBtn}
-          width='50px'
-          color={theme.palette.posco_white}
-          fontColor={theme.palette.posco_black}
-          hoverColor={theme.palette.posco_gray_100}
-        >
-          <ChevronRightIcon />
-        </Button>
+        <AccountingSlipCalender
+          year={year}
+          setYear={setYear}
+          currentMonth={currentMonth}
+          setCurrentMonth={setCurrentMonth}
+        />
       </div>
       <div style={{ height: '20px' }} />
       <div />
@@ -685,7 +667,7 @@ export default function AccountingSlipTable(props) {
                   order={order}
                   orderBy={orderBy}
                   onRequestSort={handleRequestSort}
-                  rowCount={rows.length}
+                  rowCount={accountingSlip.length}
                 />
               </Paper>
             </TableHead>
@@ -693,8 +675,10 @@ export default function AccountingSlipTable(props) {
             <TableBody>
               {Object.keys(groupedVisibleRows).map(
                 (invoiceNumGroup, groupIndex) => {
+                  const groupData = groupedVisibleRows[invoiceNumGroup];
                   return (
                     <React.Fragment key={`group-${groupIndex}`}>
+                      {/* 그룹 선택하는 줄 */}
                       <TableRow
                         sx={{
                           display: 'grid',
@@ -723,34 +707,33 @@ export default function AccountingSlipTable(props) {
                             {`${invoiceNumGroup} `} {/* 그룹 선택됨 */}
                           </Typography>
                         </TableCell>
-                        {groupedVisibleRows[invoiceNumGroup].map(
-                          (row, index) => (
-                            <TableRow
-                              key={row.tx_num}
-                              tabIndex={-1}
-                              sx={{ paddingTop: '3px', paddingBottom: '3px' }}
-                            >
-                              {headCells.map((headCell) => (
-                                <TableCell
-                                  key={headCell.id}
-                                  align='center'
-                                  style={{ minWidth: `${headCell.minWidth}px` }}
-                                  sx={{
-                                    fontSize: {
-                                      xs: '12px',
-                                      sm: '14px',
-                                      md: '16px',
-                                    },
-                                    padding: 0,
-                                  }}
-                                >
-                                  {row[headCell.id]}
-                                </TableCell>
-                              ))}
-                            </TableRow>
-                          )
-                        )}
+                        {groupData.map((row, index) => (
+                          <TableRow
+                            key={row.accountSlipId}
+                            tabIndex={-1}
+                            sx={{ paddingTop: '3px', paddingBottom: '3px' }}
+                          >
+                            {headCells.map((headCell) => (
+                              <TableCell
+                                key={headCell.id}
+                                align='center'
+                                style={{ minWidth: `${headCell.minWidth}px` }}
+                                sx={{
+                                  fontSize: {
+                                    xs: '12px',
+                                    sm: '14px',
+                                    md: '16px',
+                                  },
+                                  padding: 0,
+                                }}
+                              >
+                                {row[headCell.id]}
+                              </TableCell>
+                            ))}
+                          </TableRow>
+                        ))}
                       </TableRow>
+                      {/* 그룹의 데이터를 렌더링 */}
                     </React.Fragment>
                   );
                 }
@@ -770,7 +753,7 @@ export default function AccountingSlipTable(props) {
         <TablePagination
           rowsPerPageOptions={[5, 10, 25]}
           component='div'
-          count={rows.length}
+          count={visibleRows.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -778,8 +761,8 @@ export default function AccountingSlipTable(props) {
         />
       </Paper>
       {/* 유저 권한에 따라서 사무소장만 버튼 볼 수 있도록, 검증은 자동으로 하고 그 결과에 따라 렌더링 되는 버튼이 달라짐 */}
-      <ManagerRejectBtn />
-      <ManagerImportBtn />
+      {user.role === 'SUPER_USER' && <ManagerRejectBtn />}
+      {user.role === 'SUPER_USER' && <ManagerImportBtn />}
     </Box>
   );
 }
