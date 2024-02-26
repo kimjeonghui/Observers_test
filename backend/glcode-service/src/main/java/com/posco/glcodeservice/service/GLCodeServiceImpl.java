@@ -48,6 +48,17 @@ public class GLCodeServiceImpl implements GLCodeService{
     }
 
     @Override
+    public List<GLCodeDTO> createGLCodeList(List<GLCodeDTO> glCodeDTOList) {
+        List<GLCodeEntity> glCodeEntities = glCodeDTOList.stream()
+                .map(this::insertGLCodeEntity)
+                .collect(Collectors.toList());
+        List<GLCodeEntity> savedEntities = glCodeRepository.saveAll(glCodeEntities);
+        return savedEntities.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public boolean deleteGLCodeByTranCd(String tranCd) {
         GLCodeEntity glCodeEntity = glCodeRepository.findByTranCd(tranCd);
         if (glCodeEntity != null) {
