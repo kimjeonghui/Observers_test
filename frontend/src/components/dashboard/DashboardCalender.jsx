@@ -5,16 +5,13 @@ import { Typography } from '@mui/material';
 import { useTheme } from '@emotion/react';
 
 import Button from '../global/Button';
-function SummaryCalendar(props) {
+function DashboardCalender(props) {
   const { currentDate, year, setYear, currentMonth, setCurrentMonth } = props;
 
   // dateRange는 [startDate, endDate] 형태의 배열을 값 가짐
   const [dateRange, setDateRange] = useState([null, null]);
   //dateRange 변수를 startDate와 endDate 프로퍼티로 전달
   const [startDate, endDate] = dateRange;
-  const [maxYear, setMaxYear] = useState(year);
-  const [maxMonth, setMaxMonth] = useState(currentMonth);
-  const [possible, setPossible] = useState(true);
   const theme = useTheme();
 
   const getMonthString = (monthNumber) => {
@@ -42,7 +39,6 @@ function SummaryCalendar(props) {
       if (newMonth === 12) {
         setYear((prevYear) => prevYear - 1);
       }
-      setPossible(false);
       return newMonth;
     });
   };
@@ -51,13 +47,7 @@ function SummaryCalendar(props) {
     setCurrentMonth((prevMonth) => {
       const newMonth = (prevMonth + 1) % 12 || 12;
       if (newMonth === 1) {
-        if (year + 1 > maxYear) setPossible(true);
-        else setPossible(false);
         setYear((prevYear) => prevYear + 1);
-      }
-      if (!possible) {
-        if (year === maxYear && newMonth >= maxMonth) setPossible(true);
-        else setPossible(false);
       }
       return newMonth;
     });
@@ -88,7 +78,6 @@ function SummaryCalendar(props) {
       </Typography>
       <Button
         onClick={onClickNextBtn}
-        disabled={possible}
         width='50px'
         color={theme.palette.posco_white}
         fontColor={theme.palette.posco_black}
@@ -100,4 +89,4 @@ function SummaryCalendar(props) {
   );
 }
 
-export default SummaryCalendar;
+export default DashboardCalender;
