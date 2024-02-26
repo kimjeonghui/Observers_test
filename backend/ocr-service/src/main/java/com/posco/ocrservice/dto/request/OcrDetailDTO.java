@@ -32,7 +32,7 @@ public class OcrDetailDTO {
 
     @Override
     public String toString() {
-        return "ReceiptOCR { \n" +
-                "description = " + description + "\n" + "unitPrice = " + unitPrice + "\n" + "sumPrice = " + sumPrice + "\n" + "count = " + count + " }";
+        return "Item { \n" +
+                "description = " + description + "\n" + "unitPrice = " + unitPrice + "\n" + "sumPrice = " + sumPrice + "\n" + "count = " + count + " }\n";
     }
 }
