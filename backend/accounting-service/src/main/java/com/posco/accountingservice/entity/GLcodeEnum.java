@@ -24,11 +24,11 @@ public enum GLcodeEnum {
     }
 
     public static List<Object> getValuesByCode(String code) {
-        for (GLcodeEnum glCode : values()) {
+        for (GLcodeEnum glCode : GLcodeEnum.values()) {
             if (glCode.name().equals("GL_CODE_" + code)) {
                 return glCode.getValues();
             }
         }
-        return null;
+        return new ArrayList<>();
     }
 }

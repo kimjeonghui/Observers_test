@@ -1,10 +1,7 @@
 package com.posco.accountingservice.entity;
 
 import com.posco.accountingservice.dto.response.AccountingSlipDTO;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -22,7 +19,8 @@ public class AccountingSlipEntity extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long accountSlipId; //식별자
-
+    @Column
+    private String fiscalMonth;
     @Column(nullable = false)
     private String txCd; //삭별코드
 
@@ -41,7 +39,8 @@ public class AccountingSlipEntity extends BaseEntity{
     @Column(nullable = false)
     private BigDecimal krwAmount; //원화금액
 
-    @Column(nullable = false)
+    //@Column(nullable = false)
+    @Column
     private Float exchangeRate; //환율
 
     @Column(nullable = false)
@@ -58,12 +57,14 @@ public class AccountingSlipEntity extends BaseEntity{
 
     @ManyToOne(targetEntity = AccountingSlipInvoiceNumEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "invoice_num")
-    @Getter
+    @Getter @Setter
     private AccountingSlipInvoiceNumEntity accountingSlipInvoiceNumEntity;  //송장번호
 
+    @Getter @Setter
     @OneToOne(mappedBy = "accountingSlip", cascade = CascadeType.ALL, orphanRemoval = true)
     private AccountSlipHeaderEntity accountSlipHeader; //헤더
 
+    @Getter @Setter
     @OneToOne(mappedBy = "accountingSlip", cascade = CascadeType.ALL, orphanRemoval = true)
     private AccountingSlipLineEntity accountingSlipLineEntity;
 

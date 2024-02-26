@@ -7,5 +7,5 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface InvoiceDataRepository extends JpaRepository<InvoiceDataEntity, Long> {
-    public List<InvoiceDataEntity> findByOvsCdAndFiscalMonth(String OvsCd, String fiscalMonth);
+    public List<InvoiceDataEntity> findAllByOvsCdAndFiscalMonth(String ovsCd, String fiscalMonth);
 }
