@@ -11,6 +11,7 @@ import ReceiptsMonth from './pages/ReceiptsMonth';
 import ReceiptsDetail from './pages/ReceiptsDetail';
 import Ocr from './pages/Ocr';
 import OcrCall from './pages/OcrCall';
+import Dashboard from './pages/Dashboard.jsx';
 import ManagerAccountingSlip from './pages/AccountingSlip';
 import AccountingSlip from './pages/AccountingSlip';
 import AdminCode from './pages/AdminCode';
@@ -36,6 +37,7 @@ function App() {
           <Route path='/receipts' element={<Receipts />} />
           <Route path='/receipts/:id' element={<ReceiptsMonth />} />
           <Route path='/receipts/:id/:id' element={<ReceiptsDetail />} />
+          <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/ocr' element={<Ocr />} />
           {/* <Route path='/ocr-call' element={<OcrCall />} /> */}
           <Route path='/send-img' element={<SendImg />} /> {/* 테스트용 */}
