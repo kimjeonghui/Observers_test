@@ -68,12 +68,12 @@ export default function Summary(props) {
   const currentDate = new Date();
   const [year, setYear] = useState(currentDate.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth() + 1);
-  const [fiscalMonth, setFiscalMonth] = useState(year + currentMonth);
+  const [fiscalMonth, setFiscalMonth] = useState();
   const user = useRecoilValue(userState);
 
   const handleGetSummary = () => {
     axios
-      .get(requests.GET_SUMMARY(1, 111))
+      .get(requests.GET_SUMMARY(1, fiscalMonth))
       .then((res) => {
         console.log(res);
         setSummary(res.data.summary);
@@ -84,10 +84,26 @@ export default function Summary(props) {
       });
   };
 
+  const handleFiscalMonth = () => {
+    if (currentMonth < 10) setFiscalMonth(year + '-0' + currentMonth);
+    else setFiscalMonth(year + '-' + currentMonth);
+
+    console.log(fiscalMonth);
+  };
+
   useEffect(() => {
     if (user.ovsCd) setOvsCd(user.ovsCd);
-    handleGetSummary();
+    // handleFiscalMonth();
+    // handleGetSummary();
   }, []);
+
+  useEffect(() => {
+    handleGetSummary();
+  }, [ovsCd, fiscalMonth]);
+
+  useEffect(() => {
+    handleFiscalMonth();
+  }, [year, currentMonth]);
   return (
     <div style={{ padding: '10px 36px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
