@@ -99,7 +99,9 @@ public class SummaryServiceImpl implements SummaryService {
     @Override
     public SummaryResponseDTO getSummaryContents(String ovsCd, String fiscalMonth) {
         SummaryEntity summaryEntity = summaryRepository.findByOvsCdAndFiscalMonth(ovsCd, fiscalMonth);
-
+        if(summaryEntity==null){
+            return null;
+        }
         List<SummaryContentsEntity> contentsEntities = summaryContentsRepository.findAllBySummaryId(summaryEntity.getSummaryId());
         List<SummaryContentDTO> summaryContentDTOList = new ArrayList<>();
         for(SummaryContentsEntity summaryContentsEntity: contentsEntities){
