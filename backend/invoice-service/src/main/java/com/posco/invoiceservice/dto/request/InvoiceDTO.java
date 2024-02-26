@@ -25,6 +25,7 @@ public class InvoiceDTO {
     private BigDecimal deposit;         // 입금 금액
     private String wdCurr;              // 출금 통화
     private BigDecimal withdrawal;      // 출금 금액
+    private Long ocrId;                 // ocr 아이디
     @NotNull
     private String tranCd;             // 식별 코드
     @NotNull

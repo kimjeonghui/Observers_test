@@ -81,19 +81,17 @@ function InvoiceCalendar(props) {
       <Typography sx={{ paddingX: '32px', fontSize: '28px' }}>
         {currentMonthString} , {year}
       </Typography>
-      {isNext ? (
-        <Button
-          onClick={onClickNextBtn}
-          width='50px'
-          color={theme.palette.posco_white}
-          fontColor={theme.palette.posco_black}
-          hoverColor={theme.palette.posco_gray_100}
-        >
-          <ChevronRightIcon />
-        </Button>
-      ) : (
-        <div>{}</div>
-      )}
+
+      <Button
+        onClick={onClickNextBtn}
+        width='50px'
+        color={theme.palette.posco_white}
+        fontColor={theme.palette.posco_black}
+        hoverColor={theme.palette.posco_gray_100}
+        disabled={!isNext}
+      >
+        <ChevronRightIcon />
+      </Button>
     </div>
   );
 }
