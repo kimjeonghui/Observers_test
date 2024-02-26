@@ -668,7 +668,7 @@ export default function AccountingSlipTable(props) {
       <Paper sx={{ width: '100%', overflow: 'hidden', mb: 2 }}>
         <EnhancedTableToolbar />
         <TableContainer sx={{ height: '60vh' }}>
-          <Table>
+          <Table sx={{ minWidth: { xs: '90vw', sm: '80vw', md: '50vw' } }}>
             <TableHead
               stickyHeader
               aria-label='sticky table'
