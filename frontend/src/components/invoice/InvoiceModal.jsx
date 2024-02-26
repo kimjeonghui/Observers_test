@@ -21,6 +21,7 @@ import CustomButton from '../global/Button';
 import ModalInput from '../global/ModalInput';
 import invoiceRq from '../../api/invoiceConfig';
 import ocrRq from '../../api/ocrConfig';
+import exchangeRq from '../../api/exchangeRateConfig';
 
 export default function InvoiceModal(props) {
   const { open, setOpen, user, getInvoiceData } = props;
@@ -126,6 +127,7 @@ export default function InvoiceModal(props) {
       fiscalMonth += '0' + (today.getMonth() + 1).toString();
     }
 
+    // Todo:환율도 api로 불러와서 넣어주세요!
     const data = {
       ovsCd: user.ovsCd,
       fiscalMonth,
