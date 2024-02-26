@@ -11,7 +11,6 @@ import lombok.Setter;
 @Setter
 @Builder
 public class OcrDTO {
-//    private Long ocrId;               // OCR 자료 id
     private String storeName;       // 거래처 명
     private String purDate;         // 거래 일자
     private Double totalVal;      // 총 금액

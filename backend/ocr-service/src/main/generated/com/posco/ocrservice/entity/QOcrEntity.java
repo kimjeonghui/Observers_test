@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -26,6 +27,8 @@ public class QOcrEntity extends EntityPathBase<OcrEntity> {
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
+
+    public final ListPath<OcrDetailEntity, QOcrDetailEntity> detailList = this.<OcrDetailEntity, QOcrDetailEntity>createList("detailList", OcrDetailEntity.class, QOcrDetailEntity.class, PathInits.DIRECT2);
 
     //inherited
     public final StringPath lastUpdatedBy = _super.lastUpdatedBy;

@@ -1,7 +1,10 @@
 package com.posco.ocrservice.controller;
 
 import com.posco.ocrservice.dto.request.OcrDTO;
+import com.posco.ocrservice.dto.request.OcrDetailDTO;
+import com.posco.ocrservice.entity.OcrDetailEntity;
 import com.posco.ocrservice.entity.OcrEntity;
+import com.posco.ocrservice.repository.OcrDetailRepository;
 import com.posco.ocrservice.repository.OcrRepository;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -24,7 +27,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,6 +43,8 @@ public class OcrController {
 
     @Autowired
     private OcrRepository ocrRepository;
+    @Autowired
+    private OcrDetailRepository ocrDetailRepository;
 
     // 이미지 받아오기
     @PostMapping("/upload")
@@ -46,7 +53,6 @@ public class OcrController {
             // 이미지 처리
             // Convert MultipartFile to Base64
             String base64Image = convertMultipartFileToBase64(file);
-//            System.out.println(base64Image);
 
             // OCR 분석
             sendPostRequest(base64Image);
@@ -91,6 +97,7 @@ public class OcrController {
         // POST 요청 보내기
         String apiUrl = OCR_POST_URL;
 
+        // 받은 응답
         ClientResponse clientResponse = webClient.post()
                 .uri(apiUrl)
                 .headers(httpHeaders -> httpHeaders.addAll(headers))
@@ -129,6 +136,7 @@ public class OcrController {
         // GET 요청 보내기
         String apiUrl = OCR_GET_URI1 + resultId + OCR_GET_URI2;
 
+        // 받은 응답
         Mono<String> responseBody = webClient.get()
                 .uri(apiUrl)
                 .headers(httpHeaders -> httpHeaders.addAll(headers))
@@ -141,24 +149,34 @@ public class OcrController {
                     response -> {
                         System.out.println("GET 요청 성공: " + response);
 
-                        // 데이터 파싱하여 DB에 저장
                         OcrDTO ocrDTO = jsonParsing(response);
+
 
                         // DTO를 Entity로 변환
                         OcrEntity ocrEntity = ocrDTO.toEntity(ocrDTO);
-//                        System.out.println(ocrEntity.toString());
+
+//                        OcrDetailDTO ocrDetailDTO = new OcrDetailDTO(null, null, null, null, ocrEntity.getOcrId());
+//                        OcrDetailDTO ocrDetailDTO = detailJsonParsing(response, ocrEntity);
+//                        OcrDetailEntity ocrDetailEntity = ocrDetailDTO.toEntity(ocrDetailDTO);
 
                         // Repository에게 Entity를 DB로 저장하게 함
                         OcrEntity ocrSaved = ocrRepository.save(ocrEntity);
-//                        System.out.println("----");
+                        System.out.println("ocr id: " + ocrSaved.getOcrId());
+                        List<OcrDetailDTO> ocrDetailDTOList = detailJsonParsing(response, ocrSaved);
+                        for(int i=0; i<ocrDetailDTOList.size(); i++){
+                            ocrDetailDTOList.get(i).setOcrId(ocrSaved.getOcrId());
+                            OcrDetailEntity entity = OcrDetailDTO.toEntity(ocrDetailDTOList.get(i) );
+                            entity.setOcrEntity(ocrSaved);
+                            ocrDetailRepository.save(entity);
+                        }
+
+
                         System.out.println(ocrSaved.toString());
+//                        OcrDetailEntity ocrDetailSaved = ocrDetailRepository.save(ocrDetailEntity);
+//                        System.out.println(ocrDetailSaved.toString());
 
                         // 프론트로 전송
 
-                        // 확인용
-//                        System.out.println(ocrDTO.getStoreName());
-//                        System.out.println(ocrDTO.getPurDate());
-//                        System.out.println(ocrDTO.getTotalVal());
                     },
                     error -> System.err.println("GET 요청 실패: " + error.getMessage())
             );
@@ -168,9 +186,17 @@ public class OcrController {
     }
 
     public OcrDTO jsonParsing(String response) {
+        // ocr entity
         String storeName = null;
         String purDate = null;
         Double totalPrice = null;
+
+        // ocr detail entity
+        String description = null;
+        Double unitPrice = null;
+        Double sumPrice = null;
+        Long count = null;
+        OcrDetailEntity ocrDetailEntity;
 
         try {
             JSONParser jsonParser = new JSONParser();
@@ -211,6 +237,48 @@ public class OcrController {
 
                     // Items 내부의 valueArray 배열 가져오기
                     JSONArray valueArray = (JSONArray) items.get("valueArray");
+                }
+            }
+        } catch (ParseException e) {
+            // ParseException이 발생했을 때 처리
+            e.printStackTrace();
+        }
+
+        OcrDTO ocrDTO = new OcrDTO(storeName, purDate, totalPrice);
+
+
+        return ocrDTO;
+    }
+
+    public List<OcrDetailDTO> detailJsonParsing(String response, OcrEntity ocrEntity) {
+        System.out.println(response);
+        String description = null;
+        Double unitPrice = null;
+        Double sumPrice = null;
+        Long count = null;
+        List<OcrDetailDTO> ocrDetailDTOList =new ArrayList<>();
+
+        try {
+            JSONParser jsonParser = new JSONParser();
+            JSONObject jsonObject = (JSONObject) jsonParser.parse(response);
+
+            Object analyzeResultObject = jsonObject.get("analyzeResult");
+            JSONObject analyzeResult = (JSONObject) analyzeResultObject;
+            JSONArray documents = (JSONArray) analyzeResult.get("documents");
+
+            // documents 배열 순회
+            for (Object documentObject : documents) {
+                if (documentObject instanceof JSONObject) {
+                    JSONObject document = (JSONObject) documentObject;
+
+                    // document 내부의 fields 객체 가져오기
+                    JSONObject fields = (JSONObject) document.get("fields");
+
+                    // fields 내부의 Items 객체 가져오기
+                    JSONObject items = (JSONObject) fields.get("Items");
+
+                    // Items 내부의 valueArray 배열 가져오기
+                    JSONArray valueArray = (JSONArray) items.get("valueArray");
 
                     // valueArray 배열 순회
                     for (Object itemObject : valueArray) {
@@ -223,29 +291,32 @@ public class OcrController {
 
                             // Description
                             JSONObject descriptionObject = (JSONObject) valueObject.get("Description");
-                            String description = (String) descriptionObject.get("content");
+                            description = (String) descriptionObject.get("content");
                             System.out.println("===description===");
                             System.out.println(description);
 
-                            // Price
+                            // unitPrice
                             JSONObject priceObject = (JSONObject) valueObject.get("Price");
-                            Double price = (Double) priceObject.get("valueNumber");
-                            System.out.println("===price===");
-                            System.out.println(price);
+                            unitPrice = (Double) priceObject.get("valueNumber");
+                            System.out.println("===unitPrice===");
+                            System.out.println(unitPrice);
 
                             // Quantity
-                            JSONObject quantityObject = (JSONObject) valueObject.get("Quantity");
-                            Long quantity = (Long) quantityObject.get("valueNumber");
-                            System.out.println("===quantity===");
-                            System.out.println(quantity);
+                            JSONObject countObject = (JSONObject) valueObject.get("Quantity");
+                            count = (Long) countObject.get("valueNumber");
+                            System.out.println("===count===");
+                            System.out.println(count);
 
-                            // ItemTotalPrice
-                            JSONObject itemTotalPriceObject = (JSONObject) valueObject.get("TotalPrice");
-                            Double itemTotalPrice = (Double) itemTotalPriceObject.get("valueNumber");
-                            System.out.println("===itemTotalPrice===");
-                            System.out.println(itemTotalPrice);
+                            // sumPrice
+                            JSONObject sumPriceObject = (JSONObject) valueObject.get("TotalPrice");
+                            sumPrice = (Double) sumPriceObject.get("valueNumber");
+                            System.out.println("===sumPrice===");
+                            System.out.println(sumPrice);
 
                             System.out.println("------------------------------------");
+
+                            OcrDetailDTO detailDTO = new OcrDetailDTO(description, unitPrice, sumPrice, count, ocrEntity.getOcrId());
+                            ocrDetailDTOList.add(detailDTO);
 
                         }
                     }
@@ -256,8 +327,8 @@ public class OcrController {
             // ParseException이 발생했을 때 처리
             e.printStackTrace();
         }
+        System.out.println(ocrDetailDTOList);
 
-        OcrDTO dto = new OcrDTO(storeName, purDate, totalPrice);
-        return dto;
+        return ocrDetailDTOList;
     }
 }
