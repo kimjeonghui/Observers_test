@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import requests from '../api/officeConfig';
 import AdminOfficeDialog from '../components/admin/AdminOfficeDialog';
 import AdminOfficeModal from '../components/admin/AdminOfficeModal';
 import AdminOfficeUpdate from '../components/admin/AdminOfficeUpdate';
@@ -43,7 +44,7 @@ export default function AdminOffice() {
 
   const fetchData = () => {
     axios
-      .get('http://localhost:8086/admin-office')
+      .get(requests.GET_OFFICE_ALL())
       .then((response) => {
         const { data } = response;
         setTableData(data.referenceList);
@@ -64,7 +65,7 @@ export default function AdminOffice() {
     } else {
       // Fetch reference data for the selected office (선택한 사무실 보여줌)
       axios
-        .get(`http://localhost:8086/admin-office/${selectedOffice}`)
+        .get(requests.GET_OFFICE_LIST_BY_CODE(selectedOffice))
         .then((response) => {
           const { data } = response;
           setTableData([data.reference]);
@@ -103,7 +104,7 @@ export default function AdminOffice() {
     if (deleteRow) {
       // Perform deletion
       axios
-        .delete(`http://localhost:8086/admin-office/${deleteRow.ovsCd}`)
+        .delete(requests.DELETE_OFFICE(deleteRow.ovsCd))
         .then((response) => {
           console.log(response.data);
           fetchData(); // Refetch data after successful deletion
@@ -182,7 +183,11 @@ export default function AdminOffice() {
             </CustomButton>
           </CSVLink>
           {/* <AdminOfficeDialog /> */}
-          <AdminOfficeModal open={open} setOpen={setOpen} />
+          <AdminOfficeModal
+            open={open}
+            setOpen={setOpen}
+            fetchData={fetchData} // Pass fetchData function down to AdminOfficeModal
+          />
           <CustomButton onClick={handleOpenInsert} size='sm'>
             생성
           </CustomButton>
@@ -233,6 +238,7 @@ export default function AdminOffice() {
                             }
                             handleClose={() => handleCloseUpdate(row.ovsCd)}
                             ovsCd={row.ovsCd} // Ensure row.ovsCd is passed to AdminOfficeUpdate
+                            fetchData={fetchData} // Pass fetchData function down to AdminOfficeModal
                           />
                           <EditIcon
                             onClick={() => handleOpenUpdate(row.ovsCd)}
