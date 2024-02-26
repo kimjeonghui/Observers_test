@@ -5,7 +5,7 @@ import { Typography } from '@mui/material';
 import { useTheme } from '@emotion/react';
 
 import Button from '../global/Button';
-function InvoiceCalendar(props) {
+function SummaryCalendar(props) {
   const { currentDate, year, setYear, currentMonth, setCurrentMonth } = props;
 
   // dateRange는 [startDate, endDate] 형태의 배열을 값 가짐
@@ -55,7 +55,6 @@ function InvoiceCalendar(props) {
         else setPossible(false);
         setYear((prevYear) => prevYear + 1);
       }
-      console.log(maxYear + ' ' + maxMonth + ' ' + newMonth);
       if (!possible) {
         if (year === maxYear && newMonth >= maxMonth) setPossible(true);
         else setPossible(false);
@@ -101,4 +100,4 @@ function InvoiceCalendar(props) {
   );
 }
 
-export default InvoiceCalendar;
+export default SummaryCalendar;
