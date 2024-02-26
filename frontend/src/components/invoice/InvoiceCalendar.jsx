@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { Typography } from '@mui/material';
@@ -6,21 +6,17 @@ import { useTheme } from '@emotion/react';
 
 import Button from '../global/Button';
 function InvoiceCalendar(props) {
-  const { setSelectDate } = props;
-  const currentDate = new Date();
-  const [year, setYear] = useState(currentDate.getFullYear());
-  const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth() + 1);
-  const theme = useTheme();
+  const { year, setYear, currentMonth, setCurrentMonth } = props;
+  const [isNext, setIsNext] = useState(false);
 
-  const handleSetSelectDate = () => {
-    let yyyymm = year;
-    let month = currentMonth;
-    if (month < 10) {
-      month = '0' + month;
-    }
-    yyyymm += '-' + month;
-    setSelectDate(() => yyyymm);
-  };
+  useEffect(() => {
+    const date = new Date();
+    if (year === date.getFullYear() && currentMonth === date.getMonth() + 1) {
+      setIsNext(false);
+    } else setIsNext(true);
+  }, [currentMonth]);
+
+  const theme = useTheme();
 
   const getMonthString = (monthNumber) => {
     const monthNames = [
@@ -50,7 +46,6 @@ function InvoiceCalendar(props) {
       }
       return newMonth;
     });
-    handleSetSelectDate();
   };
 
   const onClickNextBtn = () => {
@@ -61,7 +56,6 @@ function InvoiceCalendar(props) {
       }
       return newMonth;
     });
-    handleSetSelectDate();
   };
   return (
     <div
@@ -87,15 +81,19 @@ function InvoiceCalendar(props) {
       <Typography sx={{ paddingX: '32px', fontSize: '28px' }}>
         {currentMonthString} , {year}
       </Typography>
-      <Button
-        onClick={onClickNextBtn}
-        width='50px'
-        color={theme.palette.posco_white}
-        fontColor={theme.palette.posco_black}
-        hoverColor={theme.palette.posco_gray_100}
-      >
-        <ChevronRightIcon />
-      </Button>
+      {isNext ? (
+        <Button
+          onClick={onClickNextBtn}
+          width='50px'
+          color={theme.palette.posco_white}
+          fontColor={theme.palette.posco_black}
+          hoverColor={theme.palette.posco_gray_100}
+        >
+          <ChevronRightIcon />
+        </Button>
+      ) : (
+        <div>{}</div>
+      )}
     </div>
   );
 }
