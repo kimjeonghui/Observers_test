@@ -6,14 +6,21 @@ import { useTheme } from '@emotion/react';
 
 import Button from '../global/Button';
 function InvoiceCalendar(props) {
+  const { setSelectDate } = props;
   const currentDate = new Date();
   const [year, setYear] = useState(currentDate.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth() + 1);
-  // dateRange는 [startDate, endDate] 형태의 배열을 값 가짐
-  const [dateRange, setDateRange] = useState([null, null]);
-  //dateRange 변수를 startDate와 endDate 프로퍼티로 전달
-  const [startDate, endDate] = dateRange;
   const theme = useTheme();
+
+  const handleSetSelectDate = () => {
+    let yyyymm = year;
+    let month = currentMonth;
+    if (month < 10) {
+      month = '0' + month;
+    }
+    yyyymm += '-' + month;
+    setSelectDate(() => yyyymm);
+  };
 
   const getMonthString = (monthNumber) => {
     const monthNames = [
@@ -34,6 +41,7 @@ function InvoiceCalendar(props) {
     return monthNames[monthNumber - 1];
   };
   const currentMonthString = getMonthString(currentMonth);
+
   const onClickPreBtn = () => {
     setCurrentMonth((prevMonth) => {
       const newMonth = (prevMonth - 1 + 12) % 12 || 12;
@@ -42,6 +50,7 @@ function InvoiceCalendar(props) {
       }
       return newMonth;
     });
+    handleSetSelectDate();
   };
 
   const onClickNextBtn = () => {
@@ -52,6 +61,7 @@ function InvoiceCalendar(props) {
       }
       return newMonth;
     });
+    handleSetSelectDate();
   };
   return (
     <div

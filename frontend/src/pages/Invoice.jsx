@@ -20,7 +20,7 @@ export default function Invoice(props) {
   const [eviModalopen, setEviModalOpen] = useState(false);
   const [isCalc, setIsCalc] = useState(false);
   const [eviData, setEviData] = useState([]);
-  const [selectDate, setSelectDate] = useState(new Date());
+  const [selectDate, setSelectDate] = useState(null);
   const tabMenus = ['당월 입력 조회', '엑셀 입력'];
   const [invoiceData, setInvoiceData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,23 +28,29 @@ export default function Invoice(props) {
 
   useEffect(() => {
     getInvoiceData();
+    console.log('바뀐거 감지중', selectDate);
   }, [selectDate]);
 
   const getInvoiceData = () => {
     let ovsCd = user.ovsCd;
-    let fiscalMonth = selectDate.getFullYear().toString() + '-';
-    let month = selectDate.getMonth();
-    if (month >= 9) {
-      fiscalMonth += (selectDate.getMonth() + 1).toString();
-    } else {
-      fiscalMonth += '0' + (selectDate.getMonth() + 1).toString();
-    }
+    let fiscalMonth;
+    if (selectDate === null) {
+      const tmpDate = new Date();
+      fiscalMonth = tmpDate.getFullYear().toString() + '-';
+      let month = tmpDate.getMonth();
+      if (month >= 9) {
+        fiscalMonth += (tmpDate.getMonth() + 1).toString();
+      } else {
+        fiscalMonth += '0' + (tmpDate.getMonth() + 1).toString();
+      }
+    } else fiscalMonth = selectDate;
 
     axios
       .get(requests.GET_IVOICE_LIST(ovsCd, fiscalMonth))
       .then((response) => {
         if (response.status === 200) {
           const data = response.data.invoiceList;
+          console.log('data받아옴' + data);
           setInvoiceData(data);
         }
       })
@@ -147,7 +153,7 @@ export default function Invoice(props) {
               </div>
             </div>
           )}
-          <InvoiceCalendar />
+          <InvoiceCalendar setSelectDate={setSelectDate} />
           <InvoiceTable
             rows={invoiceData}
             setEviData={setEviData}
