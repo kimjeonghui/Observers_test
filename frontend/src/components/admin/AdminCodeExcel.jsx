@@ -14,13 +14,17 @@ export default function AdminCodeExcel(props) {
   const { user } = props;
   const columnLabels = [
     '거래일자',
-    '거래처명',
-    '입금통화',
-    '입금금액',
-    '출금통화',
-    '출금금액',
     '식별코드',
-    '거래내역',
+    '계정명',
+    '계정코드',
+    '보조계정',
+    '입출금구분',
+    '부서코드필수여부',
+    '대분류',
+    '중분류',
+    '소분류',
+    '적요설명',
+    '비고',
   ];
   const [data, setData] = useState([[], [], [], [], [], [], [], [], [], []]);
   const selectFile = useRef();
@@ -33,24 +37,32 @@ export default function AdminCodeExcel(props) {
 
   const headers = [
     { label: '거래일자', key: 'txDate' },
-    { label: '거래처명', key: 'store' },
-    { label: '입금통화', key: 'depCurr' },
-    { label: '입금금액', key: 'deposit' },
-    { label: '출금통화', key: 'wdCurr' },
-    { label: '출금금액', key: 'withdrawal' },
     { label: '식별코드', key: 'tranCd' },
-    { label: '거래내역', key: 'description' },
+    { label: '계정명', key: 'accountName' },
+    { label: '계정코드', key: 'account' },
+    { label: '보조계정', key: 'subAccount' },
+    { label: '입출금구분', key: 'depositCd' },
+    { label: '부서코드필수여부', key: 'deptReqFlag' },
+    { label: '대분류', key: 'majorCt' },
+    { label: '중분류', key: 'mediumCt' },
+    { label: '소분류', key: 'minorCt' },
+    { label: '적요설명', key: 'description' },
+    { label: '비고', key: 'additionalComment' },
   ];
   const sampleData = [
     {
       tx_date: 'YYYY-MM-DD',
-      store: '',
-      dep_curr: '',
-      deposit: '',
-      wd_curr: '',
-      withdrawal: '',
-      trans_cd: '',
+      tranCd: '',
+      accountName: '',
+      account: '',
+      subAccount: '',
+      depositCd: '',
+      deptReqFlag: '',
+      majorCt: '',
+      mediumCt: '',
+      minorCt: '',
       description: '',
+      additionalComment: '',
     },
   ];
 
