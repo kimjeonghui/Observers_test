@@ -1,4 +1,6 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useRecoilValue } from 'recoil';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -7,9 +9,11 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
-import ConfirmRejectBtn from './ManagerConfirmRejectBtn';
+import SuperuserBtn from './SuperuserBtn';
 import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
+import { userState } from '../../state/UserState';
+
 const columns = [
   {
     id: 'ovs_cd',
@@ -310,11 +314,12 @@ const rows = [
   },
 ];
 
-export default function StickyHeadTable() {
+export default function ApprovalTable(props) {
   const theme = useTheme();
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
-
+  const [invoiceData, setInvoiceData] = useState([]);
+  const user = useRecoilValue(userState);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -353,11 +358,11 @@ export default function StickyHeadTable() {
             <TableBody>
               {rows
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
+                .map((invoiceData) => {
                   return (
-                    <TableRow hover tabIndex={-1} key={row.code}>
+                    <TableRow hover tabIndex={-1} key={invoiceData.code}>
                       {columns.map((column) => {
-                        const value = row[column.id];
+                        const value = invoiceData[column.id];
                         return (
                           <TableCell
                             key={column.id}
@@ -403,7 +408,7 @@ export default function StickyHeadTable() {
           marginTop: '20px', // 원하는 margin-top 값 설정
         }}
       />
-      <ConfirmRejectBtn />
+      {user.role === 'SUPER_USER' && <SuperuserBtn />}
     </Box>
   );
 }
