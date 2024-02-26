@@ -38,7 +38,6 @@ import java.util.regex.Pattern;
 
 @CrossOrigin(origins = "${react.url}")
 @Controller
-//@RequestMapping("/ocr-data")
 public class OcrController {
     @Autowired
     private OcrService ocrService;
@@ -49,4 +48,3 @@ public class OcrController {
         return new ResponseEntity<>(ocrData, HttpStatus.OK);
     }
 }
-
