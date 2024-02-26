@@ -54,7 +54,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'ovs_cd',
+    id: 'ovsCd',
     numeric: false,
     disablePadding: true,
     label: '사무소코드',
@@ -67,10 +67,10 @@ const headCells = [
     disablePadding: false,
     label: '순번',
     minWidth: 60,
-    isSort: true,
+    isSort: false,
   },
   {
-    id: 'fiscal_month',
+    id: 'fiscalMonth',
     numeric: false,
     disablePadding: false,
     label: '회계월',
@@ -78,7 +78,7 @@ const headCells = [
     isSort: false,
   },
   {
-    id: 'tx_date',
+    id: 'txDate',
     numeric: true,
     disablePadding: true,
     label: '거래일자',
@@ -94,7 +94,7 @@ const headCells = [
     isSort: true,
   },
   {
-    id: 'dep_curr',
+    id: 'depCurr',
     numeric: false,
     disablePadding: true,
     label: '입금통화',
@@ -110,7 +110,7 @@ const headCells = [
     isSort: true,
   },
   {
-    id: 'wd_curr',
+    id: 'wdCurr',
     numeric: false,
     disablePadding: true,
     label: '출금통화',
@@ -126,7 +126,7 @@ const headCells = [
     isSort: true,
   },
   {
-    id: 'trans_cd',
+    id: 'tranCd',
     numeric: false,
     disablePadding: true,
     label: '식별코드',
@@ -140,7 +140,7 @@ const headCells = [
     minWidth: 120,
   },
   {
-    id: 'trans_amount',
+    id: 'transAmount',
     numeric: false,
     disablePadding: true,
     label: '환산금액',
@@ -148,7 +148,7 @@ const headCells = [
     isSort: true,
   },
   {
-    id: 'sup_evidence',
+    id: 'supEvidence',
     numeric: false,
     disablePadding: true,
     label: '증빙자료',
