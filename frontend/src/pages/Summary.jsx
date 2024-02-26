@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useRecoilValue } from 'recoil';
 
 import {
@@ -9,7 +9,9 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Button,
 } from '@mui/material';
+import { useReactToPrint } from 'react-to-print';
 import OfficeSelector from '../components/global/OfficeSelector';
 import SummaryCalendar from '../components/summary/SummaryCalendar';
 import requests from '../api/summaryConfig';
@@ -74,6 +76,19 @@ export default function Summary(props) {
   const [curMinor, setCurMinor] = useState('');
   const user = useRecoilValue(userState);
 
+  const componentRef = useRef();
+
+  /* 클릭 이벤트 */
+  const onClickEvent = () => {
+    // 프린트 함수 호출
+    handlePrint();
+  };
+
+  /* print */
+  const handlePrint = useReactToPrint({
+    content: () => componentRef.current,
+    documentTitle: '파일명',
+  });
   const handleGetSummary = () => {
     axios
       .get(requests.GET_SUMMARY(ovsCd, fiscalMonth))
@@ -119,7 +134,7 @@ export default function Summary(props) {
   }, [currentMonth]);
 
   return (
-    <div style={{ padding: '10px 36px' }}>
+    <div style={{ padding: '10px 36px' }} ref={componentRef}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
         <h2>월 총괄표</h2>
         <OfficeSelector curV={ovsCd} setCurV={setOvsCd} />
@@ -131,6 +146,9 @@ export default function Summary(props) {
         currentMonth={currentMonth}
         setCurrentMonth={setCurrentMonth}
       />
+      <Button alignItems='right' onClick={onClickEvent}>
+        프린트 하기
+      </Button>
       <Paper sx={{ width: '100%', overflow: 'hidden' }}>
         <TableContainer sx={{ maxHeight: 700 }}>
           <Table sx={{ minWidth: 700 }} stickyHeader aria-label='sticky table'>
