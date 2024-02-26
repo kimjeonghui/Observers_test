@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,13 +31,15 @@ public class OcrEntity extends BaseEntity {
     @Column(nullable = false)
     private Double totalVal;        // 총 금액
 
+    @OneToMany(mappedBy = "ocrEntity")
+    private List<OcrDetailEntity> detailList;
+
     public static OcrDTO toDTO(OcrEntity ocrEntity) {
         return OcrDTO.builder()
                 .storeName(ocrEntity.getStoreName())
                 .purDate(ocrEntity.getPurDate())
                 .totalVal(ocrEntity.getTotalVal())
                 .build();
-//        return new OcrDTO(ocrEntity.getStoreName(), ocrEntity.getPurDate(), ocrEntity.getTotalVal());
     }
 
     @Override

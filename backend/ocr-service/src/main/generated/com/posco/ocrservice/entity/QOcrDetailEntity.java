@@ -30,8 +30,6 @@ public class QOcrDetailEntity extends EntityPathBase<OcrDetailEntity> {
 
     public final QOcrEntity ocrEntity;
 
-    public final NumberPath<Long> ocrId = createNumber("ocrId", Long.class);
-
     public final NumberPath<Double> sumPrice = createNumber("sumPrice", Double.class);
 
     public final NumberPath<Double> unitPrice = createNumber("unitPrice", Double.class);
