@@ -1,6 +1,5 @@
 package com.posco.invoiceservice.controller;
 
-import com.posco.invoiceservice.dto.request.GetInvoiceListDTO;
 import com.posco.invoiceservice.dto.request.InvoiceDTO;
 import com.posco.invoiceservice.dto.response.InvoiceResponseDTO;
 import com.posco.invoiceservice.entity.InvoiceDataEntity;

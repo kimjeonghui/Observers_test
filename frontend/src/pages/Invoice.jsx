@@ -20,32 +20,38 @@ export default function Invoice(props) {
   const [eviModalopen, setEviModalOpen] = useState(false);
   const [isCalc, setIsCalc] = useState(false);
   const [eviData, setEviData] = useState([]);
-  const [selectDate, setSelectDate] = useState(new Date());
   const tabMenus = ['당월 입력 조회', '엑셀 입력'];
   const [invoiceData, setInvoiceData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const user = useRecoilValue(userState);
 
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
+  const [fiscalMonth, setFiscalMonth] = useState();
+  const user = useRecoilValue(userState);
+  const ovsCd = user.ovsCd;
   useEffect(() => {
     getInvoiceData();
-  }, [selectDate]);
+  }, [fiscalMonth]);
+
+  useEffect(() => {
+    handleFiscalMonth();
+  }, [year, currentMonth]);
+
+  const handleFiscalMonth = () => {
+    if (currentMonth < 10) setFiscalMonth(year + '-0' + currentMonth);
+    else setFiscalMonth(year + '-' + currentMonth);
+  };
 
   const getInvoiceData = () => {
-    let ovsCd = user.ovsCd;
-    let fiscalMonth = selectDate.getFullYear().toString() + '-';
-    let month = selectDate.getMonth();
-    if (month >= 9) {
-      fiscalMonth += (selectDate.getMonth() + 1).toString();
-    } else {
-      fiscalMonth += '0' + (selectDate.getMonth() + 1).toString();
-    }
-
+    handleFiscalMonth();
     axios
       .get(requests.GET_IVOICE_LIST(ovsCd, fiscalMonth))
       .then((response) => {
         if (response.status === 200) {
           const data = response.data.invoiceList;
           setInvoiceData(data);
+        } else if (response.status === 204) {
+          setInvoiceData([]);
         }
       })
       .catch((err) => {
@@ -147,7 +153,12 @@ export default function Invoice(props) {
               </div>
             </div>
           )}
-          <InvoiceCalendar />
+          <InvoiceCalendar
+            year={year}
+            setYear={setYear}
+            currentMonth={currentMonth}
+            setCurrentMonth={setCurrentMonth}
+          />
           <InvoiceTable
             rows={invoiceData}
             setEviData={setEviData}

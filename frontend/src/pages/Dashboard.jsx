@@ -1,14 +1,14 @@
-import AdminCodeExcel from '../components/admin/AdminCodeExcel';
-import AdminCodeTable from '../components/admin/AdminCodeTable';
 import React, { useState } from 'react';
 import {
   SpanTab,
   ActiveSpanTab,
 } from '../components/dashboard/DashboardStyles';
+import DashboardHome from '../components/dashboard/DashboardHome';
+import DashboardOcr from '../components/dashboard/DashboardOcr';
 
-function AdminCode() {
+function Dashboard() {
   const [activeTab, setActiveTab] = useState(0);
-  const tabMenus = ['Table', 'Excel']; // Define your tab names here
+  const tabMenus = ['HOME', 'OCR']; // Define your tab names here
 
   const handleTabChange = (idx) => {
     setActiveTab(idx);
@@ -30,11 +30,11 @@ function AdminCode() {
         )}
       </div>
       <div>
-        {activeTab === 0 ? <AdminCodeTable /> : null}
-        {activeTab === 1 ? <AdminCodeExcel /> : null}
+        {activeTab === 0 ? <DashboardHome /> : null}
+        {activeTab === 1 ? <DashboardOcr /> : null}
       </div>
     </div>
   );
 }
 
-export default AdminCode;
+export default Dashboard;
