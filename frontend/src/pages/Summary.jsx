@@ -68,12 +68,15 @@ export default function Summary(props) {
   const currentDate = new Date();
   const [year, setYear] = useState(currentDate.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth() + 1);
-  const [fiscalMonth, setFiscalMonth] = useState();
+  const [fiscalMonth, setFiscalMonth] = useState('');
+  const [curMajor, setCurMajor] = useState('');
+  const [curMedium, setCurMedium] = useState('');
+  const [curMinor, setCurMinor] = useState('');
   const user = useRecoilValue(userState);
 
   const handleGetSummary = () => {
     axios
-      .get(requests.GET_SUMMARY(1, fiscalMonth))
+      .get(requests.GET_SUMMARY(ovsCd, fiscalMonth))
       .then((res) => {
         console.log(res);
         setSummary(res.data.summary);
@@ -91,19 +94,30 @@ export default function Summary(props) {
     console.log(fiscalMonth);
   };
 
+  const handleMajor = (major) => {
+    if (major === curMajor) return '';
+    else {
+      setCurMajor(major);
+      return major;
+    }
+  };
+
   useEffect(() => {
     if (user.ovsCd) setOvsCd(user.ovsCd);
+    // setYear();
+    // setCurrentMonth(currentDate.getMonth() + 1);
     // handleFiscalMonth();
     // handleGetSummary();
   }, []);
 
   useEffect(() => {
-    handleGetSummary();
+    if (fiscalMonth.length === 7) handleGetSummary();
   }, [ovsCd, fiscalMonth]);
 
   useEffect(() => {
     handleFiscalMonth();
-  }, [year, currentMonth]);
+  }, [currentMonth]);
+
   return (
     <div style={{ padding: '10px 36px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -140,31 +154,40 @@ export default function Summary(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {summary?.contents?.map((row, idx) => (
-                <TableRow key={idx}>
-                  <TableCell align='center'>{row.majorCt}</TableCell>
-                  <TableCell align='center'>{row.mediumCt}</TableCell>
-                  <TableCell align='center'>{row.minorCt}</TableCell>
-                  <TableCell align='center'>{row.tranCd}</TableCell>
-                  <TableCell align='center'>{row.loc}</TableCell>
-                  <TableCell align='center'>{row.trans}</TableCell>
-                  <TableCell align='center'>{row.note}</TableCell>
-                </TableRow>
-              ))}
-              {/* <TableRow>
-                <TableCell rowSpan={3} />
-                <TableCell colSpan={2}>Subtotal</TableCell>
-                <TableCell align='right'></TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell>Tax</TableCell>
-                <TableCell align='right'>{`${(TAX_RATE * 100).toFixed(0)} %`}</TableCell>
-                <TableCell align='right'></TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell colSpan={2}>Total</TableCell>
-                <TableCell align='right'></TableCell>
-              </TableRow> */}
+              {/* 분류 기준으로 정렬하고 이전이랑 같으면 안보이게 */}
+              {summary?.contents
+                ?.sort((a, b) => {
+                  if (a.majorCt !== b.majorCt) {
+                    return a.majorCt.localeCompare(b.majorCt);
+                  } else if (a.mediumCt !== b.mediumCt) {
+                    return a.mediumCt.localeCompare(b.mediumCt);
+                  } else {
+                    return a.minorCt.localeCompare(b.minorCt);
+                  }
+                })
+                .map((row, idx, arr) => (
+                  <TableRow key={idx}>
+                    {arr[idx - 1]?.majorCt === row.majorCt ? (
+                      <TableCell align='center'></TableCell>
+                    ) : (
+                      <TableCell align='center'>{row.majorCt}</TableCell>
+                    )}
+                    {arr[idx - 1]?.mediumCt === row.mediumCt ? (
+                      <TableCell align='center'></TableCell>
+                    ) : (
+                      <TableCell align='center'>{row.mediumCt}</TableCell>
+                    )}
+                    {arr[idx - 1]?.minorCt === row.minorCt ? (
+                      <TableCell align='center'></TableCell>
+                    ) : (
+                      <TableCell align='center'>{row.minorCt}</TableCell>
+                    )}
+                    <TableCell align='center'>{row.tranCd}</TableCell>
+                    <TableCell align='center'>{row.loc}</TableCell>
+                    <TableCell align='center'>{row.trans}</TableCell>
+                    <TableCell align='center'>{row.note}</TableCell>
+                  </TableRow>
+                ))}
             </TableBody>
           </Table>
         </TableContainer>
