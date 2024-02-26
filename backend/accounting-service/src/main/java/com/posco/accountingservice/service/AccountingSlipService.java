@@ -60,7 +60,7 @@ public class AccountingSlipService {
 
                     invoiceNumEntity.setInvoiceDataEntity(invoiceData);
                     invoiceData.setAccountingSlipInvoiceNum(invoiceNumEntity);
-                  //  invoiceNumRepository.save(invoiceNumEntity);
+                    //  invoiceNumRepository.save(invoiceNumEntity);
                     invoiceNumEntityList.add(invoiceNumEntity);
                 } catch (Exception e) {
                     // 중복 예외 처리
@@ -105,7 +105,7 @@ public class AccountingSlipService {
                         String.valueOf(GLcodeEnum.getValuesByCode(invoiceDataEntity.getTranCd()).get(1)))
                 .amount(amount1)
                 .drCr(1L)
-                .txNum(invoiceDataEntity.getAccountingSlipInvoiceNum().getTxNum())
+                .txNum(invoiceDataEntity.getAccountingSlipInvoiceNum().getTxNum()+1)
                 .currCode(currCode)
                 .krwAmount(invoiceDataEntity.getTransAmount())
                 .exchangeRate(invoiceDataEntity.getExchangeRate())
@@ -121,7 +121,7 @@ public class AccountingSlipService {
                 .txCd(txCd2)
                 .amount(amount1.negate())
                 .drCr(1L)
-                .txNum(invoiceDataEntity.getAccountingSlipInvoiceNum().getTxNum())
+                .txNum(invoiceDataEntity.getAccountingSlipInvoiceNum().getTxNum()+1)
                 .currCode(currCode)
                 .krwAmount(invoiceDataEntity.getTransAmount().negate())
                 .exchangeRate(invoiceDataEntity.getExchangeRate())
@@ -137,7 +137,7 @@ public class AccountingSlipService {
                 .amount(BigDecimal.valueOf(0))
                 .txCd(invoiceDataEntity.getTranCd())
                 .drCr(0L)
-                .txNum(invoiceDataEntity.getAccountingSlipInvoiceNum().getTxNum())
+                .txNum(invoiceDataEntity.getAccountingSlipInvoiceNum().getTxNum()+1)
                 .currCode(currCode)
                 .krwAmount(BigDecimal.valueOf(0))
                 .exchangeRate((float) 0)
@@ -171,10 +171,10 @@ public class AccountingSlipService {
     public List<AccountingSlipEntity> createAccountingSlip(String ovsCd, String month){
         List<AccountingSlipInvoiceNumEntity> invoiceList = createInvoiceList(ovsCd, month);
         List<AccountingSlipEntity> accountingSlipEntityList =new ArrayList<>();
-       for(int i=0; i<invoiceList.size(); i++){
-           System.out.println(invoiceList.get(i).getInvoiceNum());
-           accountingSlipEntityList.addAll(creatAccountingSlip(invoiceList.get(i).getInvoiceDataEntity()));
-       }
+        for(int i=0; i<invoiceList.size(); i++){
+            System.out.println(invoiceList.get(i).getInvoiceNum());
+            accountingSlipEntityList.addAll(creatAccountingSlip(invoiceList.get(i).getInvoiceDataEntity()));
+        }
         return accountingSlipEntityList;
     }
 
@@ -182,7 +182,7 @@ public class AccountingSlipService {
     //회계전표 읽기
     public List<AccountingSlipDTO> findAccoutingSlipList(String ovsCd, String fiscalMonth){
         List<AccountingSlipEntity> accountingSlipEntityList = accountingSlipRepository.findByOvsCdIsAndFiscalMonthIs(ovsCd, fiscalMonth);
-        System.out.println(accountingSlipEntityList.get(0));
+        //System.out.println(accountingSlipEntityList.get(0));
         return accountingSlipEntityList.stream()
                 .map(entity -> AccountingSlipEntity.toDto(entity, entity.getAccountingSlipInvoiceNumEntity().getInvoiceDataEntity()))
                 .collect(Collectors.toList());

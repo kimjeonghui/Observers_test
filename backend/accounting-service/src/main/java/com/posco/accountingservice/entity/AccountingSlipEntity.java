@@ -83,6 +83,8 @@ public class AccountingSlipEntity extends BaseEntity{
                 .invoiceNum(accountingSlip.getAccountingSlipInvoiceNumEntity().getInvoiceNum())
                 .createdBy(invoiceDataEntity.getCreatedBy())
                 .createdDate(invoiceDataEntity.getCreatedDate())
+                .ovsCd(invoiceDataEntity.getOvsCd())
+                .groupId("OAM"+"-"+accountingSlip.fiscalMonth+"-"+accountingSlip.ovsCd)
                 .build();
     }
 }
