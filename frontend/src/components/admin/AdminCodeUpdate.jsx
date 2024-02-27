@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import requests from '../../api/officeConfig';
+import requests from '../../api/glcodeConfig';
 
 import {
   Dialog,
@@ -14,51 +14,36 @@ import { FlexDiv } from './AdminStyles';
 import CustomButton from '../global/Button';
 import ModalInput from '../global/ModalInput';
 
-function AdminOfficeUpdate(props) {
-  const { open, setOpen, ovsCd, fetchData } = props;
+function AdminCodeUpdate(props) {
+  const { open, setOpen, glCodeId, fetchData } = props;
 
   const handleClose = () => {
     setOpen(false);
   };
-
-  // const [tableData, setTableData] = useState([]);
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
-
-  // const fetchData = () => {
-  //   axios
-  //     .get(requests.GET_OFFICE_ALL())
-  //     .then((response) => {
-  //       const { data } = response;
-  //       setTableData(data.referenceList);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Failed fetchData Error fetching data:', error);
-  //     });
-  // };
 
   const [referenceData, setReferenceData] = useState({}); // Initialize with an empty object
 
   useEffect(() => {
     if (open) {
       axios
-        .get(requests.GET_OFFICE_LIST_BY_CODE(ovsCd))
+        .get(requests.GET_GLCODE_BY_ID(glCodeId))
         .then((response) => {
           const { data } = response;
           // Update only specific properties of referenceData
           setReferenceData((prevData) => ({
             ...prevData,
-            ovsCd: data.reference.ovsCd,
-            ovsMeaning: data.reference.ovsMeaning,
-            ovsCopCd: data.reference.ovsCopCd,
-            glCurr: data.reference.glCurr,
-            locCurr: data.reference.locCurr,
-            transCurr: data.reference.transCurr,
-            locCurr2: data.reference.locCurr2,
-            transCurr2: data.reference.transCurr2,
-            startDate: data.reference.startDate,
-            endDate: data.reference.endDate,
+            glCodeId: data.glCode.glCodeId,
+            ovsCd: data.glCode.ovsCd,
+            tranCd: data.glCode.tranCd,
+            accountName: data.glCode.accountName,
+            account: data.glCode.account,
+            subAccount: data.glCode.subAccount,
+            deptReqFlag: data.glCode.deptReqFlag,
+            majorCt: data.glCode.majorCt,
+            mediumCt: data.glCode.mediumCt,
+            minorCt: data.glCode.minorCt,
+            description: data.glCode.description,
+            additionalComment: data.glCode.additionalComment,
             // Add other properties as needed
           }));
         })
@@ -66,7 +51,7 @@ function AdminOfficeUpdate(props) {
           console.error('Error fetching data:', error);
         });
     }
-  }, [open, ovsCd]);
+  }, [open, glCodeId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -78,7 +63,7 @@ function AdminOfficeUpdate(props) {
 
   const handleUpdate = () => {
     axios
-      .put(requests.PUT_OFFICE(), referenceData)
+      .put(requests.PUT_GLCODE_BY_ID(glCodeId), referenceData)
       .then((response) => {
         console.log(response.data);
         alert('업데이트 되었습니다.');
@@ -97,69 +82,85 @@ function AdminOfficeUpdate(props) {
         <DialogContent sx={{ padding: '36px 88px' }}>
           <FlexDiv>
             <ModalInput
+              label='ID'
+              name='glCodeId'
+              value={referenceData.glCodeId}
+              onChange={handleChange}
+            />
+            <ModalInput
               label='사무소코드'
               name='ovsCd'
               value={referenceData.ovsCd}
               onChange={handleChange}
             />
             <ModalInput
-              label='사무소이름'
-              name='ovsMeaning'
-              value={referenceData.ovsMeaning}
+              label='식별코드'
+              name='tranCd'
+              value={referenceData.tranCd}
               onChange={handleChange}
             />
             <ModalInput
-              label='법인코드'
-              name='ovsCopCd'
-              value={referenceData.ovsCopCd}
-              onChange={handleChange}
-            />
-            <ModalInput
-              label='장부통화'
-              name='glCurr'
-              value={referenceData.glCurr}
+              label='계정명'
+              name='accountName'
+              value={referenceData.accountName}
               onChange={handleChange}
             />
           </FlexDiv>
           <FlexDiv>
             <ModalInput
-              label='[기본]현지통화'
-              name='locCurr'
-              value={referenceData.locCurr}
+              label='계정코드'
+              name='account'
+              value={referenceData.account}
               onChange={handleChange}
             />
             <ModalInput
-              label='[기본]송금통화'
-              name='transCurr'
-              value={referenceData.transCurr}
+              label='보조계정'
+              name='subAccount'
+              value={referenceData.subAccount}
               onChange={handleChange}
             />
             <ModalInput
-              label='(추가)현지통화'
-              name='locCurr2'
-              value={referenceData.locCurr2}
+              label='입출금구분'
+              name='depositCd'
+              value={referenceData.depositCd}
               onChange={handleChange}
             />
             <ModalInput
-              label='(추가)송금통화'
-              name='transCurr2'
-              value={referenceData.transCurr2}
+              label='부서코드필수여부'
+              name='deptReqFlag'
+              value={referenceData.deptReqFlag}
               onChange={handleChange}
             />
           </FlexDiv>
           <FlexDiv>
             <ModalInput
-              type='date'
-              label='시작일'
-              value={referenceData.startDate}
-              name='startDate'
+              label='대분류'
+              value={referenceData.majorCt}
+              name='majorCt'
               onChange={handleChange}
             />
             <ModalInput
-              type='date'
-              label='만료일'
-              value={referenceData.endDate}
-              name='endDate'
+              label='중분류'
+              value={referenceData.mediumCt}
+              name='mediumCt'
+              onChange={handleChange}
+            />
+            <ModalInput
+              label='소분류'
+              value={referenceData.minorCt}
+              name='minorCt'
+              onChange={handleChange}
+            />
+            <ModalInput
+              label='적요설명'
+              value={referenceData.description}
+              name='description'
+              onChange={handleChange}
+            />
+            <ModalInput
+              label='비고'
+              value={referenceData.additionalComment}
+              name='additionalComment'
               onChange={handleChange}
             />
             <CustomButton onClick={handleUpdate} size='md'>
@@ -181,4 +182,4 @@ function AdminOfficeUpdate(props) {
   );
 }
 
-export default AdminOfficeUpdate;
+export default AdminCodeUpdate;

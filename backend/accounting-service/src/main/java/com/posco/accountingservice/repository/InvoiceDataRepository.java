@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface InvoiceDataRepository extends JpaRepository<InvoiceDataEntity, Long> {
     public List<InvoiceDataEntity> findAllByOvsCdAndFiscalMonth(String ovsCd, String fiscalMonth);
+    public List<InvoiceDataEntity> findAllByOvsCdAndFiscalMonthAndStatus(String ovsCd, String fiscalMonth, String status);
 }

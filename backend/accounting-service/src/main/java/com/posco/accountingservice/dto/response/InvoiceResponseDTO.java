@@ -1,6 +1,6 @@
-package com.posco.invoiceservice.dto.response;
+package com.posco.accountingservice.dto.response;
 
-import com.posco.invoiceservice.entity.InvoiceDataEntity;
+import com.posco.accountingservice.entity.InvoiceDataEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,8 +30,7 @@ public class InvoiceResponseDTO {
     private BigDecimal transAmount;     // 환산 금액
     private String status;              // 상태
     private Long ocrId;                 // ocr 연결 id
-    private List<EvidenceDTO> evidenceDirs;   // 증빙 자료 경로들
-
+    //private List<EvidenceDTO> evidenceDirs;   // 증빙 자료 경로들
     public static InvoiceResponseDTO toDTO(InvoiceDataEntity invoiceDataEntity){
         return InvoiceResponseDTO.builder()
                 .invoiceId(invoiceDataEntity.getInvoiceDataId())

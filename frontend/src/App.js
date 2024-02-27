@@ -6,9 +6,9 @@ import { loginState } from './state/UserState.jsx';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Invoice from './pages/Invoice';
-import Receipts from './pages/Receipts';
-import ReceiptsMonth from './pages/ReceiptsMonth';
-import ReceiptsDetail from './pages/ReceiptsDetail';
+import Evidence from './pages/Evidence.jsx';
+import EvidenceMonth from './pages/EvidenceMonth.jsx';
+import EvidenceDetail from './pages/EvidenceDetail.jsx';
 import Dashboard from './pages/Dashboard.jsx';
 import ManagerAccountingSlip from './pages/AccountingSlip';
 import AccountingSlip from './pages/AccountingSlip';
@@ -32,9 +32,12 @@ function App() {
           <Route path='/' element={<Home />} />
           <Route path='/login' element={<Login />} />
           <Route path='/invoice' element={<Invoice />} />
-          <Route path='/receipts' element={<Receipts />} />
-          <Route path='/receipts/:id' element={<ReceiptsMonth />} />
-          <Route path='/receipts/:id/:id' element={<ReceiptsDetail />} />
+          <Route path='/evidence' element={<Evidence />} />
+          <Route path='/evidence/:month' element={<EvidenceMonth />} />
+          <Route
+            path='/evidence/:month/:evidence-id'
+            element={<EvidenceDetail />}
+          />
           <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/send-img' element={<SendImg />} /> {/* 테스트용 */}
           <Route

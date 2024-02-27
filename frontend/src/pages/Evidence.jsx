@@ -6,7 +6,7 @@ import FolderIcon from '@mui/icons-material/Folder';
 import { Box } from '@mui/material';
 import axios from 'axios';
 
-export default function Receipts(props) {
+export default function Evidence() {
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -21,24 +21,24 @@ export default function Receipts(props) {
     '2024-02',
   ];
 
-  const handleButtonClick = (id) => {
+  const handleButtonClick = (month) => {
     // 폴더 내부로 이동
-    navigate(`/receipts/${id}`);
+    navigate(`/evidence/${month}`);
 
     // POST 호출
-    const serverUrl = process.env.REACT_APP_OCR_SERVER_URL;
-    axios
-      .post(`${serverUrl}/${id}`)
-      .then((response) => {
-        // 3. Handle the response as needed
-        console.log('POST request successful:', response.data);
+    // const serverUrl = process.env.REACT_APP_OCR_SERVER_URL;
+    // axios
+    //   .post(`${serverUrl}/${month}`)
+    //   .then((response) => {
+    //     // 3. Handle the response as needed
+    //     console.log('POST request successful:', response.data);
 
-        // Additional logic or UI updates based on the response can be added here
-      })
-      .catch((error) => {
-        console.error('POST request failed:', error.message);
-        // Handle errors or display a message to the user
-      });
+    //     // Additional logic or UI updates based on the response can be added here
+    //   })
+    //   .catch((error) => {
+    //     console.error('POST request failed:', error.message);
+    //     // Handle errors or display a message to the user
+    //   });
   };
 
   return (

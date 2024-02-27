@@ -1,9 +1,6 @@
 package com.posco.invoiceservice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -55,6 +52,7 @@ public class InvoiceDataEntity extends BaseEntity{
     private String fiscalMonth;         // 회계 년월
 
     @Column
+    @Setter
     private String status;              // 상태
 
     @Column

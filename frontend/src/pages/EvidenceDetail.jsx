@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import receipt_img from '../assets/spain2.jpeg';
 import Table from '@mui/material/Table';
@@ -26,10 +27,13 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-function ReceiptsMonth(props) {
+function EvidenceDetail(props) {
   const [expanded, setExpanded] = React.useState(false);
   const [h, setH] = React.useState(50);
   const [w, setW] = React.useState(200);
+
+  // useParams hook을 사용하여 URL 파라미터를 추출
+  const { month } = useParams();
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
@@ -47,19 +51,17 @@ function ReceiptsMonth(props) {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        // gap: '20px',
         padding: '20px',
       }}
     >
       <Typography variant='h6' style={{ fontSize: '25px', marginLeft: '12px' }}>
-        2023-10-03 14:23:11
+        {month}-03 14:23:11
       </Typography>
       <Box
         sx={{
           display: 'flex',
           flexDirection: 'row',
           gap: '20px',
-          // padding: '20px',
         }}
       >
         <img
@@ -86,59 +88,10 @@ function ReceiptsMonth(props) {
                 <TableBody>
                   <TableRow>
                     <TableCell style={{ fontWeight: 'bold' }}>
-                      MerchantAddress
-                    </TableCell>
-                    <TableCell align='right' colSpan={2}>
-                      C/SANTA MARIA DEL BLANCA, 32 41004 SEVILLA
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell rowSpan={5} />
-                    <TableCell colSpan={1} style={{ fontWeight: 'bold' }}>
-                      HouseNumber
-                    </TableCell>
-                    <TableCell align='right'>32</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>Road</TableCell>
-                    <TableCell align='right'>
-                      C/SANTA MARIA DEL BLANCA
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>
-                      PostalCode
-                    </TableCell>
-                    <TableCell align='right'>41004</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>City</TableCell>
-                    <TableCell align='right'>SEVILLA</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>
-                      StreetAddress
-                    </TableCell>
-                    <TableCell align='right'>
-                      32 C/SANTA MARIA DEL BLANCA
-                    </TableCell>
-                  </TableRow>
-
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>
                       MerchantName
                     </TableCell>
                     <TableCell align='right' colSpan={2}>
                       YIFAN HUANG S.L.
-                    </TableCell>
-                  </TableRow>
-
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>
-                      MerchantPhoneNumber
-                    </TableCell>
-                    <TableCell align='right' colSpan={2}>
-                      +34954220988
                     </TableCell>
                   </TableRow>
 
@@ -231,4 +184,4 @@ function ReceiptsMonth(props) {
   );
 }
 
-export default ReceiptsMonth;
+export default EvidenceDetail;
