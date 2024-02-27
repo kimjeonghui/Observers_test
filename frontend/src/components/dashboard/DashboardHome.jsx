@@ -9,26 +9,26 @@ function Dashboard() {
   const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth() + 1);
 
   const [costData, setCostData] = useState([
-    { id: '0', value: 3000, label: '인건비', color: '#ff0000' },
-    { id: '1', value: 2000, label: '경비', color: '#ff3322' },
-    { id: '2', value: 800, label: '경상투자', color: '#ff6347' },
-    { id: '3', value: 500, label: '기타지출', color: '#ff7f00' },
+    { id: '0', value: 3000, label: '인건비', color: '#CC3D3D' },
+    { id: '1', value: 2000, label: '경비', color: '#F15F5F' },
+    { id: '2', value: 800, label: '경상투자', color: '#FFA7A7' },
+    { id: '3', value: 500, label: '기타지출', color: '#FFD8D8' },
     // { id: '4', value: 2500, label: '당월잔액', color: '#cc0000' },
   ]);
 
   const [incomeData, setIncomeData] = useState([
-    { id: '0', value: 10000, label: '전도금입금', color: '#808080' },
-    { id: '1', value: 2500, label: '전월이월', color: '#888888' },
-    { id: '2', value: 1500, label: '자금수입', color: '#a9a9a9' },
-    { id: '3', value: 1000, label: '이자수익', color: '#c0c0c0' },
-    { id: '4', value: 1500, label: '기타이익', color: '#d3d3d3' },
+    { id: '0', value: 10000, label: '전도금입금', color: '#003399' },
+    { id: '1', value: 2500, label: '전월이월', color: '#4174D9' },
+    { id: '2', value: 1500, label: '자금수입', color: '#6699FF' },
+    { id: '3', value: 1000, label: '이자수익', color: '#B2CCFF' },
+    { id: '4', value: 1500, label: '기타이익', color: '#D9E5FF' },
     // { id: '5', value: 1800, label: '경상투자', color: '#dcdcdc' },
   ]);
 
   const [validationData, setValidationData] = useState([
-    { id: '0', value: 1000, label: '기말잔액', color: '#008000' },
-    { id: '1', value: 1000, label: '전월이월', color: '#008080' },
-    { id: '2', value: 2000, label: '당월잔액', color: '#808B00' },
+    { id: '0', value: 1000, label: '기말잔액', color: '#6B9900' },
+    { id: '1', value: 1000, label: '전월이월', color: '#9FC93C' },
+    { id: '2', value: 2000, label: '당월잔액', color: '#BCE55C' },
   ]);
 
   // Function to calculate percentage for each data point
