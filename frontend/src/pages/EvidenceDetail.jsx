@@ -1,4 +1,5 @@
 import React from 'react';
+import { useParams } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
 import receipt_img from '../assets/spain2.jpeg';
 import Table from '@mui/material/Table';
@@ -31,6 +32,9 @@ function EvidenceDetail(props) {
   const [h, setH] = React.useState(50);
   const [w, setW] = React.useState(200);
 
+  // useParams hook을 사용하여 URL 파라미터를 추출
+  const { month } = useParams();
+
   const handleExpandClick = () => {
     setExpanded(!expanded);
     if (expanded) {
@@ -51,7 +55,7 @@ function EvidenceDetail(props) {
       }}
     >
       <Typography variant='h6' style={{ fontSize: '25px', marginLeft: '12px' }}>
-        2023-10-03 14:23:11
+        {month}-03 14:23:11
       </Typography>
       <Box
         sx={{
