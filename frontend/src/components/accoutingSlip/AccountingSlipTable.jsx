@@ -3,10 +3,8 @@ import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import PropTypes from 'prop-types';
 import { alpha } from '@mui/material/styles';
-import DatePicker from 'react-datepicker';
 import AccountingSlipCalender from './AccountingSlipCalender';
 import MenuItem from '@mui/material/MenuItem';
-import 'react-datepicker/dist/react-datepicker.css';
 
 import {
   Box,
@@ -634,17 +632,6 @@ export default function AccountingSlipTable(props) {
           marginRight: ' auto',
         }}
       >
-        <DatePicker
-          showIcon
-          selectsRange={true}
-          startDate={startDate}
-          endDate={endDate}
-          onChange={(update) => {
-            setDateRange(update);
-          }}
-          withPortal
-          className='datepicker'
-        />
         <AccountingSlipSearch />
       </div>
       <Paper sx={{ width: '100%', overflow: 'hidden', mb: 2 }}>
