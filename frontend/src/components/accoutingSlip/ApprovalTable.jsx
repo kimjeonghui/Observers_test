@@ -13,10 +13,12 @@ import SuperuserBtn from './SuperuserBtn';
 import { Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { userState } from '../../state/UserState';
+import ButtonComponent from '../global/Button';
+import requests from '../../api/accountingSlipConfig';
 
 const columns = [
   {
-    id: 'ovs_cd',
+    id: 'ovsCd',
     numeric: false,
     disablePadding: true,
     label: '사무소코드',
@@ -30,14 +32,14 @@ const columns = [
     minWidth: 70,
   },
   {
-    id: 'fiscal_month',
+    id: 'fiscalMonth',
     numeric: false,
     disablePadding: false,
     label: '회계월',
     minWidth: 100,
   },
   {
-    id: 'tx_date',
+    id: 'txDate',
     numeric: true,
     disablePadding: true,
     label: '거래일자',
@@ -51,7 +53,7 @@ const columns = [
     minWidth: 300,
   },
   {
-    id: 'dep_curr',
+    id: 'depCurr',
     numeric: false,
     disablePadding: true,
     label: '입금통화',
@@ -65,7 +67,7 @@ const columns = [
     minWidth: 150,
   },
   {
-    id: 'wd_curr',
+    id: 'wdCurr',
     numeric: false,
     disablePadding: true,
     label: '출금통화',
@@ -79,7 +81,7 @@ const columns = [
     minWidth: 150,
   },
   {
-    id: 'trans_cd',
+    id: 'tranCd',
     numeric: false,
     disablePadding: true,
     label: '식별코드',
@@ -93,7 +95,7 @@ const columns = [
     minWidth: 350,
   },
   {
-    id: 'trans_amount',
+    id: 'transAmount',
     numeric: false,
     disablePadding: true,
     label: '환산금액',
@@ -319,7 +321,21 @@ export default function ApprovalTable(props) {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(25);
   const [invoiceData, setInvoiceData] = useState([]);
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
+  const [fiscalMonth, setFiscalMonth] = useState();
   const user = useRecoilValue(userState);
+  useEffect(() => {
+    handleFiscalMonth();
+  }, [year, currentMonth]);
+
+  const handleFiscalMonth = () => {
+    if (currentMonth < 10) setFiscalMonth(year + '-0' + currentMonth);
+    else setFiscalMonth(year + '-' + currentMonth);
+  };
+  useEffect(() => {
+    getInvoiceData();
+  }, [fiscalMonth]);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -328,6 +344,46 @@ export default function ApprovalTable(props) {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+  const getInvoiceData = () => {
+    handleFiscalMonth();
+    console.log(fiscalMonth);
+    axios
+      .get(requests.GET_INVOICE_DATA(user.ovsCd, fiscalMonth, 'REQUESTED'))
+      .then((response) => {
+        if (response.status === 200) {
+          const data = response.data;
+          setInvoiceData(data);
+        } else {
+          setInvoiceData([]);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const patchInvoiceData = () => {
+    handleFiscalMonth();
+    console.log(fiscalMonth);
+    console.log('call patchInvoiceData');
+    axios
+      .patch(requests.PATCH_INVOICE_DATA(user.ovsCd, fiscalMonth), {
+        status: 'APPROVED',
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          const data = response.data;
+          //setInvoiceData(data);
+        } else {
+          //setInvoiceData([]);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    getInvoiceData();
+  }, []); // 컴포넌트가 마운트될 때 한 번만 실행
 
   return (
     <Box>
@@ -356,13 +412,16 @@ export default function ApprovalTable(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows
+              {invoiceData
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((invoiceData) => {
+                .map((invoiceData, index) => {
                   return (
                     <TableRow hover tabIndex={-1} key={invoiceData.code}>
                       {columns.map((column) => {
-                        const value = invoiceData[column.id];
+                        const value =
+                          column.id === 'num'
+                            ? index + 1
+                            : invoiceData[column.id];
                         return (
                           <TableCell
                             key={column.id}
@@ -392,7 +451,7 @@ export default function ApprovalTable(props) {
         <TablePagination
           rowsPerPageOptions={[10, 25, 100]}
           component='div'
-          count={rows.length}
+          count={invoiceData.length}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
@@ -408,7 +467,27 @@ export default function ApprovalTable(props) {
           marginTop: '20px', // 원하는 margin-top 값 설정
         }}
       />
-      {user.role === 'SUPER_USER' && <SuperuserBtn />}
+      <Box style={{ textAlign: 'center', marginTop: '20px' }}>
+        {user.role === 'SUPER_USER' && (
+          <ButtonComponent
+            width='120px'
+            sx={{ margin: '0 32px' }}
+            onClick={patchInvoiceData}
+            disabled={invoiceData.length === 0}
+          >
+            승인
+          </ButtonComponent>
+        )}
+        {user.role === 'SUPER_USER' && (
+          <ButtonComponent
+            width='120px'
+            sx={{ margin: '0 32px' }}
+            disabled={invoiceData.length === 0}
+          >
+            반려
+          </ButtonComponent>
+        )}
+      </Box>
     </Box>
   );
 }
