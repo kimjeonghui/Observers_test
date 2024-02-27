@@ -6,7 +6,7 @@ import FolderIcon from '@mui/icons-material/Folder';
 import { Box } from '@mui/material';
 import axios from 'axios';
 
-export default function Evidence(props) {
+export default function Evidence() {
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -26,19 +26,19 @@ export default function Evidence(props) {
     navigate(`/evidence/${month}`);
 
     // POST 호출
-    const serverUrl = process.env.REACT_APP_OCR_SERVER_URL;
-    axios
-      .post(`${serverUrl}/${month}`)
-      .then((response) => {
-        // 3. Handle the response as needed
-        console.log('POST request successful:', response.data);
+    // const serverUrl = process.env.REACT_APP_OCR_SERVER_URL;
+    // axios
+    //   .post(`${serverUrl}/${month}`)
+    //   .then((response) => {
+    //     // 3. Handle the response as needed
+    //     console.log('POST request successful:', response.data);
 
-        // Additional logic or UI updates based on the response can be added here
-      })
-      .catch((error) => {
-        console.error('POST request failed:', error.message);
-        // Handle errors or display a message to the user
-      });
+    //     // Additional logic or UI updates based on the response can be added here
+    //   })
+    //   .catch((error) => {
+    //     console.error('POST request failed:', error.message);
+    //     // Handle errors or display a message to the user
+    //   });
   };
 
   return (
