@@ -6,14 +6,14 @@ import styled from 'styled-components';
 
 const ImgButton = styled.button`
   margin: 4px;
-  background-color: #f6f6f6;
-  border: 2px solid #f6f6f6;
+  background-color: #eaeaea;
+  border: 2px solid #eaeaea;
   border-radius: 5px;
   padding: 5px 10px 3px;
   cursor: pointer;
 
   &:hover {
-    background-color: #ddd;
+    background-color: #d5d5d5;
   }
 `;
 
@@ -39,6 +39,198 @@ function EvidenceMonth() {
       <Typography variant='h6' style={{ fontSize: '23px', marginLeft: '12px' }}>
         {month}
       </Typography>
+      <ImgButton onClick={() => handleButtonClick(`${month}`, '1')}>
+        <Typography variant='body1'>{month}-03 14:23:11</Typography>
+        <img
+          src={receipt_img}
+          alt='img'
+          style={{
+            width: '150px',
+            height: '150px',
+            margin: '7px',
+          }}
+        />
+      </ImgButton>
+      <ImgButton onClick={() => handleButtonClick(`${month}`, '1')}>
+        <Typography variant='body1'>{month}-03 14:23:11</Typography>
+        <img
+          src={receipt_img}
+          alt='img'
+          style={{
+            width: '150px',
+            height: '150px',
+            margin: '7px',
+          }}
+        />
+      </ImgButton>
+      <ImgButton onClick={() => handleButtonClick(`${month}`, '1')}>
+        <Typography variant='body1'>{month}-03 14:23:11</Typography>
+        <img
+          src={receipt_img}
+          alt='img'
+          style={{
+            width: '150px',
+            height: '150px',
+            margin: '7px',
+          }}
+        />
+      </ImgButton>
+      <ImgButton onClick={() => handleButtonClick(`${month}`, '1')}>
+        <Typography variant='body1'>{month}-03 14:23:11</Typography>
+        <img
+          src={receipt_img}
+          alt='img'
+          style={{
+            width: '150px',
+            height: '150px',
+            margin: '7px',
+          }}
+        />
+      </ImgButton>
+      <ImgButton onClick={() => handleButtonClick(`${month}`, '1')}>
+        <Typography variant='body1'>{month}-03 14:23:11</Typography>
+        <img
+          src={receipt_img}
+          alt='img'
+          style={{
+            width: '150px',
+            height: '150px',
+            margin: '7px',
+          }}
+        />
+      </ImgButton>
+      <ImgButton onClick={() => handleButtonClick(`${month}`, '1')}>
+        <Typography variant='body1'>{month}-03 14:23:11</Typography>
+        <img
+          src={receipt_img}
+          alt='img'
+          style={{
+            width: '150px',
+            height: '150px',
+            margin: '7px',
+          }}
+        />
+      </ImgButton>
+      <ImgButton onClick={() => handleButtonClick(`${month}`, '1')}>
+        <Typography variant='body1'>{month}-03 14:23:11</Typography>
+        <img
+          src={receipt_img}
+          alt='img'
+          style={{
+            width: '150px',
+            height: '150px',
+            margin: '7px',
+          }}
+        />
+      </ImgButton>
+      <ImgButton onClick={() => handleButtonClick(`${month}`, '1')}>
+        <Typography variant='body1'>{month}-03 14:23:11</Typography>
+        <img
+          src={receipt_img}
+          alt='img'
+          style={{
+            width: '150px',
+            height: '150px',
+            margin: '7px',
+          }}
+        />
+      </ImgButton>
+      <ImgButton onClick={() => handleButtonClick(`${month}`, '1')}>
+        <Typography variant='body1'>{month}-03 14:23:11</Typography>
+        <img
+          src={receipt_img}
+          alt='img'
+          style={{
+            width: '150px',
+            height: '150px',
+            margin: '7px',
+          }}
+        />
+      </ImgButton>
+      <ImgButton onClick={() => handleButtonClick(`${month}`, '1')}>
+        <Typography variant='body1'>{month}-03 14:23:11</Typography>
+        <img
+          src={receipt_img}
+          alt='img'
+          style={{
+            width: '150px',
+            height: '150px',
+            margin: '7px',
+          }}
+        />
+      </ImgButton>
+      <ImgButton onClick={() => handleButtonClick(`${month}`, '1')}>
+        <Typography variant='body1'>{month}-03 14:23:11</Typography>
+        <img
+          src={receipt_img}
+          alt='img'
+          style={{
+            width: '150px',
+            height: '150px',
+            margin: '7px',
+          }}
+        />
+      </ImgButton>
+      <ImgButton onClick={() => handleButtonClick(`${month}`, '1')}>
+        <Typography variant='body1'>{month}-03 14:23:11</Typography>
+        <img
+          src={receipt_img}
+          alt='img'
+          style={{
+            width: '150px',
+            height: '150px',
+            margin: '7px',
+          }}
+        />
+      </ImgButton>
+      <ImgButton onClick={() => handleButtonClick(`${month}`, '1')}>
+        <Typography variant='body1'>{month}-03 14:23:11</Typography>
+        <img
+          src={receipt_img}
+          alt='img'
+          style={{
+            width: '150px',
+            height: '150px',
+            margin: '7px',
+          }}
+        />
+      </ImgButton>
+      <ImgButton onClick={() => handleButtonClick(`${month}`, '1')}>
+        <Typography variant='body1'>{month}-03 14:23:11</Typography>
+        <img
+          src={receipt_img}
+          alt='img'
+          style={{
+            width: '150px',
+            height: '150px',
+            margin: '7px',
+          }}
+        />
+      </ImgButton>
+      <ImgButton onClick={() => handleButtonClick(`${month}`, '1')}>
+        <Typography variant='body1'>{month}-03 14:23:11</Typography>
+        <img
+          src={receipt_img}
+          alt='img'
+          style={{
+            width: '150px',
+            height: '150px',
+            margin: '7px',
+          }}
+        />
+      </ImgButton>
+      <ImgButton onClick={() => handleButtonClick(`${month}`, '1')}>
+        <Typography variant='body1'>{month}-03 14:23:11</Typography>
+        <img
+          src={receipt_img}
+          alt='img'
+          style={{
+            width: '150px',
+            height: '150px',
+            margin: '7px',
+          }}
+        />
+      </ImgButton>
       <ImgButton onClick={() => handleButtonClick(`${month}`, '1')}>
         <Typography variant='body1'>{month}-03 14:23:11</Typography>
         <img
