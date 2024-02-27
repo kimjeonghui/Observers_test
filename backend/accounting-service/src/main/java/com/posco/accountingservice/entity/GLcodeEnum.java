@@ -6,6 +6,9 @@ import java.util.List;
 
 public enum GLcodeEnum {
     //GL_CODE_A101(Arrays.asList(111081, 0000,"N")),
+    GL_CODE_1101(Arrays.asList(522141, 2301, "Y")),
+    GL_CODE_1102(Arrays.asList(522141, 2301, "Y")),
+    GL_CODE_1103(Arrays.asList(522141, 2301, "Y")),
     GL_CODE_1501(Arrays.asList(522141, 2301, "Y")),
     GL_CODE_X100(Arrays.asList(111121, 0000, "N")),
     GL_CODE_1699(Arrays.asList(522141, 1699, "Y")),
