@@ -29,8 +29,8 @@ const ExpandMore = styled((props) => {
 
 function EvidenceDetail(props) {
   const [expanded, setExpanded] = React.useState(false);
-  const [h, setH] = React.useState(50);
-  const [w, setW] = React.useState(200);
+  const [h, setH] = React.useState('5vh');
+  const [w, setW] = React.useState('20vh');
 
   // useParams hook을 사용하여 URL 파라미터를 추출
   const { month } = useParams();
@@ -39,10 +39,10 @@ function EvidenceDetail(props) {
     setExpanded(!expanded);
     if (expanded) {
       setH('5vh');
-      setW('70vh');
+      setW('20vh');
     } else {
       setH('70vh');
-      setW(800);
+      setW('60vh');
     }
   };
 
@@ -69,6 +69,67 @@ function EvidenceDetail(props) {
           alt='img'
           style={{ width: '500px', height: '600px', margin: '7px' }}
         />
+        <div style={{ width: '40vh' }}>
+          <TableContainer sx={{ maxHeight: 720 }} component={Paper}>
+            <Table aria-label='spanning table'>
+              <TableBody>
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>
+                    사무소코드
+                  </TableCell>
+                  <TableCell align='right' colSpan={2}>
+                    HDF32
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>순번</TableCell>
+                  <TableCell align='right' colSpan={2}>
+                    1
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>회계월</TableCell>
+                  <TableCell align='right' colSpan={2}>
+                    {month}
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>거래일자</TableCell>
+                  <TableCell align='right'>{month}-03 14:23:11</TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>출금통화</TableCell>
+                  <TableCell align='right'>EUR</TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>출금금액</TableCell>
+                  <TableCell align='right'>33,80</TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>식별코드</TableCell>
+                  <TableCell align='right'>1106</TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>거래내역</TableCell>
+                  <TableCell align='right'>직원중식비</TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>환산금액</TableCell>
+                  <TableCell align='right'>48818.02</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+
         <Card sx={{ height: h, width: w }}>
           <CardActions disableSpacing>
             OCR 결과 보기
@@ -94,7 +155,6 @@ function EvidenceDetail(props) {
                       YIFAN HUANG S.L.
                     </TableCell>
                   </TableRow>
-
                   <TableRow>
                     <TableCell style={{ fontWeight: 'bold' }}>Total</TableCell>
                     <TableCell align='right' colSpan={2}>
