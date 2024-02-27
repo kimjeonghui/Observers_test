@@ -41,6 +41,12 @@ public class GLCodeServiceImpl implements GLCodeService{
     }
 
     @Override
+    public GLCodeDTO getGLCodeById(Long glCodeId) {
+        GLCodeEntity glCodeEntity = glCodeRepository.findByGlCodeId(glCodeId);
+        return (glCodeEntity != null) ? convertToDTO(glCodeEntity) : null;
+    }
+
+    @Override
     public GLCodeDTO createGLCode(GLCodeDTO glCodeDTO) {
         GLCodeEntity glCodeEntity = insertGLCodeEntity(glCodeDTO);
         GLCodeEntity savedEntity = glCodeRepository.save(glCodeEntity);
