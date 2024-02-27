@@ -8,14 +8,14 @@ function Dashboard() {
   const [year, setYear] = useState(currentDate.getFullYear());
   const [currentMonth, setCurrentMonth] = useState(currentDate.getMonth() + 1);
 
-  const [costData, setCostData] = useState([
-    { id: '0', value: 3000, label: 'Accurate', color: '#6699FF' },
+  const [ocrAccuracy, setCostData] = useState([
+    { id: '0', value: 3000, label: 'Accurate', color: '#4174D9' },
     { id: '1', value: 50, label: 'Modified', color: '#F15F5F' },
   ]);
 
-  const [validationData, setValidationData] = useState([
-    { id: '0', value: 1200, label: 'OCR', color: '#3D0099' },
-    { id: '1', value: 1000, label: '기타', color: '#D1B2FF' },
+  const [ocrCount, setValidationData] = useState([
+    { id: '0', value: 1200, label: 'OCR', color: '#7E41D9' },
+    { id: '1', value: 1000, label: '기타', color: '#DAD9FF' },
   ]);
 
   // Function to calculate percentage for each data point
@@ -42,46 +42,46 @@ function Dashboard() {
     },
   };
 
-  const expenseCost = [
+  const evidenceCount = [
     {
-      Brussels: 59,
-      Argentina: 57,
-      EU: 86,
-      China: 21,
+      Brussels: 220,
+      Argentina: 157,
+      EU: 186,
+      China: 221,
       month: 'Jan',
     },
     {
-      Brussels: 50,
-      Argentina: 52,
-      EU: 78,
-      China: 28,
+      Brussels: 150,
+      Argentina: 152,
+      EU: 178,
+      China: 128,
       month: 'Fev',
     },
 
     {
       Brussels: 47,
-      Argentina: 53,
+      Argentina: 204,
       EU: 106,
-      China: 41,
+      China: 141,
       month: 'Mar',
     },
     {
-      Brussels: 54,
+      Brussels: 154,
       Argentina: 56,
-      EU: 92,
-      China: 73,
+      EU: 192,
+      China: 173,
       month: 'Apr',
     },
     {
       Brussels: 57,
-      Argentina: 69,
-      EU: 92,
-      China: 99,
+      Argentina: 169,
+      EU: 202,
+      China: 240,
       month: 'May',
     },
     {
-      Brussels: 60,
-      Argentina: 63,
+      Brussels: 160,
+      Argentina: 123,
       EU: 103,
       China: 144,
       month: 'June',
@@ -90,42 +90,42 @@ function Dashboard() {
       Brussels: 59,
       Argentina: 60,
       EU: 105,
-      China: 319,
+      China: 119,
       month: 'July',
     },
     {
-      Brussels: 65,
-      Argentina: 60,
+      Brussels: 265,
+      Argentina: 160,
       EU: 106,
-      China: 249,
+      China: 200,
       month: 'Aug',
     },
     {
       Brussels: 51,
-      Argentina: 51,
+      Argentina: 151,
       EU: 95,
       China: 131,
       month: 'Sept',
     },
     {
-      Brussels: 60,
-      Argentina: 65,
+      Brussels: 160,
+      Argentina: 265,
       EU: 97,
-      China: 55,
+      China: 155,
       month: 'Oct',
     },
     {
-      Brussels: 67,
-      Argentina: 64,
-      EU: 76,
-      China: 48,
+      Brussels: 117,
+      Argentina: 134,
+      EU: 176,
+      China: 148,
       month: 'Nov',
     },
     {
-      Brussels: 61,
-      Argentina: 70,
+      Brussels: 161,
+      Argentina: 170,
       EU: 103,
-      China: 25,
+      China: 125,
       month: 'Dec',
     },
   ];
@@ -182,7 +182,7 @@ function Dashboard() {
           <PieChart
             series={[
               {
-                data: calculatePercentage(costData), // Calculate percentages
+                data: calculatePercentage(ocrAccuracy), // Calculate percentages
                 highlightScope: { faded: 'global', highlighted: 'item' },
                 faded: {
                   innerRadius: 30,
@@ -201,9 +201,7 @@ function Dashboard() {
           <PieChart
             series={[
               {
-                // arcLabel: (item) => `${item.label} (${item.value})`,
-                // arcLabelMinAngle: 45,
-                data: validationData,
+                data: ocrCount,
                 highlightScope: { faded: 'global', highlighted: 'item' },
                 faded: {
                   innerRadius: 30,
@@ -220,9 +218,9 @@ function Dashboard() {
 
       <div style={{ padding: '20px', display: 'flex', flexDirection: 'row' }}>
         <div>
-          <h2>증빙자료 개수</h2>
+          <h2>사무소별 증빙자료 개수</h2>
           <BarChart
-            dataset={expenseCost}
+            dataset={evidenceCount}
             xAxis={[{ scaleType: 'band', dataKey: 'month' }]}
             series={[
               { dataKey: 'Brussels', label: 'Brussels', valueFormatter },
