@@ -1,6 +1,7 @@
 package com.posco.accountingservice.service;
 
 import com.posco.accountingservice.dto.response.AccountingSlipDTO;
+import com.posco.accountingservice.dto.response.InvoiceResponseDTO;
 import com.posco.accountingservice.entity.AccountingSlipEntity;
 import com.posco.accountingservice.entity.AccountingSlipInvoiceNumEntity;
 import com.posco.accountingservice.entity.GLcodeEnum;
@@ -31,15 +32,21 @@ public class AccountingSlipService {
     private final AccountingSlipRepository accountingSlipRepository;
     @PersistenceContext
     private EntityManager entityManager;
-    private List<InvoiceDataEntity> getInvoicedataList(String ovsCd, String fiscalMonth){
-        System.out.println(invoiceDataRepository.findAllByOvsCdAndFiscalMonth(ovsCd,fiscalMonth));
-        return invoiceDataRepository.findAllByOvsCdAndFiscalMonth(ovsCd,fiscalMonth);
+
+    //사무소코드, 회계월, 거래내역 상태에 따른 거래내역 get
+    private List<InvoiceDataEntity> getInvoicedataList(String ovsCd, String fiscalMonth, String status){
+        System.out.println(invoiceDataRepository.findAllByOvsCdAndFiscalMonthAndStatus(ovsCd,fiscalMonth, status));
+        return invoiceDataRepository.findAllByOvsCdAndFiscalMonthAndStatus(ovsCd,fiscalMonth, status);
     }
 
+    ////사무소코드, 회계월에 따른 거래내역 get
+    private List<InvoiceDataEntity> getInvoicedataList(String ovsCd, String fiscalMonth){
+        return invoiceDataRepository.findAllByOvsCdAndFiscalMonth(ovsCd,fiscalMonth);
+    }
     //1. 인보이스 만들기
     private List<AccountingSlipInvoiceNumEntity> createInvoiceList(String ovsCd, String month) {
         List<AccountingSlipInvoiceNumEntity> invoiceNumEntityList = new ArrayList<>(); // 리턴값
-        List<InvoiceDataEntity> findedInvoiceDataList = getInvoicedataList(ovsCd, month); // 거래내역
+        List<InvoiceDataEntity> findedInvoiceDataList = getInvoicedataList(ovsCd, month, "APPROVED"); // 거래내역
 
         for (int i = 0; i < findedInvoiceDataList.size(); i++) {
             InvoiceDataEntity invoiceData = findedInvoiceDataList.get(i);
@@ -184,7 +191,26 @@ public class AccountingSlipService {
         List<AccountingSlipEntity> accountingSlipEntityList = accountingSlipRepository.findByOvsCdIsAndFiscalMonthIs(ovsCd, fiscalMonth);
         //System.out.println(accountingSlipEntityList.get(0));
         return accountingSlipEntityList.stream()
-                .map(entity -> AccountingSlipEntity.toDto(entity, entity.getAccountingSlipInvoiceNumEntity().getInvoiceDataEntity()))
+                .map(entity -> AccountingSlipDTO.toDto(entity, entity.getAccountingSlipInvoiceNumEntity().getInvoiceDataEntity()))
                 .collect(Collectors.toList());
+    }
+
+    //거래 내역을 상태에 따라서 가져오기
+    //결재 승인 페이지
+    public List<InvoiceResponseDTO> findInvoiceData(String ovsCd, String fiscalMonth, String status){
+        List<InvoiceDataEntity> invoiceDataEntityList =getInvoicedataList(ovsCd, fiscalMonth, status);
+        return invoiceDataEntityList.stream().map(i -> InvoiceResponseDTO.toDTO(i)).collect(Collectors.toList());
+    }
+
+    //거래 내역 상태 바꿔주기
+    //결재 승인 페이지, 회계전표(거래 내역 재작성), 회계전표(AP 전송)
+    public List<InvoiceResponseDTO> updateInvoiceData(String ovsCd, String fiscalMonth, String status){
+        List<InvoiceDataEntity> invoiceDataEntityList = getInvoicedataList(ovsCd, fiscalMonth);
+        for(int i=0; i<invoiceDataEntityList.size(); i++){
+            InvoiceDataEntity invoiceData = invoiceDataEntityList.get(i);
+            invoiceData.setStatus(status);
+            invoiceDataRepository.save(invoiceData);
+        }
+        return invoiceDataEntityList.stream().map(i -> InvoiceResponseDTO.toDTO(i)).collect(Collectors.toList());
     }
 }

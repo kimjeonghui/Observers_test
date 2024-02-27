@@ -34,6 +34,24 @@ public class AccountingSlipDTO {
     private String createdBy; //누가 만든 거래인지
     private LocalDateTime createdDate;
 
-
+    public static AccountingSlipDTO toDto(AccountingSlipEntity accountingSlip, InvoiceDataEntity invoiceDataEntity){
+        return AccountingSlipDTO.builder().account(accountingSlip.getAccount())
+                .accountSlipId(accountingSlip.getAccountSlipId())
+                .txCd(accountingSlip.getTxCd())
+                .drCr(accountingSlip.getDrCr())
+                .txNum(accountingSlip.getTxNum())
+                .amount(accountingSlip.getAmount())
+                .currCode(accountingSlip.getCurrCode())
+                .krwAmount(accountingSlip.getKrwAmount())
+                .exchangeRate(accountingSlip.getExchangeRate())
+                .description(accountingSlip.getDescription())
+                .txDate(accountingSlip.getTxDate())
+                .invoiceNum(accountingSlip.getAccountingSlipInvoiceNumEntity().getInvoiceNum())
+                .createdBy(invoiceDataEntity.getCreatedBy())
+                .createdDate(invoiceDataEntity.getCreatedDate())
+                .ovsCd(invoiceDataEntity.getOvsCd())
+                .groupId("OAM"+"-"+accountingSlip.getFiscalMonth()+"-"+accountingSlip.getOvsCd())
+                .build();
+    }
 
 }

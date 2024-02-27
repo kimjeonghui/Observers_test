@@ -1,11 +1,11 @@
 package com.posco.accountingservice.entity;
 
+import com.posco.accountingservice.dto.response.InvoiceResponseDTO;
 import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @AllArgsConstructor
@@ -55,6 +55,7 @@ public class InvoiceDataEntity extends BaseEntity{
     private String fiscalMonth;  // 회계 년월
 
     @Column
+    @Setter
     private String status;              // 상태
 
     @Column
@@ -67,4 +68,6 @@ public class InvoiceDataEntity extends BaseEntity{
     @Getter @Setter
     @OneToMany(mappedBy = "invoiceDataEntity", cascade = CascadeType.ALL)
     private List<EvidenceDataEntity> evidenceDataEntityList;
+
+
 }
