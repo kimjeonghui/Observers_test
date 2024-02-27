@@ -362,7 +362,6 @@ export default function ApprovalTable(props) {
       });
   };
   const patchInvoiceData = () => {
-    handleFiscalMonth();
     console.log(fiscalMonth);
     console.log('call patchInvoiceData');
     axios
@@ -372,9 +371,9 @@ export default function ApprovalTable(props) {
       .then((response) => {
         if (response.status === 200) {
           const data = response.data;
-          setInvoiceData(data);
+          //setInvoiceData(data);
         } else {
-          setInvoiceData([]);
+          //setInvoiceData([]);
         }
       })
       .catch((err) => {
@@ -383,14 +382,15 @@ export default function ApprovalTable(props) {
   };
   const postAccountingSlip = () => {
     handleFiscalMonth();
+    console.log(fiscalMonth);
     axios
       .post(requests.POST_ACCOUNTING_SLIP(user.ovsCd, fiscalMonth))
       .then((response) => {
         if (response.status === 200) {
           const data = response.data;
-          setInvoiceData(data);
+          //setInvoiceData(data);
         } else {
-          setInvoiceData([]);
+          //setInvoiceData([]);
         }
       })
       .catch((err) => {
@@ -488,7 +488,10 @@ export default function ApprovalTable(props) {
           <ButtonComponent
             width='120px'
             sx={{ margin: '0 32px' }}
-            onClick={(patchInvoiceData, postAccountingSlip)}
+            onClick={() => {
+              patchInvoiceData();
+              postAccountingSlip();
+            }}
             disabled={invoiceData.length === 0}
           >
             승인
