@@ -65,7 +65,7 @@ public class GLCodeController {
         return ResponseEntity.ok().body(resultMap);
     }
 
-    @GetMapping("/{tranCd}")
+    @GetMapping("/tran/{tranCd}")
     @Operation(summary = "Get GLCode by tranCd", description = "Get a general ledge code by transaction code")
     public ResponseEntity<?> getGLCodeByTranCd(@PathVariable String tranCd){
         Map<String, Object> resultMap = new HashMap<>();
@@ -80,6 +80,25 @@ public class GLCodeController {
         resultMap.put("result", SUCCESS);
         resultMap.put("msg", "Transaction Code - Selected GLCode was retrieved successfully.");
         resultMap.put("glCodes", glCode);
+
+        return ResponseEntity.ok().body(resultMap);
+    }
+
+    @GetMapping("/{glCodeId}")
+    @Operation(summary = "Get GLCode by ID", description = "Get a general ledge code by transaction code")
+    public ResponseEntity<?> getGLCodeById(@PathVariable Long glCodeId){
+        Map<String, Object> resultMap = new HashMap<>();
+        GLCodeDTO glCode = glCodeService.getGLCodeById(glCodeId);
+
+        if(glCode == null){
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "No ID found for glCodeId." + glCodeId);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(resultMap);
+        }
+
+        resultMap.put("result", SUCCESS);
+        resultMap.put("msg", "ID - Selected GLCode was retrieved successfully.");
+        resultMap.put("glCode", glCode);
 
         return ResponseEntity.ok().body(resultMap);
     }

@@ -11,5 +11,4 @@ public interface GLCodeRepository extends JpaRepository<GLCodeEntity, String>, G
     GLCodeEntity findByTranCd(String tranCd);
     List<GLCodeEntity> findByMajorCt(String majorCt);
 
-
 }

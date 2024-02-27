@@ -8,12 +8,12 @@ import SaveAltIcon from '@mui/icons-material/SaveAlt';
 import * as XLSX from 'xlsx';
 import axios from 'axios';
 
-import requests from '../../api/invoiceConfig';
+import requests from '../../api/glcodeConfig';
 
 export default function AdminCodeExcel(props) {
-  const { user } = props;
+  // const { user } = props;
   const columnLabels = [
-    '거래일자',
+    // '거래일자',
     '식별코드',
     '계정명',
     '계정코드',
@@ -36,7 +36,7 @@ export default function AdminCodeExcel(props) {
   }, [excelData]);
 
   const headers = [
-    { label: '거래일자', key: 'txDate' },
+    // { label: '거래일자', key: 'txDate' },
     { label: '식별코드', key: 'tranCd' },
     { label: '계정명', key: 'accountName' },
     { label: '계정코드', key: 'account' },
@@ -51,7 +51,7 @@ export default function AdminCodeExcel(props) {
   ];
   const sampleData = [
     {
-      tx_date: 'YYYY-MM-DD',
+      // tx_date: 'YYYY-MM-DD',
       tranCd: '',
       accountName: '',
       account: '',
@@ -155,7 +155,7 @@ export default function AdminCodeExcel(props) {
     const today = new Date();
     let fiscalMonth = today.getFullYear().toString() + '-';
     let month = today.getMonth();
-    const ovsCd = user.ovsCd;
+    // const ovsCd = user.ovsCd;
     if (month >= 9) {
       fiscalMonth += (today.getMonth() + 1).toString();
     } else {
@@ -169,7 +169,7 @@ export default function AdminCodeExcel(props) {
         let dataValue = data[i][j].value;
         tmpArr[header] = dataValue;
       }
-      tmpArr.ovsCd = ovsCd;
+      // tmpArr.ovsCd = ovsCd;
       tmpArr.fiscalMonth = fiscalMonth;
       tmpData.push(tmpArr);
     }
@@ -180,9 +180,10 @@ export default function AdminCodeExcel(props) {
     const newData = handlePreprocessingData();
     console.log(newData);
     axios
-      .post(requests.POST_INVOICE_LIST(), newData)
+      .post(requests.POST_GLCODE_LIST(), newData)
       .then((response) => {
         console.log(response);
+        alert('식별코드가 추가되었습니다.');
       })
       .catch((err) => {
         console.error(err);
@@ -197,7 +198,7 @@ export default function AdminCodeExcel(props) {
             headers={headers}
             data={sampleData}
             style={{ decoration: 'none' }}
-            filename='Posco_Oversea_Imprest_Example.csv'
+            filename='Posco_Oversea_Imprest_GL_CODE_Example.csv'
           >
             <Button size='sm' color='#006736' hoverColor='#017940'>
               <img

@@ -12,6 +12,8 @@ public interface GLCodeService {
 
     GLCodeDTO getGLCodeByTranCd(String tranCd);
 
+    GLCodeDTO getGLCodeById(Long glCodeId);
+
     GLCodeDTO createGLCode(GLCodeDTO glCodeDTO);
 
     List<GLCodeDTO> createGLCodeList(List<GLCodeDTO> glCodeDTOList);
