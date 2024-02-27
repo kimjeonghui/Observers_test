@@ -9,7 +9,10 @@ const requests = {
     return this.base_url + `/gl-code/major/${majorCt}`;
   },
   GET_GLCODE_LIST_BY_TRAN(tranCd) {
-    return this.base_url + `/gl-code/major/${tranCd}`;
+    return this.base_url + `/gl-code/tran/${tranCd}`;
+  },
+  GET_GLCODE_BY_ID(glCodeId) {
+    return this.base_url + `/gl-code/${glCodeId}`;
   },
   POST_GLCODE() {
     return this.base_url + `/gl-code`;
