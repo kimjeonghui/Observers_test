@@ -88,59 +88,10 @@ function EvidenceDetail(props) {
                 <TableBody>
                   <TableRow>
                     <TableCell style={{ fontWeight: 'bold' }}>
-                      MerchantAddress
-                    </TableCell>
-                    <TableCell align='right' colSpan={2}>
-                      C/SANTA MARIA DEL BLANCA, 32 41004 SEVILLA
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell rowSpan={5} />
-                    <TableCell colSpan={1} style={{ fontWeight: 'bold' }}>
-                      HouseNumber
-                    </TableCell>
-                    <TableCell align='right'>32</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>Road</TableCell>
-                    <TableCell align='right'>
-                      C/SANTA MARIA DEL BLANCA
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>
-                      PostalCode
-                    </TableCell>
-                    <TableCell align='right'>41004</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>City</TableCell>
-                    <TableCell align='right'>SEVILLA</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>
-                      StreetAddress
-                    </TableCell>
-                    <TableCell align='right'>
-                      32 C/SANTA MARIA DEL BLANCA
-                    </TableCell>
-                  </TableRow>
-
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>
                       MerchantName
                     </TableCell>
                     <TableCell align='right' colSpan={2}>
                       YIFAN HUANG S.L.
-                    </TableCell>
-                  </TableRow>
-
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>
-                      MerchantPhoneNumber
-                    </TableCell>
-                    <TableCell align='right' colSpan={2}>
-                      +34954220988
                     </TableCell>
                   </TableRow>
 
