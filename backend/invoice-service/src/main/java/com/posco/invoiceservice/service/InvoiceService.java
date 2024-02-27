@@ -16,4 +16,6 @@ public interface InvoiceService {
 
     InvoiceResponseDTO getInvoice(Long invoiceId);
 
+    List<InvoiceResponseDTO> findInvoiceData(String ovsCd, String fiscalMonth, String status);
+    List<InvoiceResponseDTO> updateInvoiceData(String ovsCd, String fiscalMonth, String status);
 }

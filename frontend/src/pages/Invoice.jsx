@@ -27,14 +27,19 @@ export default function Invoice(props) {
   const [year, setYear] = useState(new Date().getFullYear());
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
   const [fiscalMonth, setFiscalMonth] = useState();
+  const [isActiveBtn, setIsActiveBtn] = useState(false);
   const user = useRecoilValue(userState);
   const ovsCd = user.ovsCd;
+  const todayYear = new Date().getFullYear();
+  const todayMonth = new Date().getMonth() + 1;
   useEffect(() => {
     getInvoiceData();
   }, [fiscalMonth]);
 
   useEffect(() => {
     handleFiscalMonth();
+    if (year === todayYear && currentMonth === todayMonth) setIsActiveBtn(true);
+    else setIsActiveBtn(false);
   }, [year, currentMonth]);
 
   const handleFiscalMonth = () => {
@@ -52,6 +57,22 @@ export default function Invoice(props) {
           setInvoiceData(data);
         } else if (response.status === 204) {
           setInvoiceData([]);
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const patchInvoiceData = () => {
+    handleFiscalMonth();
+    axios
+      .patch(requests.PATCH_INVOICE_STATUS_DATA(ovsCd, fiscalMonth), {
+        status: 'REQUESTED',
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          console.log(response.data);
         }
       })
       .catch((err) => {
@@ -136,13 +157,18 @@ export default function Invoice(props) {
 
                 {isCalc ? (
                   <CustomButton
-                    onClick={() => alert('결재요청했다~')}
+                    disabled={!isActiveBtn}
+                    onClick={() => patchInvoiceData()}
                     size='sm'
                   >
                     결재요청
                   </CustomButton>
                 ) : (
-                  <CustomButton onClick={handleCalc} size='sm'>
+                  <CustomButton
+                    disabled={!isActiveBtn}
+                    onClick={handleCalc}
+                    size='sm'
+                  >
                     외환차손익계산
                   </CustomButton>
                 )}

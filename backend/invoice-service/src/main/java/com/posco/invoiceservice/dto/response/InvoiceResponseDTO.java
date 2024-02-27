@@ -1,5 +1,6 @@
 package com.posco.invoiceservice.dto.response;
 
+import com.posco.invoiceservice.entity.InvoiceDataEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -30,6 +31,24 @@ public class InvoiceResponseDTO {
     private String status;              // 상태
     private Long ocrId;                 // ocr 연결 id
     private List<EvidenceDTO> evidenceDirs;   // 증빙 자료 경로들
+
+    public static InvoiceResponseDTO toDTO(InvoiceDataEntity invoiceDataEntity){
+        return InvoiceResponseDTO.builder()
+                .invoiceId(invoiceDataEntity.getInvoiceDataId())
+                .ovsCd(invoiceDataEntity.getOvsCd())
+                .fiscalMonth(invoiceDataEntity.getFiscalMonth())
+                .description(invoiceDataEntity.getDescription())
+                .depCurr(invoiceDataEntity.getDepCurr())
+                .tranCd(invoiceDataEntity.getTranCd())
+                .status(invoiceDataEntity.getStatus())
+                .txDate(invoiceDataEntity.getTxDate())
+                .store(invoiceDataEntity.getStore())
+                .ocrId(invoiceDataEntity.getOcrId())
+                .wdCurr(invoiceDataEntity.getWdCurr())
+                .withdrawal(invoiceDataEntity.getWithdrawal())
+                .deposit(invoiceDataEntity.getDeposit())
+                .build();
+    }
 }
 
 
