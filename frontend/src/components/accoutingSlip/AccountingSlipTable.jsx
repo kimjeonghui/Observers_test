@@ -562,9 +562,6 @@ export default function AccountingSlipTable(props) {
     [order, orderBy, page, rowsPerPage, accountingSlip]
   );
   const groupedVisibleRows = groupBy(visibleRows, 'invoiceNum');
-  const [dateRange, setDateRange] = useState([null, null]);
-  //dateRange 변수를 startDate와 endDate 프로퍼티로 전달
-  const [startDate, endDate] = dateRange;
   const theme = useTheme();
 
   const handleChangeOffice = (event) => {
@@ -749,7 +746,7 @@ export default function AccountingSlipTable(props) {
       </Paper>
       {/* 유저 권한에 따라서 사무소장만 버튼 볼 수 있도록, 검증은 자동으로 하고 그 결과에 따라 렌더링 되는 버튼이 달라짐 */}
       {user.role === 'SUPER_USER' && <ManagerRejectBtn />}
-      {user.role === 'SUPER_USER' && <ManagerImportBtn />}
+      {/* {user.role === 'SUPER_USER' && <ManagerImportBtn />} */}
     </Box>
   );
 }
