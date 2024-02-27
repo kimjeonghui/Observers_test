@@ -10,5 +10,6 @@ public interface InvoiceRepository extends JpaRepository<InvoiceDataEntity, Stri
 
     List<InvoiceDataEntity> findAllByOvsCdAndFiscalMonth(String ovsCd, String fiscalMonth);
 
-
+    List<InvoiceDataEntity> findAllByOvsCdAndFiscalMonthAndStatus(String ovsCd, String fiscalMonth, String status);
 }
+
