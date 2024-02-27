@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 
 import {
   Dialog,
@@ -19,7 +19,9 @@ import axios from 'axios';
 import { ModalStrokeBtn, FlexDiv } from './InvoiceStyles';
 import CustomButton from '../global/Button';
 import ModalInput from '../global/ModalInput';
-import requests from '../../api/invoiceConfig';
+import invoiceRq from '../../api/invoiceConfig';
+import ocrRq from '../../api/ocrConfig';
+import exchangeRq from '../../api/exchangeRateConfig';
 
 export default function InvoiceModal(props) {
   const { open, setOpen, user, getInvoiceData } = props;
@@ -35,10 +37,16 @@ export default function InvoiceModal(props) {
   const [withdrawal, setWithdrawal] = useState('');
   const [tranCd, setTranCd] = useState('');
   const [description, setDescription] = useState('');
+  //ocr
+  const [file, setFile] = useState(null);
+  const openOcrRef = useRef();
+  const [imgUrl, setImgUrl] = useState(null);
 
   // 모달 창 닫기 (500ms 뒤에 step 초기화)
   const handleClose = () => {
     setOpen(false);
+    setFile(null);
+    setImgUrl(null);
     setTimeout(() => {
       handleSteps(0);
     }, 500);
@@ -108,7 +116,7 @@ export default function InvoiceModal(props) {
     }
     return false;
   };
-
+  // 거래 내용 제출하는 api
   const handleInvoiceSubmit = () => {
     const today = new Date();
     let fiscalMonth = today.getFullYear().toString() + '-';
@@ -119,6 +127,7 @@ export default function InvoiceModal(props) {
       fiscalMonth += '0' + (today.getMonth() + 1).toString();
     }
 
+    // Todo:환율도 api로 불러와서 넣어주세요!
     const data = {
       ovsCd: user.ovsCd,
       fiscalMonth,
@@ -133,7 +142,7 @@ export default function InvoiceModal(props) {
     };
     if (checkInvoiceForm(data)) {
       axios
-        .post(requests.POST_INVOICE(), {
+        .post(invoiceRq.POST_INVOICE(), {
           ...data,
         })
         .then((response) => {
@@ -147,15 +156,56 @@ export default function InvoiceModal(props) {
         });
     }
   };
-
-  const handleOcrSubmit = () => {
-    alert('submit 되었습니다. ocr api 연결해야해요');
+  // 영수증 ocr로 넘기는 api
+  const handleOcrUpload = () => {
     handleSteps(2);
-    setTimeout(() => {
-      handleSteps(3);
-    }, 1000);
+    const formData = new FormData();
+    formData.append('image', file);
+    axios
+      .post(ocrRq.POST_OCR_UPLOAD(), formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          divOcrResponse(response.data);
+          handleSteps(3);
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+        Swal.fire({
+          title: '인식 실패',
+          text: '필수값 인식에 실패하였습니다.',
+          icon: 'error',
+          customClass: {
+            container: 'my-swal',
+          },
+        });
+        handleClose();
+        handleSteps(0);
+      });
   };
 
+  const divOcrResponse = (response) => {
+    setTxDate(response.purDate);
+    setStore(response.storeName);
+    setWithdrawal(parseFloat(response.totalVal));
+    const ocrId = response.ocrId;
+  };
+
+  // 증빙자료 넣을 때 파일가져오기 & 이미지 미리보기
+  const handleFileChange = (e) => {
+    setFile(e.target.files?.[0]);
+    const imgFile = e.target.files?.[0];
+    if (imgFile) {
+      const tmpImgUrl = URL.createObjectURL(imgFile);
+      setImgUrl(tmpImgUrl);
+    }
+  };
+
+  // 모달창의 step
   const renderDialogContent = () => {
     switch (steps) {
       case 1:
@@ -171,34 +221,34 @@ export default function InvoiceModal(props) {
               <DialogContent
                 sx={{
                   display: 'flex',
-                  justifyContent: 'space-evenly',
+                  justifyContent: 'space-between',
                   alignItems: 'center',
                   padding: '36px 88px',
                   height: '60vh',
                 }}
               >
                 <ModalStrokeBtn
-                  width='30%'
+                  width='45%'
                   height='80%'
                   onClick={() => handleSteps(3)}
                 >
                   <KeyboardAltOutlinedIcon
                     sx={{
                       color: theme.palette.posco_blue_500,
-                      fontSize: { xs: '20vw', sm: '15vw', md: '8vw' },
+                      fontSize: { xs: '20vw', md: '8vw' },
                     }}
                   />
                   Manual
                 </ModalStrokeBtn>
                 <ModalStrokeBtn
-                  width='30%'
+                  width='45%'
                   height='80%'
                   onClick={() => handleSteps(1)}
                 >
                   <AddAPhotoOutlinedIcon
                     sx={{
                       color: theme.palette.posco_blue_500,
-                      fontSize: { xs: '20vw', sm: '15vw', md: '8vw' },
+                      fontSize: { xs: '20vw', md: '8vw' },
                     }}
                   />
                   Photo
@@ -213,7 +263,7 @@ export default function InvoiceModal(props) {
             open={open}
             onClose={handleClose}
             fullWidth={true}
-            maxWidth='md'
+            maxWidth='sm'
           >
             <DialogContent
               sx={{
@@ -222,65 +272,43 @@ export default function InvoiceModal(props) {
               }}
             >
               <ModalStrokeBtn
-                width='80%'
-                height='50%'
-                onClick={() => handleSteps(1)}
+                width='90%'
+                height='90%'
+                onClick={() => {
+                  openOcrRef.current.click();
+                }}
               >
-                <AddAPhotoOutlinedIcon
-                  sx={{
-                    color: theme.palette.posco_blue_500,
-                    fontSize: { xs: '20vw', sm: '15vw', md: '8vw' },
-                  }}
+                <input
+                  ref={openOcrRef}
+                  type='file'
+                  style={{ display: 'none' }}
+                  onChange={handleFileChange}
+                  accept='image/png, image/jpeg'
                 />
-                <input type='file' accept='image/png, image/jpeg' />
+                {imgUrl ? (
+                  <img
+                    style={{
+                      width: '90%',
+                      height: '90%',
+                      objectFit: 'contain',
+                    }}
+                    src={imgUrl}
+                    alt='upload-preview'
+                  />
+                ) : (
+                  <AddAPhotoOutlinedIcon
+                    sx={{
+                      color: theme.palette.posco_blue_500,
+                      fontSize: { xs: '20vw', sm: '15vw', md: '8vw' },
+                    }}
+                  />
+                )}
               </ModalStrokeBtn>
-
-              <FlexDiv>
-                <FormControl sx={{ minWidth: 120 }} size='small'>
-                  <Typography
-                    my={1}
-                    sx={{
-                      fontSize: { xs: '12px', sm: '14px', md: '16px' },
-                      fontWeight: 600,
-                    }}
-                  >
-                    입금통화
-                  </Typography>
-                  <Select
-                    value={depCurr}
-                    onChange={handleDepChange}
-                    sx={{ backgroundColor: '#F5F6FA' }}
-                  >
-                    <MenuItem value='ARS'>ARS</MenuItem>
-                    <MenuItem value='USD'>USD</MenuItem>
-                    <MenuItem value='KRW'>KRW</MenuItem>
-                  </Select>
-                </FormControl>
-
-                <FormControl sx={{ minWidth: 120 }} size='small'>
-                  <Typography
-                    my={1}
-                    sx={{
-                      fontSize: { xs: '12px', sm: '14px', md: '16px' },
-                      fontWeight: 600,
-                    }}
-                  >
-                    출금통화
-                  </Typography>
-                  <Select
-                    value={wdCurr}
-                    onChange={handleWdChange}
-                    sx={{ backgroundColor: '#F5F6FA' }}
-                  >
-                    <MenuItem value='ARS'>ARS</MenuItem>
-                    <MenuItem value='USD'>USD</MenuItem>
-                    <MenuItem value='KRW'>KRW</MenuItem>
-                  </Select>
-                </FormControl>
-              </FlexDiv>
             </DialogContent>
             <DialogActions>
-              <CustomButton onClick={handleOcrSubmit}>제출하기</CustomButton>
+              <CustomButton onClick={handleOcrUpload} size='sm'>
+                영수증 입력하기
+              </CustomButton>
             </DialogActions>
           </Dialog>
         );
@@ -321,6 +349,7 @@ export default function InvoiceModal(props) {
               <FlexDiv>
                 <ModalInput
                   label='거래처명*'
+                  value={store}
                   width='40vw'
                   placeholder='거래처명을 입력하세요'
                   onChange={handleStoreChange}
@@ -405,12 +434,14 @@ export default function InvoiceModal(props) {
                   width='10vw'
                   placeholder='소수점 2자리포함'
                   type='number'
+                  value={withdrawal}
                   onChange={handleWithdrawalChange}
                 />
 
                 <ModalInput
                   type='date'
                   label='거래일자*'
+                  value={txDate}
                   onChange={handleTxDateChange}
                 />
               </FlexDiv>

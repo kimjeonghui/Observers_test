@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import requests from '../../api/officeConfig';
 
 import {
   Dialog,
@@ -14,35 +15,35 @@ import CustomButton from '../global/Button';
 import ModalInput from '../global/ModalInput';
 
 function AdminOfficeModal(props) {
-  const { open, setOpen, ovsCd } = props;
+  const { open, setOpen, ovsCd, fetchData } = props;
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const [tableData, setTableData] = useState([]);
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // const [tableData, setTableData] = useState([]);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
-  const fetchData = () => {
-    axios
-      .get('http://localhost:8086/admin-office')
-      .then((response) => {
-        const { data } = response;
-        setTableData(data.referenceList);
-      })
-      .catch((error) => {
-        console.error('Failed fetchData Error fetching data:', error);
-      });
-  };
+  // const fetchData = () => {
+  //   axios
+  //     .get(requests.GET_OFFICE_ALL())
+  //     .then((response) => {
+  //       const { data } = response;
+  //       setTableData(data.referenceList);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Failed fetchData Error fetching data:', error);
+  //     });
+  // };
 
   const [referenceData, setReferenceData] = useState({}); // Initialize with an empty object
 
   useEffect(() => {
     if (open) {
       axios
-        .get(`http://localhost:8086/admin-office/${ovsCd}`)
+        .get(requests.GET_OFFICE_LIST_BY_CODE(ovsCd))
         .then((response) => {
           const { data } = response;
           // Update only specific properties of referenceData
@@ -77,11 +78,12 @@ function AdminOfficeModal(props) {
 
   const handleUpdate = () => {
     axios
-      .post(`http://localhost:8086/admin-office`, referenceData)
+      .post(requests.POST_OFFICE(), referenceData)
       .then((response) => {
         console.log(response.data);
         alert('업데이트 되었습니다.');
         setOpen(false);
+        fetchData(); // Refresh data
       })
       .catch((error) => {
         console.error('Error updating reference:', error);

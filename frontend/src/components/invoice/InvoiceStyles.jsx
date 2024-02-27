@@ -25,6 +25,7 @@ export const ModalStrokeBtn = styled.div`
   color: ${(props) => props.theme.palette.posco_blue_500};
   border-radius: 15px;
   outline: 1px solid ${(props) => props.theme.palette.posco_lg_500};
+  cursor: pointer;
   &:hover {
     outline: 3px solid ${(props) => props.theme.palette.posco_blue_500};
   }
