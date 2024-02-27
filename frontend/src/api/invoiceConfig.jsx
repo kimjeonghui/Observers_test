@@ -11,6 +11,12 @@ const requests = {
   POST_INVOICE_LIST() {
     return this.base_url + `/invoice/list`;
   },
+  GET_INVOICE_STATUS_DATA(ovsCd, fiscalMonth, status) {
+    return this.base_url + `/invoice/${ovsCd}/${fiscalMonth}/${status}`;
+  },
+  PATCH_INVOICE_STATUS_DATA(ovsCd, fiscalMonth) {
+    return this.base_url + `/invoice/${ovsCd}/${fiscalMonth}`;
+  },
 };
 
 export default requests;
