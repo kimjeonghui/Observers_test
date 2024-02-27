@@ -14,7 +14,7 @@ import { FlexDiv } from './AdminStyles';
 import CustomButton from '../global/Button';
 import ModalInput from '../global/ModalInput';
 
-function AdminOfficeModal(props) {
+function AdminOfficeUpdate(props) {
   const { open, setOpen, ovsCd, fetchData } = props;
 
   const handleClose = () => {
@@ -78,7 +78,7 @@ function AdminOfficeModal(props) {
 
   const handleUpdate = () => {
     axios
-      .post(requests.POST_OFFICE(), referenceData)
+      .put(requests.PUT_OFFICE(), referenceData)
       .then((response) => {
         console.log(response.data);
         alert('업데이트 되었습니다.');
@@ -181,4 +181,4 @@ function AdminOfficeModal(props) {
   );
 }
 
-export default AdminOfficeModal;
+export default AdminOfficeUpdate;
