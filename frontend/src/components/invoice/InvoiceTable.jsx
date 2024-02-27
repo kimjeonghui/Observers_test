@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import Button from '../global/Button';
 import PropTypes from 'prop-types';
@@ -54,7 +54,7 @@ function stableSort(array, comparator) {
 
 const headCells = [
   {
-    id: 'ovs_cd',
+    id: 'ovsCd',
     numeric: false,
     disablePadding: true,
     label: '사무소코드',
@@ -67,10 +67,10 @@ const headCells = [
     disablePadding: false,
     label: '순번',
     minWidth: 60,
-    isSort: true,
+    isSort: false,
   },
   {
-    id: 'fiscal_month',
+    id: 'fiscalMonth',
     numeric: false,
     disablePadding: false,
     label: '회계월',
@@ -78,7 +78,7 @@ const headCells = [
     isSort: false,
   },
   {
-    id: 'tx_date',
+    id: 'txDate',
     numeric: true,
     disablePadding: true,
     label: '거래일자',
@@ -94,7 +94,7 @@ const headCells = [
     isSort: true,
   },
   {
-    id: 'dep_curr',
+    id: 'depCurr',
     numeric: false,
     disablePadding: true,
     label: '입금통화',
@@ -110,7 +110,7 @@ const headCells = [
     isSort: true,
   },
   {
-    id: 'wd_curr',
+    id: 'wdCurr',
     numeric: false,
     disablePadding: true,
     label: '출금통화',
@@ -126,7 +126,7 @@ const headCells = [
     isSort: true,
   },
   {
-    id: 'trans_cd',
+    id: 'tranCd',
     numeric: false,
     disablePadding: true,
     label: '식별코드',
@@ -140,7 +140,7 @@ const headCells = [
     minWidth: 120,
   },
   {
-    id: 'trans_amount',
+    id: 'transAmount',
     numeric: false,
     disablePadding: true,
     label: '환산금액',
@@ -148,7 +148,7 @@ const headCells = [
     isSort: true,
   },
   {
-    id: 'sup_evidence',
+    id: 'supEvidence',
     numeric: false,
     disablePadding: true,
     label: '증빙자료',
@@ -292,7 +292,7 @@ export default function InvoiceTable(props) {
 
   const handleSelectAllClick = (event) => {
     if (event.target.checked) {
-      const newSelected = rows?.map((n) => n.num);
+      const newSelected = rows?.map((row) => row.invoiceId);
       setSelected(newSelected);
       return;
     }
@@ -339,12 +339,12 @@ export default function InvoiceTable(props) {
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage
       ),
-    [order, orderBy, page, rowsPerPage]
+    [order, orderBy, page, rowsPerPage, rows]
   );
 
   const eviDummy = [
     {
-      id: 1,
+      invoiceId: 1,
       data: [
         {
           eviId: 1,
@@ -361,7 +361,7 @@ export default function InvoiceTable(props) {
       ],
     },
     {
-      id: 4,
+      invoiceId: 4,
       data: [
         {
           eviId: 4,
@@ -370,7 +370,7 @@ export default function InvoiceTable(props) {
       ],
     },
     {
-      id: 5,
+      invoiceId: 5,
       data: [
         {
           eviId: 5,
@@ -383,7 +383,7 @@ export default function InvoiceTable(props) {
       ],
     },
     {
-      id: 9,
+      invoiceId: 9,
       data: [
         {
           eviId: 7,
@@ -396,7 +396,7 @@ export default function InvoiceTable(props) {
       ],
     },
     {
-      id: 11,
+      invoiceId: 11,
       data: [
         {
           eviId: 1,
@@ -413,7 +413,7 @@ export default function InvoiceTable(props) {
       ],
     },
     {
-      id: 12,
+      invoiceId: 12,
       data: [
         {
           eviId: 1,
@@ -475,11 +475,11 @@ export default function InvoiceTable(props) {
             />
             <TableBody>
               {visibleRows.map((row, index) => {
-                const isItemSelected = isSelected(row.num);
+                const isItemSelected = isSelected(row.invoiceId);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
                 return (
-                  <TableRow hover tabIndex={-1} key={row.id}>
+                  <TableRow hover tabIndex={-1} key={row.invoiceId}>
                     <TableCell
                       sx={{ width: 4, padding: 0, boxSizing: 'border-box' }}
                     >
@@ -503,7 +503,7 @@ export default function InvoiceTable(props) {
                         padding: 0,
                       }}
                     >
-                      {row.ovs_cd}
+                      {row.ovsCd}
                     </TableCell>
                     <TableCell
                       align='center'
@@ -521,7 +521,7 @@ export default function InvoiceTable(props) {
                         padding: 0,
                       }}
                     >
-                      {row.fiscal_month}
+                      {row.fiscalMonth}
                     </TableCell>
                     <TableCell
                       align='center'
@@ -530,7 +530,7 @@ export default function InvoiceTable(props) {
                         padding: 0,
                       }}
                     >
-                      {row.tx_date}
+                      {row.txDate}
                     </TableCell>
                     <TableCell
                       align='center'
@@ -548,7 +548,7 @@ export default function InvoiceTable(props) {
                         padding: 0,
                       }}
                     >
-                      {row.dep_curr}
+                      {row.depCurr}
                     </TableCell>
                     <TableCell
                       align='center'
@@ -566,7 +566,7 @@ export default function InvoiceTable(props) {
                         padding: 0,
                       }}
                     >
-                      {row.wd_curr}
+                      {row.wdCurr}
                     </TableCell>
                     <TableCell
                       align='center'
@@ -584,7 +584,7 @@ export default function InvoiceTable(props) {
                         padding: 0,
                       }}
                     >
-                      {row.trans_cd}
+                      {row.tranCd}
                     </TableCell>
                     <TableCell
                       align='center'
@@ -602,7 +602,7 @@ export default function InvoiceTable(props) {
                         padding: 0,
                       }}
                     >
-                      {row.trans_amount}
+                      {row.transAmount}
                     </TableCell>
                     <TableCell
                       align='center'

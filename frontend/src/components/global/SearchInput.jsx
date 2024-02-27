@@ -23,9 +23,15 @@ export default function SearchInput(props) {
     width,
     height,
     placeholder: customPlaceholder,
+    value,
+    setValue,
+    searchValue,
   } = props;
   const theme = useTheme();
   const placeholder = customPlaceholder || 'Search';
+  const onChangeValue = (e) => {
+    setValue(e.target.value);
+  };
   return (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <CustomInput
@@ -35,12 +41,16 @@ export default function SearchInput(props) {
         rightRadius={rightRadius}
         width={width}
         height={height}
+        onChange={onChangeValue}
       />
-      <SearchIcon
-        sx={{
-          color: theme.palette.posco_gray_300,
-        }}
-      />
+      <div onClick={searchValue}>
+        <SearchIcon
+          sx={{
+            color: theme.palette.posco_gray_300,
+            cursor: 'pointer',
+          }}
+        />
+      </div>
     </div>
   );
 }

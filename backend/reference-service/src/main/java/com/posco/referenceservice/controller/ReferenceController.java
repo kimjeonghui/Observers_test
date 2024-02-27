@@ -1,5 +1,6 @@
 package com.posco.referenceservice.controller;
 
+import com.posco.referenceservice.dto.OvsCodeDTO;
 import com.posco.referenceservice.dto.ReferenceDTO;
 import com.posco.referenceservice.service.ReferenceService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -44,6 +45,23 @@ public class ReferenceController {
         return ResponseEntity.ok().body(resultMap);
     }
 
+    @GetMapping("/codeList")
+    @Operation(summary = "사무소 코드 리스트 가져오기", description = "")
+    public ResponseEntity getOvsCodeList(){
+        Map<String, Object> resultMap = new HashMap<>();
+        List<OvsCodeDTO> ovsList = referenceService.getOvsCodeList();
+
+        if(ovsList.isEmpty()){
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "사무소 코드가 없음");
+            return ResponseEntity.badRequest().body(resultMap);
+        }
+        resultMap.put("result", SUCCESS);
+        resultMap.put("msg", "사무소 코드 리스트 가져오기 성공");
+        resultMap.put("ovsCodeList", ovsList);
+        return ResponseEntity.ok().body(resultMap);
+    }
+
     @GetMapping("/{ovsCd}")
     @Operation(summary = "Get reference by office name", description = "Get a reference by its office name.")
     public ResponseEntity<?> getReferenceByOvsCd(@PathVariable String ovsCd) {
@@ -57,7 +75,7 @@ public class ReferenceController {
         }
 
         resultMap.put("result", SUCCESS);
-        resultMap.put("msg", "Reference retrieved successfully.");
+        resultMap.put("msg", "Selected Reference retrieved successfully.");
         resultMap.put("reference", reference);
 
         return ResponseEntity.ok().body(resultMap);

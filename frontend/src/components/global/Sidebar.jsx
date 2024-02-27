@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+
 import {
   Toolbar,
   IconButton,
@@ -9,23 +11,25 @@ import {
   List,
   ListItem,
   ListItemButton,
-  ListItemIcon,
-  ListItemText,
   Button,
   Drawer,
   AppBar,
+  Menu,
+  MenuItem,
+  Typography,
 } from '@mui/material';
-
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { useTheme } from '@emotion/react';
-
+import { userState, loginState } from '../../state/UserState';
 import MenuIcon from '@mui/icons-material/Menu';
-import MailIcon from '@mui/icons-material/Mail';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
 
 import Logo from '../global/Logo';
 
 function Sidebar(props) {
   const theme = useTheme();
+  const navigate = useNavigate();
+  const [user, setUser] = useRecoilState(userState);
+  const setIsLogin = useSetRecoilState(loginState);
   const [open, setOpen] = useState(false);
   const location = useLocation();
   const [adminPages, setAdminPages] = useState([
@@ -37,9 +41,16 @@ function Sidebar(props) {
     { name: '당월 자료 입력', address: '/invoice', status: false },
     { name: '월 총괄표', address: '/summary', status: false },
     { name: '회계전표', address: '/accounting-slip', status: false },
-    { name: '대시보드', address: '/ocr', status: false },
+    { name: '대시보드', address: '/dashboard', status: false },
     { name: '증빙자료관리', address: '/receipts', status: false },
   ]);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [role, setRole] = useState('user');
+  let menuOpen = Boolean(anchorEl);
+
+  useEffect(() => {
+    if (user.role === 'ADMIN' || user.role === 'SYSTEM_ADMIN') setRole('admin');
+  }, []);
 
   useEffect(() => {
     const path = location.pathname;
@@ -64,6 +75,20 @@ function Sidebar(props) {
     setOpen((prev) => !prev);
   };
 
+  const logout = () => {
+    handleClose();
+    setIsLogin(false);
+    setUser({});
+    navigate('/login');
+  };
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -75,120 +100,153 @@ function Sidebar(props) {
           height: '60px',
         }}
       >
-        <Toolbar>
-          <IconButton
-            color='inherit'
-            aria-label='open drawer'
-            onClick={handleDrawerOpen}
-            edge='start'
-            sx={{
-              ml: 1,
-              marginRight: 1,
-              color: theme.palette.posco_blue_500,
-              ...(open && { display: 'none' }),
-            }}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Logo url='/home' width='70px' height='30px' />
-          <Box>
-            <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-              {adminPages.map((page) =>
-                page.status ? (
-                  <Link
-                    to={page.address}
-                    key={page.name}
-                    style={{ textDecoration: 'none' }}
-                  >
-                    <Button
-                      sx={{
-                        my: 2,
-                        color: theme.palette.posco_black,
-                        display: 'block',
-                        m: 0,
-                      }}
+        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <IconButton
+              color='inherit'
+              aria-label='open drawer'
+              onClick={handleDrawerOpen}
+              edge='start'
+              sx={{
+                ml: 1,
+                marginRight: 1,
+                color: theme.palette.posco_blue_500,
+                ...(open && { display: 'none' }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
+            <Logo url='/' width='70px' height='30px' />
+          </div>
+          <Box sx={{ display: 'flex' }}>
+            {role === 'admin' && (
+              <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                {adminPages.map((page) =>
+                  page.status ? (
+                    <Link
+                      to={page.address}
+                      key={page.name}
+                      style={{ textDecoration: 'none' }}
                     >
-                      {page.name}
-                    </Button>
-                  </Link>
-                ) : (
-                  <Link
-                    to={page.address}
-                    key={page.name}
-                    style={{ textDecoration: 'none' }}
-                  >
-                    <Button
-                      sx={{
-                        my: 2,
-                        color: theme.palette.posco_lg_500,
-                        display: 'block',
-                        m: 0,
-                        '&:hover': {
-                          color: theme.palette.posco_gray_500,
-                        },
-                      }}
+                      <Button
+                        sx={{
+                          my: 2,
+                          color: theme.palette.posco_black,
+                          display: 'block',
+                          m: 0,
+                        }}
+                      >
+                        {page.name}
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Link
+                      to={page.address}
+                      key={page.name}
+                      style={{ textDecoration: 'none' }}
                     >
-                      {page.name}
-                    </Button>
-                  </Link>
-                )
-              )}
-            </Box>
+                      <Button
+                        sx={{
+                          my: 2,
+                          color: theme.palette.posco_lg_500,
+                          display: 'block',
+                          m: 0,
+                          '&:hover': {
+                            color: theme.palette.posco_gray_500,
+                          },
+                        }}
+                      >
+                        {page.name}
+                      </Button>
+                    </Link>
+                  )
+                )}
+              </Box>
+            )}
+            <Typography sx={{ color: theme.palette.posco_gray_500 }}>
+              {user.name}
+            </Typography>
+            <AccountCircleIcon
+              sx={{ color: theme.palette.posco_gray_500, cursor: 'pointer' }}
+              aria-controls={menuOpen}
+              aria-haspopup='true'
+              aria-expanded={menuOpen}
+              onClick={handleClick}
+            />
+            <Menu
+              id='demo-positioned-menu'
+              aria-labelledby='demo-positioned-button'
+              anchorEl={anchorEl}
+              open={menuOpen}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+            >
+              <MenuItem onClick={logout}>Logout</MenuItem>
+            </Menu>
           </Box>
         </Toolbar>
       </AppBar>
       <Drawer open={open} onClose={() => handleDrawerOpen(false)}>
-        <List sx={{ display: { xs: 'block', md: 'none' } }}>
-          {adminPages.map((page) =>
-            page.status ? (
-              <Link
-                to={page.address}
-                key={page.name}
-                style={{ textDecoration: 'none' }}
-              >
-                <ListItem sx={{ width: '25vw', height: '60px' }}>
-                  <div
-                    style={{
-                      width: '6px',
-                      height: '30px',
-                      backgroundColor: theme.palette.posco_blue_500,
-                    }}
-                  ></div>
+        {role === 'admin' && (
+          <List sx={{ display: { xs: 'block', md: 'none' } }}>
+            {adminPages.map((page) =>
+              page.status ? (
+                <Link
+                  to={page.address}
+                  key={page.name}
+                  style={{ textDecoration: 'none' }}
+                >
+                  <ListItem sx={{ width: '25vw', height: '60px' }}>
+                    <div
+                      style={{
+                        width: '6px',
+                        height: '30px',
+                        backgroundColor: theme.palette.posco_blue_500,
+                      }}
+                    ></div>
+                    <ListItemButton
+                      sx={{
+                        my: 2,
+                        color: theme.palette.posco_blue_500,
+                      }}
+                    >
+                      {page.name}
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
+              ) : (
+                <Link
+                  to={page.address}
+                  key={page.name}
+                  style={{ textDecoration: 'none' }}
+                >
                   <ListItemButton
                     sx={{
                       my: 2,
-                      color: theme.palette.posco_blue_500,
+                      color: theme.palette.posco_gray_700,
+                      '&:hover': {
+                        color: theme.palette.posco_gray_900,
+                      },
                     }}
                   >
                     {page.name}
                   </ListItemButton>
-                </ListItem>
-              </Link>
-            ) : (
-              <Link
-                to={page.address}
-                key={page.name}
-                style={{ textDecoration: 'none' }}
-              >
-                <ListItemButton
-                  sx={{
-                    my: 2,
-                    color: theme.palette.posco_gray_700,
-                    '&:hover': {
-                      color: theme.palette.posco_gray_900,
-                    },
-                  }}
-                >
-                  {page.name}
-                </ListItemButton>
-              </Link>
-            )
-          )}
-        </List>
+                </Link>
+              )
+            )}
+          </List>
+        )}
         <Divider />
         <List>
-          {userPages.map((page) =>
-            page.status ? (
+          {userPages.map((page, idx) =>
+            role === 'admin' && idx === 0 ? null : page.status ? (
               <Link
                 to={page.address}
                 key={page.name}

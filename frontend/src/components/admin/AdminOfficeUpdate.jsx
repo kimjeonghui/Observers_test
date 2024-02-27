@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import requests from '../../api/officeConfig';
 
 import {
   Dialog,
@@ -14,35 +15,35 @@ import CustomButton from '../global/Button';
 import ModalInput from '../global/ModalInput';
 
 function AdminOfficeModal(props) {
-  const { open, setOpen, ovsCd } = props;
+  const { open, setOpen, ovsCd, fetchData } = props;
 
   const handleClose = () => {
     setOpen(false);
   };
 
-  const [tableData, setTableData] = useState([]);
-  useEffect(() => {
-    fetchData();
-  }, []);
+  // const [tableData, setTableData] = useState([]);
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
 
-  const fetchData = () => {
-    axios
-      .get('http://localhost:8080/admin-office')
-      .then((response) => {
-        const { data } = response;
-        setTableData(data.referenceList);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-  };
+  // const fetchData = () => {
+  //   axios
+  //     .get(requests.GET_OFFICE_ALL())
+  //     .then((response) => {
+  //       const { data } = response;
+  //       setTableData(data.referenceList);
+  //     })
+  //     .catch((error) => {
+  //       console.error('Failed fetchData Error fetching data:', error);
+  //     });
+  // };
 
   const [referenceData, setReferenceData] = useState({}); // Initialize with an empty object
 
   useEffect(() => {
     if (open) {
       axios
-        .get(`http://localhost:8080/admin-office/${ovsCd}`)
+        .get(requests.GET_OFFICE_LIST_BY_CODE(ovsCd))
         .then((response) => {
           const { data } = response;
           // Update only specific properties of referenceData
@@ -51,6 +52,13 @@ function AdminOfficeModal(props) {
             ovsCd: data.reference.ovsCd,
             ovsMeaning: data.reference.ovsMeaning,
             ovsCopCd: data.reference.ovsCopCd,
+            glCurr: data.reference.glCurr,
+            locCurr: data.reference.locCurr,
+            transCurr: data.reference.transCurr,
+            locCurr2: data.reference.locCurr2,
+            transCurr2: data.reference.transCurr2,
+            startDate: data.reference.startDate,
+            endDate: data.reference.endDate,
             // Add other properties as needed
           }));
         })
@@ -70,11 +78,12 @@ function AdminOfficeModal(props) {
 
   const handleUpdate = () => {
     axios
-      .post(`http://localhost:8080/admin-office`, referenceData)
+      .post(requests.POST_OFFICE(), referenceData)
       .then((response) => {
         console.log(response.data);
         alert('업데이트 되었습니다.');
         setOpen(false);
+        fetchData(); // Refresh data
       })
       .catch((error) => {
         console.error('Error updating reference:', error);
@@ -132,7 +141,7 @@ function AdminOfficeModal(props) {
               onChange={handleChange}
             />
             <ModalInput
-              label='[기본]송금통화'
+              label='(추가)송금통화'
               name='transCurr2'
               value={referenceData.transCurr2}
               onChange={handleChange}

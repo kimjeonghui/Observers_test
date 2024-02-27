@@ -21,7 +21,7 @@ export default function AdminCodeDialog() {
   return (
     <React.Fragment>
       <Button size='sm' onClick={handleClickOpen}>
-        추가 Insert Dialog
+        Insert Dialog
       </Button>
       <Dialog
         open={open}

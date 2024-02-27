@@ -1,10 +1,12 @@
 package com.posco.referenceservice.service;
 
+import com.posco.referenceservice.dto.OvsCodeDTO;
 import com.posco.referenceservice.dto.ReferenceDTO;
 import com.posco.referenceservice.entity.ReferenceEntity;
 import com.posco.referenceservice.repository.ReferenceRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,6 +25,20 @@ public class ReferenceServiceImpl implements ReferenceService {
         return referenceEntities.stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<OvsCodeDTO> getOvsCodeList() {
+        List<OvsCodeDTO> OvsCodes = new ArrayList<>();
+        List<ReferenceEntity> referenceDTOS = referenceRepository.findAll();
+        for(ReferenceEntity ovsCode: referenceDTOS){
+            OvsCodeDTO ovsCodeDTO = OvsCodeDTO.builder()
+                    .OvsCd(ovsCode.getOvsCd())
+                    .OvsMeaning(ovsCode.getOvsMeaning())
+                    .build();
+            OvsCodes.add(ovsCodeDTO);
+        }
+        return OvsCodes;
     }
 
     @Override

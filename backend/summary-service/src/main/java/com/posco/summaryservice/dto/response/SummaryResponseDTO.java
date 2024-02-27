@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,13 +18,8 @@ import java.time.LocalDateTime;
 public class SummaryResponseDTO {
     private String ovsCd;
     private String ovsName;
-    private LocalDateTime fiscalMonth;
-    private String majorCt;         // 대분류
-    private String mediumCt;        // 중분류
-    private String minorCt;         // 소분류
-    private String locCurr;         // 현지 통화
-    private BigDecimal loc;         // 현지 통화 금액
-    private String transCurr;       // 송금 통화
-    private BigDecimal trans;       // 송금 통화 금액
-    private String note;            // 비고
+    private String fiscalMonth;
+    private String locCurr;
+    private String transCurr;
+    private List<SummaryContentDTO> contents;
 }

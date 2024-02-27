@@ -3,6 +3,7 @@ package com.posco.userservice.controller;
 import com.posco.userservice.dto.request.LoginDTO;
 import com.posco.userservice.dto.request.RegisterDTO;
 import com.posco.userservice.dto.request.UpdateDTO;
+import com.posco.userservice.dto.response.LoginUserDTO;
 import com.posco.userservice.dto.response.TokenDTO;
 import com.posco.userservice.dto.response.UserDTO;
 import com.posco.userservice.entity.UserEntity;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,20 +38,18 @@ public class UserController {
     @Operation(summary = "Register user", description = "")
     public ResponseEntity<?> registerUser(@Valid @RequestBody RegisterDTO registerDTO){
         Map<String, Object> resultMap = new HashMap<>();
-        TokenDTO tokenDTO = userService.registerUser(registerDTO);
-
+        UserEntity user = userService.registerUser(registerDTO);
+        log.info("registerDTO"+registerDTO.toString());
         // 회원 등록 실패
-        if(tokenDTO==null){
+        if(user==null){
            resultMap.put("result", FAIL);
            resultMap.put("msg", "회원 등록 실패");
-           return ResponseEntity.internalServerError().body(resultMap);
+           return ResponseEntity.badRequest().body(resultMap);
         }
 
         // 회원 등록 성공
         resultMap.put("result", SUCCESS);
         resultMap.put("msg", "회원 등록 성공");
-        resultMap.put("accessToken", tokenDTO.getAccessToken());
-        resultMap.put("refreshToken", tokenDTO.getRefreshToken());
         return ResponseEntity.ok().body(resultMap);
     }
 
@@ -64,16 +64,15 @@ public class UserController {
             return ResponseEntity.badRequest().body(resultMap);
         }
         // 사용자 ID, PASSWORD 일치 (로그인) 확인
-        TokenDTO tokenDTO = userService.loginUser(loginDTO);
-        if(tokenDTO==null){
+        LoginUserDTO loginUserDTO = userService.loginUser(loginDTO);
+        if(loginUserDTO==null){
             resultMap.put("result", FAIL);
             resultMap.put("msg", "로그인 실패");
             return ResponseEntity.badRequest().body(resultMap);
         }
         resultMap.put("result", SUCCESS);
         resultMap.put("msg", "로그인 성공");
-        resultMap.put("accessToken", tokenDTO.getAccessToken());
-        resultMap.put("refreshToken", tokenDTO.getRefreshToken());
+        resultMap.put("user", loginUserDTO);
         return ResponseEntity.ok().body(resultMap);
     }
 
@@ -93,7 +92,7 @@ public class UserController {
         return ResponseEntity.ok().body(resultMap);
     }
 
-    @GetMapping("/{userName}")
+    @GetMapping("/detail/{userName}")
     @Operation(summary = "Get one user", description = "")
     public ResponseEntity<?> getUser(@PathVariable String userName){
         Map<String, Object> resultMap = new HashMap<>();
@@ -110,6 +109,48 @@ public class UserController {
         return ResponseEntity.ok().body(resultMap);
     }
 
+    @GetMapping("/{ovsCd}")
+    @Operation(summary = "Get userList By ovsCode", description = "")
+    public ResponseEntity<?> getUserListByOvsCode(@PathVariable String ovsCd){
+        Map<String, Object> resultMap = new HashMap<>();
+        List<UserDTO> userDTOList = userService.getUserListByOvsCode(ovsCd);
+//        if(userDTOList.isEmpty()){
+//            resultMap.put("result", FAIL);
+//            resultMap.put("msg", "해당 사무소에 소속된 사용자가 없습니다.");
+//            return ResponseEntity.badRequest().body(resultMap);
+//        }
+        resultMap.put("result", SUCCESS);
+        resultMap.put("msg", "사용자 리스트 가져오기 성공");
+        resultMap.put("userList", userDTOList);
+        return ResponseEntity.ok().body(resultMap);
+    }
+
+    @GetMapping("/search/{subject}/{value}")
+    @Operation(summary = "Get userList By searchBar", description = "")
+    public ResponseEntity<?> getUserListByOvsCode(@PathVariable String subject, @PathVariable String value){
+        Map<String, Object> resultMap = new HashMap<>();
+        List<UserDTO> userDTOList = userService.searchUserList(subject, value);
+
+//        if(subject.equals("name")){
+//            userDTOList = userService.getUserListByName(value);
+//        } else if(subject.equals("description")){
+//            userDTOList = userService.getUserListByDescription(value);
+//        } else if(subject.equals("email")){
+//            userDTOList = userService.getUserListByEmail(value);
+//        } else{
+//            userService.getUserListByRole(value);
+//        }
+        if(userDTOList.isEmpty()){
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "해당 조건에 소속된 사용자가 없습니다.");
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(resultMap);
+        }
+        resultMap.put("result", SUCCESS);
+        resultMap.put("msg", "사용자 리스트 가져오기 성공");
+        resultMap.put("userList", userDTOList);
+        return ResponseEntity.ok().body(resultMap);
+    }
+
     @PutMapping
     @Operation(summary = "Update user", description = "")
     public ResponseEntity<?> updateUser(@Valid @RequestBody UpdateDTO updateDTO){
@@ -120,35 +161,34 @@ public class UserController {
             resultMap.put("msg", "유효하지 않은 사용자입니다.");
             return ResponseEntity.badRequest().body(resultMap);
         }
-        TokenDTO tokenDTO = userService.updateUser(updateDTO);
-        if(tokenDTO==null){
+        LoginUserDTO loginUserDTO = userService.updateUser(updateDTO);
+        if(loginUserDTO==null){
             resultMap.put("result", FAIL);
             resultMap.put("msg", "회원 수정 실패");
             return ResponseEntity.badRequest().body(resultMap);
         }
         resultMap.put("result", SUCCESS);
         resultMap.put("msg", "회원 수정 성공");
-        resultMap.put("accessToken", tokenDTO.getAccessToken());
-        resultMap.put("refreshToken", tokenDTO.getRefreshToken());
+        resultMap.put("user", loginUserDTO);
         return ResponseEntity.ok().body(resultMap);
     }
 
     @DeleteMapping("/{name}")
     @Operation(summary = "Delete user", description = "")
-    public ResponseEntity<?> deleteUser(HttpServletRequest httpServletRequest, @PathVariable String name){
+    public ResponseEntity<?> deleteUser(@PathVariable String name){
         Map<String, Object> resultMap = new HashMap<>();
 
-        if(httpServletRequest.getHeader("Authorization")==null){
-            resultMap.put("result", FAIL);
-            resultMap.put("msg", "토큰이 없습니다.");
-            return ResponseEntity.badRequest().body(resultMap);
-        }
-        String role = JwtTokenProvider.getRoleByAccessToken(httpServletRequest);
-        if(!role.equals("ADMIN")){
-            resultMap.put("result", FAIL);
-            resultMap.put("msg", "삭제 권한이 없습니다.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(resultMap);
-        }
+//        if(httpServletRequest.getHeader("Authorization")==null){
+//            resultMap.put("result", FAIL);
+//            resultMap.put("msg", "토큰이 없습니다.");
+//            return ResponseEntity.badRequest().body(resultMap);
+//        }
+//        String role = JwtTokenProvider.getRoleByAccessToken(httpServletRequest);
+//        if(!role.equals("ADMIN")){
+//            resultMap.put("result", FAIL);
+//            resultMap.put("msg", "삭제 권한이 없습니다.");
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(resultMap);
+//        }
         if(userService.checkExistName(name)){
             resultMap.put("result", FAIL);
             resultMap.put("msg", "사용자가 존재하지 않습니다.");

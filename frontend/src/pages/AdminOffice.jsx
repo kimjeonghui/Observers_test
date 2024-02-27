@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import requests from '../api/officeConfig';
 import AdminOfficeDialog from '../components/admin/AdminOfficeDialog';
 import AdminOfficeModal from '../components/admin/AdminOfficeModal';
 import AdminOfficeUpdate from '../components/admin/AdminOfficeUpdate';
 import CustomButton from '../components/global/Button';
+import ExcelIcon from '../assets/excel-logo-64.png';
+import { CSVLink } from 'react-csv';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import {
@@ -19,22 +22,29 @@ import {
   TextField,
   MenuItem,
   Typography,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  Button,
 } from '@mui/material';
 
 export default function AdminOffice() {
   const [tableData, setTableData] = useState([]);
   const [selectedOffice, setSelectedOffice] = useState('');
+  const [open, setOpen] = useState(false);
+  const [deleteRow, setDeleteRow] = useState(null);
+  const [openDelete, setOpenDelete] = useState(false);
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(25);
-  const [open, setOpen] = useState(false);
 
+  //GET all
   useEffect(() => {
     fetchData();
   }, []);
 
   const fetchData = () => {
     axios
-      .get('http://localhost:8080/admin-office')
+      .get(requests.GET_OFFICE_ALL())
       .then((response) => {
         const { data } = response;
         setTableData(data.referenceList);
@@ -44,6 +54,7 @@ export default function AdminOffice() {
       });
   };
 
+  //GET by ovsCd
   const handleChangeOffice = (event) => {
     const selectedOffice = event.target.value;
     setSelectedOffice(selectedOffice);
@@ -52,9 +63,9 @@ export default function AdminOffice() {
       // If '전체' (all) is selected, fetch all references
       fetchData();
     } else {
-      // Fetch reference data for the selected office
+      // Fetch reference data for the selected office (선택한 사무실 보여줌)
       axios
-        .get(`http://localhost:8080/admin-office/${selectedOffice}`)
+        .get(requests.GET_OFFICE_LIST_BY_CODE(selectedOffice))
         .then((response) => {
           const { data } = response;
           setTableData([data.reference]);
@@ -66,20 +77,12 @@ export default function AdminOffice() {
     }
   };
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - [].length) : 0;
+  //Open Insert Modal for AdminOfficeModal.jsx
   const handleOpenInsert = () => {
     setOpen(true);
   };
 
+  //Data Mapping for AdminOfficeUpdate.jsx
   const [open2Map, setOpen2Map] = useState({});
 
   const handleOpenUpdate = (ovsCd) => {
@@ -96,8 +99,50 @@ export default function AdminOffice() {
     }));
   };
 
+  // Handle deletion confirmation
+  const handleConfirmDelete = () => {
+    if (deleteRow) {
+      // Perform deletion
+      axios
+        .delete(requests.DELETE_OFFICE(deleteRow.ovsCd))
+        .then((response) => {
+          console.log(response.data);
+          fetchData(); // Refetch data after successful deletion
+          setDeleteRow(null); // Reset deleteRow state
+          setOpenDelete(false); // Close dialog
+        })
+        .catch((error) => {
+          console.error('Error deleting data:', error);
+          // Handle deletion error
+        });
+    }
+  };
+
+  //Open Dialog for deletion confirmation
+  const renderDeleteConfirmationDialog = () => (
+    <Dialog open={openDelete} onClose={() => setOpenDelete(false)}>
+      <DialogContent>정말로 삭제하시겠습니까?</DialogContent>
+      <DialogActions>
+        <Button onClick={handleConfirmDelete}>삭제 강행</Button>
+        <Button onClick={() => setOpenDelete(false)}>취소</Button>
+      </DialogActions>
+    </Dialog>
+  );
+
+  //Page Handling
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - [].length) : 0;
+
   return (
-    <div>
+    <div style={{ padding: '10px 36px' }}>
       <Typography variant='h4' gutterBottom>
         사무소 관리
       </Typography>
@@ -122,8 +167,27 @@ export default function AdminOffice() {
           </TextField>
         </Grid>
         <Grid item xs={6} textAlign='right'>
-          <AdminOfficeDialog />
-          <AdminOfficeModal open={open} setOpen={setOpen} />
+          <CSVLink
+            data={tableData}
+            // headers={TableHead}
+            style={{ decoration: 'none' }}
+            filename='Posco_Oversea_Imprest.csv'
+          >
+            <CustomButton size='sm' color='#006736' hoverColor='#017940'>
+              <img
+                src={ExcelIcon}
+                alt='excel icon'
+                style={{ height: '60%', marginRight: '10px' }}
+              />
+              export
+            </CustomButton>
+          </CSVLink>
+          {/* <AdminOfficeDialog /> */}
+          <AdminOfficeModal
+            open={open}
+            setOpen={setOpen}
+            fetchData={fetchData} // Pass fetchData function down to AdminOfficeModal
+          />
           <CustomButton onClick={handleOpenInsert} size='sm'>
             생성
           </CustomButton>
@@ -173,13 +237,20 @@ export default function AdminOffice() {
                               }))
                             }
                             handleClose={() => handleCloseUpdate(row.ovsCd)}
+                            ovsCd={row.ovsCd} // Ensure row.ovsCd is passed to AdminOfficeUpdate
+                            fetchData={fetchData} // Pass fetchData function down to AdminOfficeModal
                           />
                           <EditIcon
                             onClick={() => handleOpenUpdate(row.ovsCd)}
                           />
                         </TableCell>
                         <TableCell>
-                          <DeleteIcon />
+                          <DeleteIcon
+                            onClick={() => {
+                              setDeleteRow(row);
+                              setOpenDelete(true);
+                            }}
+                          />
                         </TableCell>
                       </TableRow>
                     ))}
@@ -207,6 +278,8 @@ export default function AdminOffice() {
           </Paper>
         </Grid>
       </Grid>
+      {/* 어디에 추가하는게 맞는지 모르겠음 */}
+      {renderDeleteConfirmationDialog()}
     </div>
   );
 }

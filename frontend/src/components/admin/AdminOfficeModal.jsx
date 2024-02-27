@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import requests from '../../api/officeConfig';
 
 import {
   Dialog,
@@ -18,7 +19,7 @@ import ModalInput from '../global/ModalInput';
 import 'react-datepicker/dist/react-datepicker.css';
 
 function AdminOfficeModal(props) {
-  const { open, setOpen } = props;
+  const { open, setOpen, fetchData } = props;
   const [steps, setSteps] = useState(1);
   const handleClose = () => {
     setSteps(1);
@@ -27,12 +28,12 @@ function AdminOfficeModal(props) {
 
   const [tableData, setTableData] = useState([]);
   useEffect(() => {
-    fetchData();
+    fetchLOV();
   }, []);
 
-  const fetchData = () => {
+  const fetchLOV = () => {
     axios
-      .get('http://localhost:8080/admin-office')
+      .get(requests.GET_OFFICE_ALL())
       .then((response) => {
         const { data } = response;
         setTableData(data.referenceList);
@@ -73,13 +74,25 @@ function AdminOfficeModal(props) {
       return; // Stop the function execution if ovsCd already exists
     }
     axios
-      .post('http://localhost:8080/admin-office', referenceData)
+      .post(requests.POST_OFFICE(), referenceData)
       .then((response) => {
         console.log(response.data); // Log response for debugging
         alert('생성 되었습니다.'); // Alert user for successful creation
+        setReferenceData({
+          // Reset referenceData state 생성 후 입력값 비우기
+          ovsCd: '',
+          ovsMeaning: '',
+          ovsCopCd: '',
+          glCurr: '',
+          locCurr: '',
+          transCurr: '',
+          locCurr2: '',
+          transCurr2: '',
+          startDate: '',
+          endDate: null,
+        });
+        handleClose(); // Close the modal after successful creation
         fetchData();
-        handleClose();
-        // Close the modal after successful creation
       })
       .catch((error) => {
         console.error('Error creating reference:', error);
@@ -110,7 +123,7 @@ function AdminOfficeModal(props) {
                 />
                 <ModalInput
                   label='법인코드'
-                  placeholder='PH'
+                  placeholder='ex.PH'
                   name='ovsCopCd'
                   value={referenceData.ovsCopCd}
                   onChange={handleChange}

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import requests from '../../api/config';
+import requests from '../../api/userConfig';
 
 import {
   Button,
@@ -12,25 +12,28 @@ import {
   Select,
   Typography,
   FormControl,
-  TextField,
-  DialogContentText,
 } from '@mui/material';
 
 import ModalInput from '../global/ModalInput';
 import axios from 'axios';
 function UserRegisterModal(props) {
-  const { open, setOpen } = props;
-  const { name, setName } = useState('');
-  const { description, setDescription } = useState('');
-  const { password, setPassword } = useState('');
-  const { email, setEmail } = useState('');
-  const { ovsCode, setOvsCode } = useState('');
-  const { role, setRole } = useState('');
+  const { open, setOpen, getState, setGetState } = props;
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
+  const [ovsCd, setOvsCd] = useState('');
+  const [ovsMeaning, setOvsMeaning] = useState('');
+  const [role, setRole] = useState('');
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+  const [ovsCdList, setovsCdList] = useState([]);
 
   const handleOpen = (e) => {
     setOpen(false);
   };
   const handleClose = () => {
+    setInit();
     setOpen(false);
   };
   const onChangeName = (e) => {
@@ -45,9 +48,14 @@ function UserRegisterModal(props) {
     setDescription(e.target.value);
     console.log(description);
   };
-  const onChangeOvsCode = (e) => {
-    setOvsCode(e.target.value);
-    console.log(ovsCode);
+  const onChangeOvsCd = (e) => {
+    setOvsCd(e.target.value.ovsCd);
+    setOvsMeaning(e.target.value.ovsMeaning);
+    console.log(ovsCd);
+  };
+  const onChangeOvsMeaning = (meaning) => {
+    setOvsMeaning(meaning);
+    console.log(ovsMeaning);
   };
   const onChangeEmail = (e) => {
     setEmail(e.target.value);
@@ -57,20 +65,72 @@ function UserRegisterModal(props) {
     setRole(e.target.value);
     console.log(role);
   };
+  const onChangeStartDate = (e) => {
+    setStartDate(e.target.value);
+    console.log(startDate);
+  };
+  const onChangeEndDate = (e) => {
+    setEndDate(e.target.value);
+    console.log(endDate);
+  };
+  const setInit = () => {
+    setName('');
+    setDescription('');
+    setPassword('');
+    setOvsCd('');
+    setOvsMeaning('');
+    setEmail('');
+    setRole('');
+    setStartDate('');
+    setEndDate('');
+  };
   const handleRegister = (e) => {
     setOpen(false);
-    const response = axios
+    // console.log(name);
+    // console.log(password);
+    // console.log(description);
+    // console.log(email);
+    // console.log(ovsCd);
+    // console.log(role);
+    // console.log(startDate);
+    // console.log(endDate);
+    axios
       .post(requests.POST_REGISTER(), {
         name,
         password,
         description,
         email,
+        ovsCd,
+        ovsMeaning,
         role,
+        startDate,
+        endDate,
+      })
+      .then(() => {
+        setGetState(!getState);
       })
       .catch((err) => {
         console.error(err);
       });
+    setInit();
   };
+  const handlegetOvsCode = () => {
+    axios
+      .get(`http://localhost:8086/admin-office/codeList`)
+      .then((res) => {
+        setovsCdList(res.data.ovsCodeList);
+        console.log(ovsCdList);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  // const handleChange = (event) => {
+  //   setOvsCd(event.target.value);
+  // };
+  useEffect(() => {
+    handlegetOvsCode();
+  }, []);
 
   return (
     <Dialog
@@ -123,24 +183,30 @@ function UserRegisterModal(props) {
             sx={{
               fontSize: { xs: '12px', sm: '14px', md: '16px' },
               fontWeight: 600,
+              textAlign: 'left',
             }}
           >
             사무소코드
           </Typography>
           <Select
-            value={ovsCode}
+            value={ovsCd}
             label=''
-            onChange={onChangeOvsCode}
+            onChange={onChangeOvsCd}
             sx={{
               backgroundColor: '#F5F6FA',
               width: '20vw',
               maxWidth: '250px',
               marginRight: '2vw',
+              textAlign: 'left',
             }}
           >
-            <MenuItem value='ARS'>ARS</MenuItem>
-            <MenuItem value='USD'>USD</MenuItem>
-            <MenuItem value='KRW'>KRW</MenuItem>
+            {ovsCdList.map((row, index) => (
+              <MenuItem key={index} value={row}>
+                {row.ovsMeaning}
+              </MenuItem>
+            ))}
+            {/* <MenuItem value='USD'>USD</MenuItem>
+            <MenuItem value='KRW'>KRW</MenuItem> */}
           </Select>
         </FormControl>
         <FormControl sx={{ minWidth: 120 }} size='small'>
@@ -154,20 +220,32 @@ function UserRegisterModal(props) {
             권한
           </Typography>
           <Select
-            value={ovsCode}
+            value={role}
             label=''
-            onChange={onChangeOvsCode}
+            onChange={onChangeRole}
             sx={SelectStyle}
           >
-            <MenuItem value='ARS'>ARS</MenuItem>
-            <MenuItem value='USD'>USD</MenuItem>
-            <MenuItem value='KRW'>KRW</MenuItem>
+            <MenuItem value='USER'>직원</MenuItem>
+            <MenuItem value='SUPER_USER'>사무소장</MenuItem>
+            <MenuItem value='ADMIN'>관리자</MenuItem>
           </Select>
         </FormControl>{' '}
+        <ModalInput
+          value={startDate}
+          onChange={onChangeStartDate}
+          type='date'
+          label='시작일'
+        />
+        <ModalInput
+          value={endDate}
+          onChange={onChangeEndDate}
+          type='date'
+          label='만료일'
+        />
       </DialogContent>
       <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleRegister}>Subscribe</Button>
+        <Button onClick={handleClose}>취소</Button>
+        <Button onClick={handleRegister}>등록</Button>
       </DialogActions>
     </Dialog>
   );

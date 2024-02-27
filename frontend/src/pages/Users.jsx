@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
-import requests from '../api/config';
+import requests from '../api/userConfig';
 
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Button from '../components/global/Button';
-import Input from '../components/global/Input';
+import { Grid, Paper } from '@mui/material';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -16,165 +13,192 @@ import TablePagination from '@mui/material/TablePagination';
 import { createSvgIcon } from '@mui/material/utils';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
-import Select from '@mui/material/Select';
-import Typography from '@mui/material/Typography';
-import MenuItem from '@mui/material/MenuItem';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 import FormControl from '@mui/material/FormControl';
 import UserRegisterModal from '../components/users/UserRegisterModal';
-
+import UserUpdateModal from '../components/users/UserUpdateModal';
+import Button from '../components/global/Button';
+import Input from '../components/global/Input';
+import OfficeSelector from '../components/global/OfficeSelector';
+import UserSearch from '../components/users/UserSearch';
 import axios from 'axios';
 
 export default function Users(props) {
   const [tableData, setTableData] = useState([]);
 
-  // const handleAddRow = () => {
-  //   // Implement logic to add a new row to the table
-  //   // You might want to fetch data from an API or add a dummy row
-  //   // For now, let's add a dummy row with random data
-  //   const newRow = Array.from(
-  //     { length: 10 },
-  //     (_, index) => `Data ${index + 1}`
-  //   );
-  //   setTableData((prevData) => [...prevData, newRow]);
-  // };
-  function createRow(name, desc, email, ovsName, startDate, endDate, role) {
-    return { name, desc, email, ovsName, startDate, endDate, role };
+  function createRow(
+    name,
+    description,
+    email,
+    ovsName,
+    ovsCd,
+    startDate,
+    endDate,
+    role
+  ) {
+    return {
+      name,
+      description,
+      email,
+      ovsName,
+      ovsCd,
+      startDate,
+      endDate,
+      role,
+    };
   }
   const rows = [
     createRow(
       'PC123457',
-      '포석호',
+      '제갈석호',
       'poseok@posco.com',
       'EU사무소',
+      'ARS',
       '2020-01-28',
       '2027-01-28',
-      'Super User'
+      'USER'
     ),
     createRow(
-      'PC123457',
-      '포석호',
+      'PC123451',
+      '남궁석호',
       'poseok@posco.com',
       'EU사무소',
+      'HDB143',
       '2020-01-28',
       '2027-01-28',
-      'Super User'
+      'USER'
     ),
     createRow(
-      'PC123457',
-      '포석호',
+      'PC123452',
+      '신석호',
       'poseok@posco.com',
       'EU사무소',
+      'HDB143',
       '2020-01-28',
       '2027-01-28',
-      'Super User'
+      'USER'
     ),
     createRow(
-      'PC123457',
-      '포석호',
+      'PC123453',
+      '인석호',
       'poseok@posco.com',
       'EU사무소',
+      'HDB143',
       '2020-01-28',
       '2027-01-28',
-      'Super User'
+      'USER'
     ),
     createRow(
-      'PC123457',
-      '포석호',
+      'PC123454',
+      '조석호',
       'poseok@posco.com',
       'EU사무소',
+      'HDB143',
       '2020-01-28',
       '2027-01-28',
-      'Super User'
+      'USER'
     ),
     createRow(
-      'PC123457',
-      '포석호',
+      'PC123455',
+      '정석호',
       'poseok@posco.com',
       'EU사무소',
+      'HDB143',
       '2020-01-28',
       '2027-01-28',
-      'Super User'
+      'USER'
     ),
     createRow(
-      'PC123457',
-      '포석호',
+      'PC123456',
+      '이석호',
       'poseok@posco.com',
       'EU사무소',
+      'HDB143',
       '2020-01-28',
       '2027-01-28',
-      'Super User'
+      'USER'
     ),
     createRow(
-      'PC123457',
-      '포석호',
+      'PC123458',
+      '박석호',
       'poseok@posco.com',
       'EU사무소',
+      'HDB143',
       '2020-01-28',
       '2027-01-28',
-      'Super User'
+      'USER'
     ),
     createRow(
-      'PC123457',
-      '포석호',
+      'PC123459',
+      '최석호',
       'poseok@posco.com',
       'EU사무소',
+      'HDB143',
       '2020-01-28',
       '2027-01-28',
-      'Super User'
+      'USER'
     ),
     createRow(
-      'PC123457',
-      '포석호',
+      'PC123460',
+      '김석호',
       'poseok@posco.com',
       'EU사무소',
+      'HDB143',
       '2020-01-28',
       '2027-01-28',
-      'Super User'
+      'USER'
     ),
     createRow(
-      'PC123457',
-      '포석호',
+      'PC123450',
+      '호석호',
       'poseok@posco.com',
       'EU사무소',
+      'HDB143',
       '2020-01-28',
       '2027-01-28',
-      'Super User'
+      'USER'
     ),
     createRow(
-      'PC123457',
-      '포석호',
+      'PC123461',
+      '포슥호',
       'poseok@posco.com',
       'EU사무소',
+      'HDB143',
       '2020-01-28',
       '2027-01-28',
-      'Super User'
+      'USER'
     ),
     createRow(
-      'PC123457',
-      '포석호',
+      'PC123462',
+      '포호',
       'poseok@posco.com',
       'EU사무소',
+      'HDB143',
       '2020-01-28',
       '2027-01-28',
-      'Super User'
+      'USER'
     ),
     createRow(
-      'PC123457',
-      '포석호',
+      'PC1234563',
+      '석호',
       'poseok@posco.com',
       'EU사무소',
+      'HDB143',
       '2020-01-28',
       '2027-01-28',
-      'Super User'
+      'USER'
     ),
     createRow(
-      'PC123457',
-      '포석호',
+      'PC1234565',
+      '포석',
       'poseok@posco.com',
       'EU사무소',
+      'HDB143',
       '2020-01-28',
       '2027-01-28',
-      'Super User'
+      'USER'
     ),
   ];
   const PlusIcon = createSvgIcon(
@@ -197,12 +221,17 @@ export default function Users(props) {
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [ovsCode, setOvsCode] = useState('');
+  const [ovsCd, setOvsCd] = useState('');
   const [registerOpen, setRegisterOpen] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [user, setUser] = useState();
+  const [ovsCdList, setovsCdList] = useState([]);
+  const [getState, setGetState] = useState(false);
+  const [deleteName, setDeleteName] = useState('');
 
-  const handleChange = (event) => {
-    setOvsCode(event.target.value);
+  const handleDeleteClose = (event) => {
+    setDeleteOpen(false);
   };
 
   const handleChangePage = (event, newPage) => {
@@ -218,71 +247,97 @@ export default function Users(props) {
     setRegisterOpen(true);
   };
 
-  const handleUpdateOpen = (event) => {
+  const handleUpdateOpen = (row) => {
+    console.log(row.name);
+    setUser(row);
     setUpdateOpen(true);
   };
 
-  const handleDeleteUser = (deleteName) => {
+  const handleDeleteDialog = (name) => {
+    setDeleteName(name);
+    setDeleteOpen(true);
+  };
+
+  const handleDeleteUser = () => {
     axios
-      .delete(requests.DELETE_USER('posco2'), {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: 'Baerer ' + requests.GET_TOKEN(),
-        },
+      .delete(requests.DELETE_USER(deleteName))
+      .then(() => {
+        setGetState(!getState);
+        setDeleteOpen(false);
       })
       .catch((err) => {
         console.error(err);
       });
   };
+
+  const handlegetUsers = () => {
+    axios
+      .get(requests.GET_USERS())
+      .then((res) => {
+        console.log(res);
+        setTableData(res.data.userList);
+        console.log(tableData);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  const handlegetByOvsCode = () => {
+    axios
+      .get(requests.GET_USERS_BY_OVSCD(ovsCd))
+      .then((res) => {
+        setTableData(res.data.userList);
+        console.log(tableData);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  useEffect(() => {
+    handlegetUsers();
+    // handlegetOvsCode();
+  }, []);
+
+  useEffect(() => {
+    handlegetUsers();
+  }, [getState]);
+
+  useEffect(() => {
+    handlegetByOvsCode();
+  }, [ovsCd]);
+
   return (
-    <div>
-      <UserRegisterModal open={registerOpen} setOpen={setRegisterOpen} />
+    <div style={{ padding: '10px 36px' }}>
+      <UserRegisterModal
+        open={registerOpen}
+        setOpen={setRegisterOpen}
+        getState={getState}
+        setGetState={setGetState}
+      />
+      <UserUpdateModal
+        open={updateOpen}
+        setOpen={setUpdateOpen}
+        getState={getState}
+        setGetState={setGetState}
+        user={user}
+      />
+      <Dialog open={deleteOpen} onClose={handleDeleteClose}>
+        <DialogContent>삭제하시겠습니까?</DialogContent>
+        <DialogActions>
+          <Button onClick={handleDeleteUser}>삭제</Button>
+          <Button onClick={handleDeleteClose}>취소</Button>
+        </DialogActions>
+      </Dialog>
       <h2>사용자 관리</h2>
-      <Grid container spacing={3}>
+      <Grid container spacing={3} sx={{ marginTop: '5px' }}>
         <Grid item xs={6}>
-          <Input widthV='20' heightV='5' label='Search' />
+          {/* <Input widthV='20' heightV='5' label='Search' /> */}
+          <UserSearch setTableData={setTableData} />
         </Grid>
         <Grid item xs={6} textAlign='right'>
-          {/* <FormControl>
-            <InputLabel id='demo-simple-select-label'>사무소코드</InputLabel>
-            <Select
-              labelId='demo-simple-select-label'
-              id='demo-simple-select'
-              value={ovsCode}
-              label='Age'
-              onChange={handleChange}
-            >
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
-          </FormControl> */}
-          <FormControl sx={{ minWidth: 120 }} size='small'>
-            <Typography
-              my={1}
-              sx={{
-                fontSize: { xs: '12px', sm: '14px', md: '16px' },
-                fontWeight: 600,
-              }}
-            >
-              사무소코드
-            </Typography>
-            <Select
-              value={ovsCode}
-              label=''
-              onChange={handleChange}
-              sx={{
-                backgroundColor: '#F5F6FA',
-                width: '20vw',
-                maxWidth: '250px',
-                marginRight: '2vw',
-              }}
-            >
-              <MenuItem value='ARS'>ARS</MenuItem>
-              <MenuItem value='USD'>USD</MenuItem>
-              <MenuItem value='KRW'>KRW</MenuItem>
-            </Select>
-          </FormControl>
+          <OfficeSelector curV={ovsCd} setCurV={setOvsCd} />
           <Button size='sm' onClick={handleRegisterOpen}>
             <PlusIcon color='white' />
           </Button>
@@ -306,7 +361,7 @@ export default function Users(props) {
                   사무소
                 </TableCell>
                 <TableCell align='center' colSpan={1}>
-                  등록일
+                  시작일
                 </TableCell>
                 <TableCell align='center' colSpan={1}>
                   만료일
@@ -319,23 +374,27 @@ export default function Users(props) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
+              {tableData?.map((row) => (
                 <TableRow key={row.name}>
                   <TableCell>{row.name}</TableCell>
-                  <TableCell align='center'>{row.desc}</TableCell>
+                  <TableCell align='center'>{row.description}</TableCell>
                   <TableCell align='center'>{row.email}</TableCell>
-                  <TableCell align='center'>{row.ovsName}</TableCell>
-                  <TableCell align='center'>{row.startDate}</TableCell>
-                  <TableCell align='center'>{row.endDate}</TableCell>
+                  <TableCell align='center'>{row.ovsMeaning}</TableCell>
+                  <TableCell align='center'>
+                    {(row.startDate + '').substring(0, 10)}
+                  </TableCell>
+                  <TableCell align='center'>
+                    {(row.endDate + '').substring(0, 10)}
+                  </TableCell>
                   <TableCell align='center'>{row.role}</TableCell>
                   <TableCell align='center'>
-                    <div onClick={handleRegisterOpen}>
-                      <EditIcon />
+                    <div onClick={() => handleUpdateOpen(row)}>
+                      <EditIcon sx={{ cursor: 'pointer' }} />
                     </div>
                   </TableCell>
                   <TableCell align='center'>
-                    <div onClick={() => handleDeleteUser(row.name)}>
-                      <DeleteIcon />
+                    <div onClick={() => handleDeleteDialog(row.name)}>
+                      <DeleteIcon sx={{ cursor: 'pointer' }} />
                     </div>
                   </TableCell>
                 </TableRow>

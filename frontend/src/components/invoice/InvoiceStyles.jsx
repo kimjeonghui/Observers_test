@@ -15,12 +15,19 @@ export const ActiveSpanTab = styled.span`
 `;
 
 export const ModalStrokeBtn = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
   width: ${(props) => props.width};
   height: ${(props) => props.height};
+  margin: 5px;
+  color: ${(props) => props.theme.palette.posco_blue_500};
   border-radius: 15px;
-  border: 1px solid ${(props) => props.theme.palette.posco_lg_500};
+  outline: 1px solid ${(props) => props.theme.palette.posco_lg_500};
+  cursor: pointer;
   &:hover {
-    border: 2px solid ${(props) => props.theme.palette.posco_blue_500};
+    outline: 3px solid ${(props) => props.theme.palette.posco_blue_500};
   }
 `;
 

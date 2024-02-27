@@ -1,6 +1,7 @@
 package com.posco.summaryservice.service;
 
 import com.posco.summaryservice.dto.request.SummaryDTO;
+import com.posco.summaryservice.dto.response.SummaryContentDTO;
 import com.posco.summaryservice.dto.response.SummaryResponseDTO;
 import com.posco.summaryservice.entity.GLCodeEntity;
 import com.posco.summaryservice.entity.SummaryContentsEntity;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,15 +32,17 @@ public class SummaryServiceImpl implements SummaryService {
     // 월 총괄표 생성
     @Override
     public SummaryEntity createSummary(SummaryDTO summaryDTO) {
-        LocalDateTime fiscalMonth = summaryDTO.getFiscalMonth();
-        LocalDateTime newTime = LocalDateTime.of(fiscalMonth.getYear(), fiscalMonth.getMonth(), 1, 0, 0, 0);
-        SummaryEntity summaryEntity = summaryRepository.findByFiscalMonth(newTime);
+        String fiscalMonth = summaryDTO.getFiscalMonth();
+//        LocalDateTime newTime = LocalDateTime.of(fiscalMonth.getYear(), fiscalMonth.getMonth(), 1, 0, 0, 0);
+        SummaryEntity summaryEntity = summaryRepository.findByFiscalMonth(fiscalMonth);
         SummaryEntity saveSummaryEntity = null;
         if(summaryEntity==null){
             summaryEntity = SummaryEntity.builder()
                     .ovsCd(summaryDTO.getOvsCd())
                     .ovsName(summaryDTO.getOvsName())
-                    .fiscalMonth(newTime)
+                    .fiscalMonth(fiscalMonth)
+                    .locCurr(summaryDTO.getDepCurr())
+                    .transCurr(summaryDTO.getWdCurr())
                     .build();
             saveSummaryEntity = summaryRepository.save(summaryEntity);
         }else{
@@ -63,9 +67,7 @@ public class SummaryServiceImpl implements SummaryService {
                     .majorCt(glCodeEntity.getMajorCt())
                     .mediumCt(glCodeEntity.getMediumCt())
                     .minorCt(glCodeEntity.getMinorCt())
-                    .locCurr(summaryDTO.getDepCurr())
                     .loc(summaryDTO.getDeposit())
-                    .transCurr(summaryDTO.getWdCurr())
                     .trans(summaryDTO.getWithdrawal())
                     .summaryId(summaryEntity.getSummaryId())
                     .summaryEntity(summaryEntity)
@@ -73,8 +75,8 @@ public class SummaryServiceImpl implements SummaryService {
                     .glCodeEntity(glCodeEntity)
                     .build();
         }else{
-            BigDecimal loc = summaryDTO.getDepCurr().equals(summaryContentsEntity.getLocCurr())?summaryDTO.getWithdrawal():summaryDTO.getDeposit();
-            BigDecimal trans = summaryDTO.getDepCurr().equals(summaryContentsEntity.getLocCurr())?summaryDTO.getWithdrawal():summaryDTO.getDeposit();
+            BigDecimal loc = summaryDTO.getDepCurr().equals(summaryEntity.getLocCurr())?summaryDTO.getWithdrawal():summaryDTO.getDeposit();
+            BigDecimal trans = summaryDTO.getDepCurr().equals(summaryEntity.getLocCurr())?summaryDTO.getWithdrawal():summaryDTO.getDeposit();
 
             newSummaryContents = SummaryContentsEntity.builder()
                     .summaryContentId(summaryContentsEntity.getSummaryContentId())
@@ -95,28 +97,33 @@ public class SummaryServiceImpl implements SummaryService {
     }
 
     @Override
-    public List<SummaryResponseDTO> getSummaryContents(String ovsCd) {
-        List<SummaryEntity> summaryEntities = summaryRepository.findAllByOvsCd(ovsCd);
-        List<SummaryResponseDTO> summaryResponseDTOS = new ArrayList<>();
-        for(SummaryEntity summaryEntity : summaryEntities){
-            List<SummaryContentsEntity> contentsEntities = summaryContentsRepository.findAllBySummaryId(summaryEntity.getSummaryId());
-            for(SummaryContentsEntity summaryContentsEntity: contentsEntities){
-                SummaryResponseDTO responseDTO = SummaryResponseDTO.builder()
-                        .ovsCd(summaryEntity.getOvsCd())
-                        .ovsName(summaryEntity.getOvsName())
-                        .fiscalMonth(summaryEntity.getFiscalMonth())
-                        .majorCt(summaryContentsEntity.getMajorCt())
-                        .mediumCt(summaryContentsEntity.getMediumCt())
-                        .minorCt(summaryContentsEntity.getMinorCt())
-                        .locCurr(summaryContentsEntity.getLocCurr())
-                        .loc(summaryContentsEntity.getLoc())
-                        .transCurr(summaryContentsEntity.getTransCurr())
-                        .trans(summaryContentsEntity.getTrans())
-                        .note(summaryContentsEntity.getNote())
-                        .build();
-                summaryResponseDTOS.add(responseDTO);
-            }
+    public SummaryResponseDTO getSummaryContents(String ovsCd, String fiscalMonth) {
+        SummaryEntity summaryEntity = summaryRepository.findByOvsCdAndFiscalMonth(ovsCd, fiscalMonth);
+        if(summaryEntity==null){
+            return null;
         }
-        return summaryResponseDTOS;
+        List<SummaryContentsEntity> contentsEntities = summaryContentsRepository.findAllBySummaryId(summaryEntity.getSummaryId());
+        List<SummaryContentDTO> summaryContentDTOList = new ArrayList<>();
+        for(SummaryContentsEntity summaryContentsEntity: contentsEntities){
+            SummaryContentDTO responseDTO = SummaryContentDTO.builder()
+                    .summaryContentId(summaryContentsEntity.getSummaryContentId())
+                    .majorCt(summaryContentsEntity.getMajorCt())
+                    .mediumCt(summaryContentsEntity.getMediumCt())
+                    .minorCt(summaryContentsEntity.getMinorCt())
+                    .loc(summaryContentsEntity.getLoc())
+                    .trans(summaryContentsEntity.getTrans())
+                    .note(summaryContentsEntity.getNote())
+                    .tranCd(summaryContentsEntity.getTranCd())
+                    .build();
+            summaryContentDTOList.add(responseDTO);
+        }
+        return SummaryResponseDTO.builder()
+                .ovsCd(summaryEntity.getOvsCd())
+                .ovsName(summaryEntity.getOvsName())
+                .fiscalMonth(summaryEntity.getFiscalMonth())
+                .locCurr(summaryEntity.getLocCurr())
+                .transCurr(summaryEntity.getTransCurr())
+                .contents(summaryContentDTOList)
+                .build();
     }
 }

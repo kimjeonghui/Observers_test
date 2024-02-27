@@ -41,12 +41,15 @@ public class ReferenceEntity extends BaseEntity {
     private String transCurr2;      // 송금 통화2
 
     @Column(nullable = false)
-    private LocalDate startDate;    // 시작일
+    private LocalDate startDate;
 
     @Column
     private LocalDate endDate;      // 만료일
-
-    @OneToMany(mappedBy = "referenceEntity", cascade = CascadeType.REMOVE)
-    private List<GLCodeEntity> codeEntityList;
+//
+//    @OneToMany(mappedBy = "referenceEntity", cascade = CascadeType.REMOVE)
+//    private List<GLCodeEntity> glCodeEntityList;
+//
+//    @OneToMany(mappedBy = "referenceEntity", cascade = CascadeType.REMOVE)
+//    private List<PeriodStatusEntity> periodStatusEntityList;
 
 }

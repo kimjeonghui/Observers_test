@@ -1,14 +1,15 @@
-import React, { useNavigate } from 'react';
+import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
 
+import { loginState } from './state/UserState.jsx';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Invoice from './pages/Invoice';
 import Receipts from './pages/Receipts';
 import ReceiptsMonth from './pages/ReceiptsMonth';
 import ReceiptsDetail from './pages/ReceiptsDetail';
-import Ocr from './pages/Ocr';
-import OcrCall from './pages/OcrCall';
+import Dashboard from './pages/Dashboard.jsx';
 import ManagerAccountingSlip from './pages/AccountingSlip';
 import AccountingSlip from './pages/AccountingSlip';
 import AdminCode from './pages/AdminCode';
@@ -21,11 +22,11 @@ import SendImg from './pages/SendImg.jsx';
 import Sidebar from './components/global/Sidebar';
 
 function App() {
-  const isLoginPage = window.location.pathname === '/login';
+  const isLogin = useRecoilValue(loginState);
   return (
     <BrowserRouter>
       <div className='App'>
-        {!isLoginPage && <Sidebar />}
+        {isLogin && <Sidebar />}
 
         <Routes>
           <Route path='/' element={<Home />} />
@@ -34,8 +35,7 @@ function App() {
           <Route path='/receipts' element={<Receipts />} />
           <Route path='/receipts/:id' element={<ReceiptsMonth />} />
           <Route path='/receipts/:id/:id' element={<ReceiptsDetail />} />
-          <Route path='/ocr' element={<Ocr />} />
-          <Route path='/ocr-call' element={<OcrCall />} /> {/* 테스트용 */}
+          <Route path='/dashboard' element={<Dashboard />} />
           <Route path='/send-img' element={<SendImg />} /> {/* 테스트용 */}
           <Route
             path='/manager/accounting-slip'

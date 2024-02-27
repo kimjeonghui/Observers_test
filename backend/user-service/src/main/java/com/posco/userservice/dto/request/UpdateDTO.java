@@ -18,7 +18,15 @@ public class UpdateDTO {
     @NotNull
     private String description;
 
+    private String password;
+
+    private String email;
+
+    private String ovsCd;
+
+    private String ovsMeaning;
+
     private String role;
 
-    private LocalDateTime endDate;
+    private String endDate;
 }
