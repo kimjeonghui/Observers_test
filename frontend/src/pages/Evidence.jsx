@@ -6,7 +6,7 @@ import FolderIcon from '@mui/icons-material/Folder';
 import { Box } from '@mui/material';
 import axios from 'axios';
 
-export default function Receipts(props) {
+export default function Evidence(props) {
   const theme = useTheme();
   const navigate = useNavigate();
 
@@ -21,14 +21,14 @@ export default function Receipts(props) {
     '2024-02',
   ];
 
-  const handleButtonClick = (id) => {
+  const handleButtonClick = (month) => {
     // 폴더 내부로 이동
-    navigate(`/receipts/${id}`);
+    navigate(`/evidence/${month}`);
 
     // POST 호출
     const serverUrl = process.env.REACT_APP_OCR_SERVER_URL;
     axios
-      .post(`${serverUrl}/${id}`)
+      .post(`${serverUrl}/${month}`)
       .then((response) => {
         // 3. Handle the response as needed
         console.log('POST request successful:', response.data);

@@ -26,7 +26,7 @@ const ExpandMore = styled((props) => {
   }),
 }));
 
-function ReceiptsMonth(props) {
+function EvidenceDetail(props) {
   const [expanded, setExpanded] = React.useState(false);
   const [h, setH] = React.useState(50);
   const [w, setW] = React.useState(200);
@@ -47,7 +47,6 @@ function ReceiptsMonth(props) {
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        // gap: '20px',
         padding: '20px',
       }}
     >
@@ -59,7 +58,6 @@ function ReceiptsMonth(props) {
           display: 'flex',
           flexDirection: 'row',
           gap: '20px',
-          // padding: '20px',
         }}
       >
         <img
@@ -231,4 +229,4 @@ function ReceiptsMonth(props) {
   );
 }
 
-export default ReceiptsMonth;
+export default EvidenceDetail;
