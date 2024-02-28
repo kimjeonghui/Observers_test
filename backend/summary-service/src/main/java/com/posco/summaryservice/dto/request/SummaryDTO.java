@@ -15,10 +15,10 @@ public class SummaryDTO {
     private Long invoiceId;             // 거래 내역 id
     @NotNull
     private String ovsCd;               // 사무실 코드
-    @NotNull
-    private String ovsName;             // 사무실 이름
-    @NotNull
-    private LocalDateTime txDate;       // 거래 일자
+//    @NotNull
+//    private String ovsName;             // 사무실 이름
+//    @NotNull
+//    private String txDate;       // 거래 일자
 
     private String store;               // 거래 처명
     private String depCurr;             // 입금 통화

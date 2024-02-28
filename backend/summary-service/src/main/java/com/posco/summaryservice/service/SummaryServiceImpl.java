@@ -4,9 +4,11 @@ import com.posco.summaryservice.dto.request.SummaryDTO;
 import com.posco.summaryservice.dto.response.SummaryContentDTO;
 import com.posco.summaryservice.dto.response.SummaryResponseDTO;
 import com.posco.summaryservice.entity.GLCodeEntity;
+import com.posco.summaryservice.entity.ReferenceEntity;
 import com.posco.summaryservice.entity.SummaryContentsEntity;
 import com.posco.summaryservice.entity.SummaryEntity;
 import com.posco.summaryservice.repository.GLCodeRepository;
+import com.posco.summaryservice.repository.ReferenceRepository;
 import com.posco.summaryservice.repository.SummaryContentsRepository;
 import com.posco.summaryservice.repository.SummaryRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,20 +31,22 @@ public class SummaryServiceImpl implements SummaryService {
     private final SummaryRepository summaryRepository;
     private final SummaryContentsRepository summaryContentsRepository;
     private final GLCodeRepository glCodeRepository;
+    private final ReferenceRepository referenceRepository;
     // 월 총괄표 생성
     @Override
     public SummaryEntity createSummary(SummaryDTO summaryDTO) {
         String fiscalMonth = summaryDTO.getFiscalMonth();
 //        LocalDateTime newTime = LocalDateTime.of(fiscalMonth.getYear(), fiscalMonth.getMonth(), 1, 0, 0, 0);
         SummaryEntity summaryEntity = summaryRepository.findByFiscalMonth(fiscalMonth);
+        ReferenceEntity referenceEntity = referenceRepository.findByOvsCd(summaryDTO.getOvsCd());
         SummaryEntity saveSummaryEntity = null;
         if(summaryEntity==null){
             summaryEntity = SummaryEntity.builder()
                     .ovsCd(summaryDTO.getOvsCd())
-                    .ovsName(summaryDTO.getOvsName())
+//                    .ovsName(summaryDTO.getOvsName())
                     .fiscalMonth(fiscalMonth)
-                    .locCurr(summaryDTO.getDepCurr())
-                    .transCurr(summaryDTO.getWdCurr())
+                    .locCurr(referenceEntity.getLocCurr())
+                    .transCurr(referenceEntity.getTransCurr())
                     .build();
             saveSummaryEntity = summaryRepository.save(summaryEntity);
         }else{
@@ -63,20 +67,23 @@ public class SummaryServiceImpl implements SummaryService {
         if(summaryContentsEntity==null){
             // 식별코드 정보 가져오기
             GLCodeEntity glCodeEntity = glCodeRepository.findById(summaryDTO.getTranCd()).orElseThrow();
+            ReferenceEntity referenceEntity = referenceRepository.findByOvsCd(glCodeEntity.getOvsCd());
+            BigDecimal loc = summaryDTO.getWdCurr().equals(summaryEntity.getLocCurr())?summaryDTO.getWithdrawal():summaryDTO.getDeposit();
+            BigDecimal trans = summaryDTO.getWdCurr().equals(summaryEntity.getLocCurr())?summaryDTO.getWithdrawal():summaryDTO.getDeposit();
             newSummaryContents = SummaryContentsEntity.builder()
                     .majorCt(glCodeEntity.getMajorCt())
                     .mediumCt(glCodeEntity.getMediumCt())
                     .minorCt(glCodeEntity.getMinorCt())
-                    .loc(summaryDTO.getDeposit())
-                    .trans(summaryDTO.getWithdrawal())
+                    .loc(loc)
+                    .trans(trans)
                     .summaryId(summaryEntity.getSummaryId())
                     .summaryEntity(summaryEntity)
                     .tranCd(glCodeEntity.getTranCd())
                     .glCodeEntity(glCodeEntity)
                     .build();
         }else{
-            BigDecimal loc = summaryDTO.getDepCurr().equals(summaryEntity.getLocCurr())?summaryDTO.getWithdrawal():summaryDTO.getDeposit();
-            BigDecimal trans = summaryDTO.getDepCurr().equals(summaryEntity.getLocCurr())?summaryDTO.getWithdrawal():summaryDTO.getDeposit();
+            BigDecimal loc = summaryDTO.getWdCurr().equals(summaryEntity.getLocCurr())?summaryDTO.getWithdrawal():summaryDTO.getDeposit();
+            BigDecimal trans = summaryDTO.getWdCurr().equals(summaryEntity.getTransCurr())?summaryDTO.getWithdrawal():summaryDTO.getDeposit();
 
             newSummaryContents = SummaryContentsEntity.builder()
                     .summaryContentId(summaryContentsEntity.getSummaryContentId())
@@ -84,8 +91,8 @@ public class SummaryServiceImpl implements SummaryService {
                     .mediumCt(summaryContentsEntity.getMediumCt())
                     .minorCt(summaryContentsEntity.getMinorCt())
                     .note(summaryContentsEntity.getNote())
-                    .trans(trans)
-                    .loc(loc)
+                    .trans(trans!=null?trans.add(summaryContentsEntity.getTrans()):summaryContentsEntity.getTrans())
+                    .loc(loc!=null?loc.add(summaryContentsEntity.getLoc()):summaryContentsEntity.getLoc())
                     .summaryId(summaryContentsEntity.getSummaryId())
                     .summaryEntity(summaryContentsEntity.getSummaryEntity())
                     .tranCd(summaryContentsEntity.getTranCd())
@@ -119,7 +126,7 @@ public class SummaryServiceImpl implements SummaryService {
         }
         return SummaryResponseDTO.builder()
                 .ovsCd(summaryEntity.getOvsCd())
-                .ovsName(summaryEntity.getOvsName())
+//                .ovsName(summaryEntity.getOvsName())
                 .fiscalMonth(summaryEntity.getFiscalMonth())
                 .locCurr(summaryEntity.getLocCurr())
                 .transCurr(summaryEntity.getTransCurr())
