@@ -42,7 +42,7 @@ function Sidebar(props) {
     { name: '월 총괄표', address: '/summary', status: false },
     { name: '회계전표', address: '/accounting-slip', status: false },
     { name: '대시보드', address: '/dashboard', status: false },
-    { name: '증빙자료관리', address: '/evidence', status: false },
+    { name: '증빙 자료 관리', address: '/evidence', status: false },
   ]);
   const [anchorEl, setAnchorEl] = useState(null);
   const [role, setRole] = useState('user');
