@@ -330,14 +330,16 @@ export default function Users(props) {
           <Button onClick={handleDeleteClose}>취소</Button>
         </DialogActions>
       </Dialog>
-      <h2>사용자 관리</h2>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h2>사용자 관리</h2>
+        <OfficeSelector curV={ovsCd} setCurV={setOvsCd} />
+      </div>
       <Grid container spacing={3} sx={{ marginTop: '5px' }}>
         <Grid item xs={6}>
           {/* <Input widthV='20' heightV='5' label='Search' /> */}
           <UserSearch setTableData={setTableData} />
         </Grid>
         <Grid item xs={6} textAlign='right'>
-          <OfficeSelector curV={ovsCd} setCurV={setOvsCd} />
           <Button size='sm' onClick={handleRegisterOpen}>
             <PlusIcon color='white' />
           </Button>
