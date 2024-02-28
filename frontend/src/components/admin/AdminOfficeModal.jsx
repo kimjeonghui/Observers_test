@@ -19,6 +19,8 @@ import ModalInput from '../global/ModalInput';
 import 'react-datepicker/dist/react-datepicker.css';
 
 function AdminOfficeModal(props) {
+  const Swal = require('sweetalert2');
+
   const { open, setOpen, fetchData } = props;
   const [steps, setSteps] = useState(1);
   const handleClose = () => {
@@ -70,14 +72,30 @@ function AdminOfficeModal(props) {
     );
 
     if (isExistingOvsCd) {
-      alert('이미 존재하는 사무소 코드입니다.');
+      // alert('이미 존재하는 사무소 코드입니다.');
+      Swal.fire({
+        title: '실패',
+        text: '사무소코드가 중복되었습니다.',
+        icon: 'error',
+        customClass: {
+          container: 'my-swal',
+        },
+      });
       return; // Stop the function execution if ovsCd already exists
     }
     axios
       .post(requests.POST_OFFICE(), referenceData)
       .then((response) => {
         console.log(response.data); // Log response for debugging
-        alert('생성 되었습니다.'); // Alert user for successful creation
+        // alert('생성 되었습니다.'); // Alert user for successful creation
+        Swal.fire({
+          title: '생성완료',
+          text: '사무소가 생성되었습니다.',
+          icon: 'success',
+          customClass: {
+            container: 'my-swal',
+          },
+        });
         setReferenceData({
           // Reset referenceData state 생성 후 입력값 비우기
           ovsCd: '',
