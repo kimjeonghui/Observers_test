@@ -29,20 +29,19 @@ const ExpandMore = styled((props) => {
 
 function EvidenceDetail(props) {
   const [expanded, setExpanded] = React.useState(false);
-  const [h, setH] = React.useState(50);
-  const [w, setW] = React.useState(200);
+  const [h, setH] = React.useState('5vh');
+  const [w, setW] = React.useState('20vh');
 
-  // useParams hook을 사용하여 URL 파라미터를 추출
   const { month } = useParams();
 
   const handleExpandClick = () => {
     setExpanded(!expanded);
     if (expanded) {
       setH('5vh');
-      setW('70vh');
+      setW('20vh');
     } else {
       setH('70vh');
-      setW(800);
+      setW('60vh');
     }
   };
 
@@ -52,9 +51,24 @@ function EvidenceDetail(props) {
         display: 'flex',
         flexDirection: 'column',
         padding: '20px',
+        backgroundColor: '#eaeaea',
+        borderRadius: '10px',
+        height: '80vh',
+        width: '170vh',
+        boxShadow: '0 4px 8px rgba(0, 0, 0, 255)',
+        // border: '2px solid #747474',
+        justifyContent: 'start', // 세로 중앙 정렬
+        alignItems: 'start', // 가로 중앙 정렬
+        position: 'absolute',
+        top: '53%', // 화면 상단에서 50% 위치
+        left: '50%', // 화면 좌측에서 50% 위치
+        transform: 'translate(-50%, -50%)', // 중앙 정렬을 위한 위치 이동
       }}
     >
-      <Typography variant='h6' style={{ fontSize: '25px', marginLeft: '12px' }}>
+      <Typography
+        variant='h6'
+        style={{ fontSize: '25px', marginLeft: '12px', marginBottom: '15px' }}
+      >
         {month}-03 14:23:11
       </Typography>
       <Box
@@ -62,14 +76,90 @@ function EvidenceDetail(props) {
           display: 'flex',
           flexDirection: 'row',
           gap: '20px',
+          alignItems: 'start',
         }}
       >
         <img
           src={receipt_img}
           alt='img'
-          style={{ width: '500px', height: '600px', margin: '7px' }}
+          style={{
+            width: '500px',
+            height: '600px',
+            margin: '7px',
+            borderRadius: '10px',
+          }}
         />
-        <Card sx={{ height: h, width: w }}>
+        <div style={{ width: '40vh' }}>
+          <TableContainer sx={{ maxHeight: 720 }} component={Paper}>
+            <Table aria-label='spanning table'>
+              <TableBody>
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>
+                    사무소코드
+                  </TableCell>
+                  <TableCell align='right' colSpan={2}>
+                    HDF32
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>순번</TableCell>
+                  <TableCell align='right' colSpan={2}>
+                    1
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>회계월</TableCell>
+                  <TableCell align='right' colSpan={2}>
+                    {month}
+                  </TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>거래일자</TableCell>
+                  <TableCell align='right'>{month}-03 14:23:11</TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>출금통화</TableCell>
+                  <TableCell align='right'>EUR</TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>출금금액</TableCell>
+                  <TableCell align='right'>33,80</TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>식별코드</TableCell>
+                  <TableCell align='right'>1106</TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>거래내역</TableCell>
+                  <TableCell align='right'>직원중식비</TableCell>
+                </TableRow>
+
+                <TableRow>
+                  <TableCell style={{ fontWeight: 'bold' }}>환산금액</TableCell>
+                  <TableCell align='right'>48818.02</TableCell>
+                </TableRow>
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+
+        <Card
+          sx={{
+            height: h,
+            width: w,
+            backgroundColor: '#fff',
+            borderRadius: '10px',
+            boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
+            border: '1px solid #ddd',
+          }}
+        >
           <CardActions disableSpacing>
             OCR 결과 보기
             <ExpandMore
@@ -82,101 +172,107 @@ function EvidenceDetail(props) {
             </ExpandMore>
           </CardActions>
           <Collapse in={expanded} timeout='auto' unmountOnExit>
-            <CardContent />
-            <TableContainer sx={{ maxHeight: 720 }} component={Paper}>
-              <Table aria-label='spanning table'>
-                <TableBody>
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>
-                      MerchantName
-                    </TableCell>
-                    <TableCell align='right' colSpan={2}>
-                      YIFAN HUANG S.L.
-                    </TableCell>
-                  </TableRow>
+            <CardContent>
+              <Typography variant='body1' style={{ margin: '10px 0' }}>
+                <Table aria-label='spanning table'>
+                  <TableBody>
+                    <TableRow>
+                      <TableCell style={{ fontWeight: 'bold' }}>
+                        MerchantName
+                      </TableCell>
+                      <TableCell align='right' colSpan={2}>
+                        YIFAN HUANG S.L.
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell style={{ fontWeight: 'bold' }}>
+                        Total
+                      </TableCell>
+                      <TableCell align='right' colSpan={2}>
+                        33.8
+                      </TableCell>
+                    </TableRow>
 
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>Total</TableCell>
-                    <TableCell align='right' colSpan={2}>
-                      33.8
-                    </TableCell>
-                  </TableRow>
+                    <TableRow>
+                      <TableCell style={{ fontWeight: 'bold' }}>
+                        TransactionDate
+                      </TableCell>
+                      <TableCell align='right' colSpan={2}>
+                        2019-01-12
+                      </TableCell>
+                    </TableRow>
 
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>
-                      TransactionDate
-                    </TableCell>
-                    <TableCell align='right' colSpan={2}>
-                      2019-01-12
-                    </TableCell>
-                  </TableRow>
+                    <TableRow>
+                      <TableCell style={{ fontWeight: 'bold' }}>
+                        1 Content
+                      </TableCell>
+                      <TableCell align='right' colSpan={2}>
+                        2 MENU DE LA CASA 15,00 30,00
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell rowSpan={4} />
+                      <TableCell style={{ fontWeight: 'bold' }}>
+                        Description
+                      </TableCell>
+                      <TableCell align='right'>MENU DE LA CASA</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell style={{ fontWeight: 'bold' }}>
+                        Price
+                      </TableCell>
+                      <TableCell align='right'>15</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell style={{ fontWeight: 'bold' }}>
+                        Quantity
+                      </TableCell>
+                      <TableCell align='right'>2</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell style={{ fontWeight: 'bold' }}>
+                        TotalPrice
+                      </TableCell>
+                      <TableCell align='right'>30</TableCell>
+                    </TableRow>
 
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>
-                      1 Content
-                    </TableCell>
-                    <TableCell align='right' colSpan={2}>
-                      2 MENU DE LA CASA 15,00 30,00
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell rowSpan={4} />
-                    <TableCell style={{ fontWeight: 'bold' }}>
-                      Description
-                    </TableCell>
-                    <TableCell align='right'>MENU DE LA CASA</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>Price</TableCell>
-                    <TableCell align='right'>15</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>
-                      Quantity
-                    </TableCell>
-                    <TableCell align='right'>2</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>
-                      TotalPrice
-                    </TableCell>
-                    <TableCell align='right'>30</TableCell>
-                  </TableRow>
-
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>
-                      2 Content
-                    </TableCell>
-                    <TableCell align='right' colSpan={2}>
-                      1 CERVEZA JAPONESA 3,80 3,80
-                    </TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell rowSpan={4} />
-                    <TableCell style={{ fontWeight: 'bold' }}>
-                      Description
-                    </TableCell>
-                    <TableCell align='right'>CERVEZA JAPONESA</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>Price</TableCell>
-                    <TableCell align='right'>3.8</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>
-                      Quantity
-                    </TableCell>
-                    <TableCell align='right'>1</TableCell>
-                  </TableRow>
-                  <TableRow>
-                    <TableCell style={{ fontWeight: 'bold' }}>
-                      TotalPrice
-                    </TableCell>
-                    <TableCell align='right'>3.8</TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
-            </TableContainer>
+                    <TableRow>
+                      <TableCell style={{ fontWeight: 'bold' }}>
+                        2 Content
+                      </TableCell>
+                      <TableCell align='right' colSpan={2}>
+                        1 CERVEZA JAPONESA 3,80 3,80
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell rowSpan={4} />
+                      <TableCell style={{ fontWeight: 'bold' }}>
+                        Description
+                      </TableCell>
+                      <TableCell align='right'>CERVEZA JAPONESA</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell style={{ fontWeight: 'bold' }}>
+                        Price
+                      </TableCell>
+                      <TableCell align='right'>3.8</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell style={{ fontWeight: 'bold' }}>
+                        Quantity
+                      </TableCell>
+                      <TableCell align='right'>1</TableCell>
+                    </TableRow>
+                    <TableRow>
+                      <TableCell style={{ fontWeight: 'bold' }}>
+                        TotalPrice
+                      </TableCell>
+                      <TableCell align='right'>3.8</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </Typography>
+            </CardContent>
           </Collapse>
         </Card>
       </Box>
