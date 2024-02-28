@@ -500,7 +500,7 @@ export default function AccountingSlipTable(props) {
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('calories');
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [rowsPerPage, setRowsPerPage] = useState(39);
   const [year, setYear] = useState(new Date().getFullYear());
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
   const [fiscalMonth, setFiscalMonth] = useState();
@@ -550,6 +550,7 @@ export default function AccountingSlipTable(props) {
   };
 
   // Avoid a layout jump when reaching the last page with empty rows.
+  const totalRows = accountingSlip.length;
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -735,9 +736,9 @@ export default function AccountingSlipTable(props) {
           </Table>
         </TableContainer>
         <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
+          rowsPerPageOptions={[9, 24, 39]}
           component='div'
-          count={visibleRows.length}
+          count={totalRows}
           rowsPerPage={rowsPerPage}
           page={page}
           onPageChange={handleChangePage}
