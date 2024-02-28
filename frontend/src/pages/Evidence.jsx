@@ -46,7 +46,7 @@ export default function Evidence() {
   return (
     <div style={{ padding: '10px 36px' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <h2>월 총괄표</h2>
+        <h2>증빙 자료 관리</h2>
         <OfficeSelector curV={ovsCd} setCurV={setOvsCd} />
       </div>
       <Box sx={{ display: 'flex', gap: '20px', padding: '20px' }}>
