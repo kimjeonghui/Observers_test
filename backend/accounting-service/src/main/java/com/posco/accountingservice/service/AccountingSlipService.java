@@ -46,7 +46,7 @@ public class AccountingSlipService {
     //1. 인보이스 만들기
     private List<AccountingSlipInvoiceNumEntity> createInvoiceList(String ovsCd, String month) {
         List<AccountingSlipInvoiceNumEntity> invoiceNumEntityList = new ArrayList<>(); // 리턴값
-        List<InvoiceDataEntity> findedInvoiceDataList = getInvoicedataList(ovsCd, month, "APPROVED"); // 거래내역
+        List<InvoiceDataEntity> findedInvoiceDataList = getInvoicedataList(ovsCd, month); // 거래내역
 
         for (int i = 0; i < findedInvoiceDataList.size(); i++) {
             InvoiceDataEntity invoiceData = findedInvoiceDataList.get(i);
@@ -67,7 +67,7 @@ public class AccountingSlipService {
 
                     invoiceNumEntity.setInvoiceDataEntity(invoiceData);
                     invoiceData.setAccountingSlipInvoiceNum(invoiceNumEntity);
-                    //  invoiceNumRepository.save(invoiceNumEntity);
+                    //invoiceNumRepository.save(invoiceNumEntity);
                     invoiceNumEntityList.add(invoiceNumEntity);
                 } catch (Exception e) {
                     // 중복 예외 처리
@@ -96,8 +96,8 @@ public class AccountingSlipService {
         // 차변2(전도금)은 A204 900302-0000 고정
         //대변은 210301-0000으로 고정
 
-        String currCode = (invoiceDataEntity.getDepCurr() == null) ? invoiceDataEntity.getWdCurr() : invoiceDataEntity.getDepCurr();
-        BigDecimal amount1 = (invoiceDataEntity.getDepCurr() == null)? invoiceDataEntity.getWithdrawal() : invoiceDataEntity.getDeposit();
+        String currCode = (invoiceDataEntity.getDepCurr() == null ||invoiceDataEntity.getDepCurr().isEmpty() ) ? invoiceDataEntity.getWdCurr() : invoiceDataEntity.getDepCurr();
+        BigDecimal amount1 = (invoiceDataEntity.getDepCurr() == null || invoiceDataEntity.getDepCurr().isEmpty())? invoiceDataEntity.getWithdrawal() : invoiceDataEntity.getDeposit();
         if(amount1.compareTo(BigDecimal.ZERO)>0){
             account2 = "111121-0000";
             txCd2 = invoiceDataEntity.getTranCd();

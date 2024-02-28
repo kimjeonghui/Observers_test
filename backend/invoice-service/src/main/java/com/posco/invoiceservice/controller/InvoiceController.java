@@ -1,6 +1,7 @@
 package com.posco.invoiceservice.controller;
 
 import com.posco.invoiceservice.dto.request.InvoiceDTO;
+import com.posco.invoiceservice.dto.request.InvoiceDataStatusDTO;
 import com.posco.invoiceservice.dto.response.InvoiceResponseDTO;
 import com.posco.invoiceservice.entity.InvoiceDataEntity;
 import com.posco.invoiceservice.service.InvoiceService;
@@ -77,4 +78,18 @@ public class InvoiceController {
         resultMap.put("invoiceList", responseDTOList);
         return ResponseEntity.ok().body(resultMap);
     }
+
+    @GetMapping("/{ovs-cd}/{fiscal-month}/{status}")
+    public List<InvoiceResponseDTO> getInvoiceDataList(@PathVariable(name = "ovs-cd")String ovsCd,
+                                                       @PathVariable(name = "fiscal-month")String fiscalMonth,
+                                                       @PathVariable(name = "status")String status){
+        return invoiceService.findInvoiceData(ovsCd, fiscalMonth, status);
+    }
+    @PatchMapping("/{ovs-cd}/{fiscal-month}")
+    public List<InvoiceResponseDTO> patchInvoiceDateList(@PathVariable(name = "ovs-cd")String ovsCd,
+                                                         @PathVariable(name = "fiscal-month")String fiscalMonth,
+                                                         @RequestBody InvoiceDataStatusDTO statusDTO){
+        return invoiceService.updateInvoiceData(ovsCd, fiscalMonth, statusDTO.getStatus());
+    }
+
 }
