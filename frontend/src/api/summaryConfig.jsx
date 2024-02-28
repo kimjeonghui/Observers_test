@@ -1,6 +1,6 @@
 //변수명은 notion의 API명세서에 method+기능을 참고하였음.
 
-const requests = {
+const summaryRq = {
   //기본 URL 주소
   base_url: process.env.REACT_APP_SUMMARY_API,
 
@@ -12,4 +12,4 @@ const requests = {
   },
 };
 
-export default requests;
+export default summaryRq;
