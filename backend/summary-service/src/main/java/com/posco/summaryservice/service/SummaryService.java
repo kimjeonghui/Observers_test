@@ -12,6 +12,5 @@ import java.util.List;
 public interface SummaryService {
     SummaryEntity createSummary(SummaryDTO summaryDTO);
     SummaryContentsEntity createSummaryContent(SummaryEntity summaryEntity, SummaryDTO summaryDTO);
-
     SummaryResponseDTO getSummaryContents(String ovsCd, String fiscalMonth);
 }
