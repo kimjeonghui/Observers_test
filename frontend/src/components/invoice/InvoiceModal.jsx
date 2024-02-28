@@ -165,13 +165,13 @@ export default function InvoiceModal(props) {
           console.error(err);
         });
       console.log(data);
-      // axios
-      //   .post(summaryRq.POST_SUMMARY(), {
-      //     ...data,
-      //   })
-      //   .catch((err) => {
-      //     console.log(err);
-      //   });
+      axios
+        .post(summaryRq.POST_SUMMARY(), {
+          ...data,
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   };
   // 영수증 ocr로 넘기는 api
