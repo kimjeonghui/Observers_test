@@ -40,8 +40,6 @@ public class QSummaryEntity extends EntityPathBase<SummaryEntity> {
 
     public final StringPath ovsCd = createString("ovsCd");
 
-    public final StringPath ovsName = createString("ovsName");
-
     public final ListPath<SummaryContentsEntity, QSummaryContentsEntity> summaryContentsEntityList = this.<SummaryContentsEntity, QSummaryContentsEntity>createList("summaryContentsEntityList", SummaryContentsEntity.class, QSummaryContentsEntity.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> summaryId = createNumber("summaryId", Long.class);

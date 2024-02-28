@@ -25,8 +25,8 @@ public class SummaryEntity extends BaseEntity{
     @Column(nullable = false)
     private String ovsCd;
 
-    @Column(nullable = false)
-    private String ovsName;
+//    @Column(nullable = false)
+//    private String ovsName;
 
     @Column(nullable = false)
     private String fiscalMonth;
