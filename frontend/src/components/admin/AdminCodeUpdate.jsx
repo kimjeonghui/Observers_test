@@ -38,6 +38,7 @@ function AdminCodeUpdate(props) {
             accountName: data.glCode.accountName,
             account: data.glCode.account,
             subAccount: data.glCode.subAccount,
+            depositCd: data.glCode.depositCd,
             deptReqFlag: data.glCode.deptReqFlag,
             majorCt: data.glCode.majorCt,
             mediumCt: data.glCode.mediumCt,

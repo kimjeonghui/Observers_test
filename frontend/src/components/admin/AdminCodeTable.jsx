@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import requests from '../../api/glcodeConfig';
-import AdminOfficeModal from '../../components/admin/AdminOfficeModal';
+import AdminCodeModal from './AdminCodeModal';
 import AdminCodeUpdate from './AdminCodeUpdate';
 import CustomButton from '../../components/global/Button';
 import ExcelIcon from '../../assets/excel-logo-64.png';
@@ -182,10 +182,10 @@ export default function AdminCodeTable() {
               export
             </CustomButton>
           </CSVLink>
-          <AdminOfficeModal
+          <AdminCodeModal
             open={open}
             setOpen={setOpen}
-            fetchData={fetchData} // Pass fetchData function down to AdminOfficeModal
+            fetchData={fetchData} // Pass fetchData function down to AdminCodeModal
           />
           <CustomButton onClick={handleOpenInsert} size='sm'>
             생성
