@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
@@ -43,6 +44,32 @@ public class SummaryController {
         // 해당 식별코드의 summary content 추가
         SummaryContentsEntity summaryContentsEntity = summaryService.createSummaryContent(summaryEntity, summaryDTO);
         if(summaryContentsEntity==null){
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "월 총괄표 내용 입력 실패");
+            return ResponseEntity.badRequest().body(resultMap);
+        }
+        resultMap.put("result", SUCCESS);
+        resultMap.put("msg", "월 총괄표 입력 성공");
+        return ResponseEntity.ok().body(resultMap);
+    }
+
+    @PostMapping("/list")
+    @Operation(summary = "Insert summary list", description = "")
+    public ResponseEntity<?> createSummaryList (@RequestBody List<SummaryDTO> summaryDTOs){
+        Map<String, Object> resultMap = new HashMap<>();
+        // summary가 있는지 확인하고 없으면 summary 생성
+        SummaryEntity summaryEntity = summaryService.createSummary(summaryDTOs.get(0));
+        if(summaryEntity==null){
+            resultMap.put("result", FAIL);
+            resultMap.put("msg", "월 총괄표 생성 실패");
+            return ResponseEntity.badRequest().body(resultMap);
+        }
+        // 해당 식별코드의 summary content 추가
+        List<SummaryContentsEntity> contents = new ArrayList<>();
+        for(SummaryDTO summaryDTO: summaryDTOs){
+            contents.add(summaryService.createSummaryContent(summaryEntity, summaryDTO));
+        }
+        if(contents.isEmpty()){
             resultMap.put("result", FAIL);
             resultMap.put("msg", "월 총괄표 내용 입력 실패");
             return ResponseEntity.badRequest().body(resultMap);
