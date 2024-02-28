@@ -145,16 +145,15 @@ function AdminOfficeModal(props) {
                     onChange={handleChange}
                     sx={{ backgroundColor: '#F5F6FA' }}
                   >
-                    {tableData.map((row) => (
+                    {/* {tableData.map((row) => (
                       <MenuItem key={row.locCurr} value={row.locCurr}>
                         {row.locCurr}
                       </MenuItem>
                       //Todo: 환율테이블에서 값을 가져와야 함
-                    ))}
-                    {/* <MenuItem value='USD'>USD</MenuItem>
+                    ))} */}
+                    <MenuItem value='USD'>USD</MenuItem>
                     <MenuItem value='EUR'>EUR</MenuItem>
-                    <MenuItem value='ARS'>ARS</MenuItem>
-                    <MenuItem value='KRW'>KRW</MenuItem> */}
+                    <MenuItem value='KRW'>KRW</MenuItem>
                   </Select>
                 </FormControl>
               </FlexDiv>
@@ -178,6 +177,7 @@ function AdminOfficeModal(props) {
                     <MenuItem value='USD'>USD</MenuItem>
                     <MenuItem value='EUR'>EUR</MenuItem>
                     <MenuItem value='ARS'>ARS</MenuItem>
+                    <MenuItem value='CNY'>CNY</MenuItem>
                     <MenuItem value='KRW'>KRW</MenuItem>
                   </Select>
                 </FormControl>
@@ -200,6 +200,7 @@ function AdminOfficeModal(props) {
                     <MenuItem value='USD'>USD</MenuItem>
                     <MenuItem value='EUR'>EUR</MenuItem>
                     <MenuItem value='ARS'>ARS</MenuItem>
+                    <MenuItem value='CNY'>CNY</MenuItem>
                     <MenuItem value='KRW'>KRW</MenuItem>
                   </Select>
                 </FormControl>
@@ -222,6 +223,7 @@ function AdminOfficeModal(props) {
                     <MenuItem value='USD'>USD</MenuItem>
                     <MenuItem value='EUR'>EUR</MenuItem>
                     <MenuItem value='ARS'>ARS</MenuItem>
+                    <MenuItem value='CNY'>CNY</MenuItem>
                     <MenuItem value='KRW'>KRW</MenuItem>
                   </Select>
                 </FormControl>
@@ -244,6 +246,7 @@ function AdminOfficeModal(props) {
                     <MenuItem value='USD'>USD</MenuItem>
                     <MenuItem value='EUR'>EUR</MenuItem>
                     <MenuItem value='ARS'>ARS</MenuItem>
+                    <MenuItem value='CNY'>CNY</MenuItem>
                     <MenuItem value='KRW'>KRW</MenuItem>
                   </Select>
                 </FormControl>
