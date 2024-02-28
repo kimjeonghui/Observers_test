@@ -163,8 +163,10 @@ function Sidebar(props) {
                 )}
               </Box>
             )}
-            <Typography sx={{ color: theme.palette.posco_gray_500 }}>
-              {user.name}
+            <Typography
+              sx={{ color: theme.palette.posco_gray_500, marginRight: '10px' }}
+            >
+              {user.description}님
             </Typography>
             <AccountCircleIcon
               sx={{ color: theme.palette.posco_gray_500, cursor: 'pointer' }}
