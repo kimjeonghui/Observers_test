@@ -45,13 +45,15 @@ public class AccountingSlipService {
     }
     //1. 인보이스 만들기
     private List<AccountingSlipInvoiceNumEntity> createInvoiceList(String ovsCd, String month) {
+        accountingSlipRepository.deleteAllByOvsCdAndFiscalMonth(ovsCd, month);
+        invoiceNumRepository.deleteAllByOvsCdAndFiscalMonth(ovsCd, month);
         List<AccountingSlipInvoiceNumEntity> invoiceNumEntityList = new ArrayList<>(); // 리턴값
         List<InvoiceDataEntity> findedInvoiceDataList = getInvoicedataList(ovsCd, month); // 거래내역
 
         for (int i = 0; i < findedInvoiceDataList.size(); i++) {
             InvoiceDataEntity invoiceData = findedInvoiceDataList.get(i);
-            Long count = invoiceNumRepository.countByFiscalMonthIs(invoiceData.getFiscalMonth()) + 1;
-            String invoice = "OAM" + "-" + invoiceData.getOvsCd() + "-" + String.format("%04d", count);
+            //if(invoiceData.getAccountingSlipInvoiceNum() != null) continue;
+            String invoice = "OAM" + "-" + invoiceData.getOvsCd() + "-" + String.format("%04d", i + 1);
 
             // 이미 같은 식별자를 가진 엔터티가 있는지 확인
             Optional<AccountingSlipInvoiceNumEntity> existingInvoiceNumEntity = invoiceNumRepository.findByInvoiceNum(invoice);
