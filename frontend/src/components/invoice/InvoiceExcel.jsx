@@ -9,6 +9,7 @@ import * as XLSX from 'xlsx';
 import axios from 'axios';
 
 import requests from '../../api/invoiceConfig';
+import summaryRq from '../../api/summaryConfig';
 
 export default function InvoiceExcel(props) {
   const { user, getInvoiceData, setIsCalc } = props;
@@ -167,32 +168,38 @@ export default function InvoiceExcel(props) {
   const handleDataSubmit = () => {
     const newData = handlePreprocessingData();
     console.log(newData);
+    // axios
+    //   .post(requests.POST_INVOICE_LIST(), newData)
+    //   .then((response) => {
+    //     if (response.status === 200) {
+    //       Swal.fire({
+    //         title: '등록성공',
+    //         text: '거래 내역이 등록되었습니다.',
+    //         icon: 'success',
+    //         customClass: {
+    //           container: 'my-swal',
+    //         },
+    //       });
+    //       getInvoiceData();
+    //       setIsCalc(false);
+    //     }
+    //   })
+    //   .catch((err) => {
+    //     console.error(err);
+    //     Swal.fire({
+    //       title: '등록실패',
+    //       text: '거래 내역 등록에 실패하였습니다.',
+    //       icon: 'error',
+    //       customClass: {
+    //         container: 'my-swal',
+    //       },
+    //     });
+    //   });
     axios
-      .post(requests.POST_INVOICE_LIST(), newData)
-      .then((response) => {
-        if (response.status === 200) {
-          Swal.fire({
-            title: '등록성공',
-            text: '거래 내역이 등록되었습니다.',
-            icon: 'success',
-            customClass: {
-              container: 'my-swal',
-            },
-          });
-          getInvoiceData();
-          setIsCalc(false);
-        }
-      })
+      .post(summaryRq.POST_SUMMARY_LIST(), newData)
+
       .catch((err) => {
         console.error(err);
-        Swal.fire({
-          title: '등록실패',
-          text: '거래 내역 등록에 실패하였습니다.',
-          icon: 'error',
-          customClass: {
-            container: 'my-swal',
-          },
-        });
       });
   };
 

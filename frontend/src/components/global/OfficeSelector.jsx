@@ -17,7 +17,7 @@ export default function OfficeSelector(props) {
     if (curV) {
       setSelectV(curV);
     } else {
-      setSelectV(officeCode[0].ovsCd);
+      setSelectV(ovsCdList.ovsMeaning);
     }
   }, [curV]);
 
