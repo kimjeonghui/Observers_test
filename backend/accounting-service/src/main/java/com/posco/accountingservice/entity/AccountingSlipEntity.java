@@ -21,8 +21,8 @@ public class AccountingSlipEntity extends BaseEntity{
     private Long accountSlipId; //식별자
     @Column
     private String fiscalMonth;
-    @Column(nullable = false, name = "tx_cd")
-    private String txCd; //삭별코드
+    @Column(nullable = false)
+    private String tranCd; //삭별코드
 
     @Column(nullable = false)
     private Long drCr; //차대

@@ -37,7 +37,7 @@ public class AccountingSlipDTO {
     public static AccountingSlipDTO toDto(AccountingSlipEntity accountingSlip, InvoiceDataEntity invoiceDataEntity){
         return AccountingSlipDTO.builder().account(accountingSlip.getAccount())
                 .accountSlipId(accountingSlip.getAccountSlipId())
-                .txCd(accountingSlip.getTxCd())
+                .txCd(accountingSlip.getTranCd())
                 .drCr(accountingSlip.getDrCr())
                 .txNum(accountingSlip.getTxNum())
                 .amount(accountingSlip.getAmount())
