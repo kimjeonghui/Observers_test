@@ -30,12 +30,14 @@ import {
 
 export default function AdminOffice() {
   const [tableData, setTableData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+
   const [selectedOffice, setSelectedOffice] = useState('');
   const [open, setOpen] = useState(false);
   const [deleteRow, setDeleteRow] = useState(null);
   const [openDelete, setOpenDelete] = useState(false);
   const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(25);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   //GET all
   useEffect(() => {
@@ -48,6 +50,7 @@ export default function AdminOffice() {
       .then((response) => {
         const { data } = response;
         setTableData(data.referenceList);
+        setFilteredData(data.referenceList); // Initialize filtered data
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -69,6 +72,7 @@ export default function AdminOffice() {
         .then((response) => {
           const { data } = response;
           setTableData([data.reference]);
+          setFilteredData([data.reference]); // Update filtered data
         })
         .catch((error) => {
           console.error('Error fetching data:', error);
@@ -138,8 +142,11 @@ export default function AdminOffice() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  // const emptyRows =
+  //   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - [].length) : 0;
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - [].length) : 0;
+    rowsPerPage -
+    Math.min(rowsPerPage, filteredData.length - page * rowsPerPage);
 
   return (
     <div style={{ padding: '10px 36px' }}>
@@ -269,7 +276,7 @@ export default function AdminOffice() {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component='div'
-              count={tableData.length}
+              count={filteredData.length} // Use filteredData length
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
