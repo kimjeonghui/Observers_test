@@ -29,6 +29,8 @@ import {
 
 export default function AdminCodeTable() {
   const [tableData, setTableData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
+
   const [selectedMajorCt, setselectedMajorCt] = useState('');
   const [open, setOpen] = useState(false);
   const [deleteRow, setDeleteRow] = useState(null);
@@ -47,6 +49,7 @@ export default function AdminCodeTable() {
       .then((response) => {
         const { data } = response;
         setTableData(data.glCodeList);
+        setFilteredData(data.glCodeList); // Update filtered data
       })
       .catch((error) => {
         console.error('Error fetching data:', error);
@@ -69,6 +72,7 @@ export default function AdminCodeTable() {
           const { data } = response;
           // setTableData([data.glCodes]);
           setTableData(data.glCodes);
+          setFilteredData(data.glCodes); // Update filtered data
         })
         .catch((error) => {
           console.error('Error fetching data:', error);
@@ -138,8 +142,13 @@ export default function AdminCodeTable() {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+  // const emptyRows =
+  //   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - [].length) : 0;
+
+  // filteredData로 무한스크롤 멈추기
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - [].length) : 0;
+    rowsPerPage -
+    Math.min(rowsPerPage, filteredData.length - page * rowsPerPage);
 
   return (
     <div style={{ padding: '10px 36px' }}>
@@ -274,7 +283,7 @@ export default function AdminCodeTable() {
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component='div'
-              count={tableData.length}
+              count={filteredData.length} // Use filteredData length
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
