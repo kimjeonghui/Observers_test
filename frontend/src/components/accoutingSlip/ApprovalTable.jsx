@@ -325,6 +325,7 @@ export default function ApprovalTable(props) {
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
   const [fiscalMonth, setFiscalMonth] = useState();
   const user = useRecoilValue(userState);
+  const Swal = require('sweetalert2');
   useEffect(() => {
     handleFiscalMonth();
   }, [year, currentMonth]);
@@ -371,6 +372,14 @@ export default function ApprovalTable(props) {
       .then((response) => {
         if (response.status === 200) {
           const data = response.data;
+          Swal.fire({
+            title: '결재승인 성공',
+            text: '결재를 승인하여 회계전표가 생성되었습니다.',
+            icon: 'success',
+            customClass: {
+              container: 'my-swal',
+            },
+          });
           //setInvoiceData(data);
         } else {
           //setInvoiceData([]);
