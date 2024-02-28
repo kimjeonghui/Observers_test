@@ -1,10 +1,6 @@
 package com.posco.invoiceservice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-
+import lombok.*;
 import javax.persistence.*;
 import java.util.List;
 
@@ -16,10 +12,9 @@ import java.util.List;
 @Table(name = "pos_ovs_accounting_slip_invoice_num")
 public class AccountingSlipInvoiceNumEntity extends BaseEntity{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer num;
-    @Column(nullable = false)
+    @Column(name = "invoice_num", nullable = false)
     private String invoiceNum;
+    @Setter
     @OneToOne(targetEntity = InvoiceDataEntity.class, fetch = FetchType.LAZY)
     @JoinColumn(name = "invoice_data_id")
     private InvoiceDataEntity invoiceDataEntity;
@@ -29,6 +24,9 @@ public class AccountingSlipInvoiceNumEntity extends BaseEntity{
     @Column(nullable = false)
     private String fiscalMonth;
 
-    @OneToMany(mappedBy = "accountingSlipInvoiceNumEntity", cascade = CascadeType.REMOVE)
+    @Setter
+    @OneToMany(mappedBy = "accountingSlipInvoiceNumEntity", cascade = CascadeType.ALL)
     private List<AccountingSlipEntity> accountingSlipEntityList;
+    @Column(nullable = false)
+    private Long txNum;
 }
