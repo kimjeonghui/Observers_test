@@ -166,12 +166,26 @@ export default function InvoiceModal(props) {
         });
       console.log(data);
       axios
-        .post(summaryRq.POST_SUMMARY(), {
+        .post(invoiceRq.POST_INVOICE(), {
           ...data,
         })
+        .then((response) => {
+          if (response.status === 200) {
+            getInvoiceData();
+            handleClose();
+          }
+        })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
         });
+      console.log(data);
+      // axios
+      //   .post(summaryRq.POST_SUMMARY(), {
+      //     ...data,
+      //   })
+      //   .catch((err) => {
+      //     console.log(err);
+      //   });
     }
   };
   // 영수증 ocr로 넘기는 api

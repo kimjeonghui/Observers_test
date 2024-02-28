@@ -15,6 +15,7 @@ import { useTheme } from '@mui/material/styles';
 import { userState } from '../../state/UserState';
 import ButtonComponent from '../global/Button';
 import requests from '../../api/accountingSlipConfig';
+import { da } from 'date-fns/locale';
 
 const columns = [
   {
@@ -325,7 +326,7 @@ export default function ApprovalTable(props) {
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
   const [fiscalMonth, setFiscalMonth] = useState();
   const user = useRecoilValue(userState);
-  const Swal = require('sweetalert2');
+
   useEffect(() => {
     handleFiscalMonth();
   }, [year, currentMonth]);
@@ -353,6 +354,7 @@ export default function ApprovalTable(props) {
       .then((response) => {
         if (response.status === 200) {
           const data = response.data;
+          console.log(data);
           setInvoiceData(data);
         } else {
           setInvoiceData([]);
@@ -372,15 +374,6 @@ export default function ApprovalTable(props) {
       .then((response) => {
         if (response.status === 200) {
           const data = response.data;
-          Swal.fire({
-            title: '결재승인 성공',
-            text: '결재를 승인하여 회계전표가 생성되었습니다.',
-            icon: 'success',
-            customClass: {
-              container: 'my-swal',
-            },
-          });
-          //setInvoiceData(data);
         } else {
           //setInvoiceData([]);
         }
@@ -406,9 +399,19 @@ export default function ApprovalTable(props) {
         console.log(err);
       });
   };
-  useEffect(() => {
-    getInvoiceData();
-  }, []); // 컴포넌트가 마운트될 때 한 번만 실행
+  const handleApproval = async () => {
+    try {
+      await patchInvoiceData();
+      await postAccountingSlip();
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // useEffect(() => {
+  //   getInvoiceData();
+  // }, []); // 컴포넌트가 마운트될 때 한 번만 실행
 
   return (
     <Box>
@@ -497,10 +500,7 @@ export default function ApprovalTable(props) {
           <ButtonComponent
             width='120px'
             sx={{ margin: '0 32px' }}
-            onClick={() => {
-              patchInvoiceData();
-              postAccountingSlip();
-            }}
+            onClick={handleApproval}
             disabled={invoiceData.length === 0}
           >
             승인
