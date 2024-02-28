@@ -23,6 +23,7 @@ export default function Invoice(props) {
   const tabMenus = ['당월 입력 조회', '엑셀 입력'];
   const [invoiceData, setInvoiceData] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const Swal = require('sweetalert2');
 
   const [year, setYear] = useState(new Date().getFullYear());
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
@@ -72,7 +73,14 @@ export default function Invoice(props) {
       })
       .then((response) => {
         if (response.status === 200) {
-          console.log(response.data);
+          Swal.fire({
+            title: '결재요청 성공',
+            text: '당월자료를 결재요청했습니다.',
+            icon: 'success',
+            customClass: {
+              container: 'my-swal',
+            },
+          });
         }
       })
       .catch((err) => {
@@ -87,7 +95,14 @@ export default function Invoice(props) {
     setInputModalOpen(true);
   };
   const handleCalc = () => {
-    alert('계산해라~');
+    Swal.fire({
+      title: '외환차손익계산 완료',
+      text: '외환차손익계산을 완료했습니다.',
+      icon: 'success',
+      customClass: {
+        container: 'my-swal',
+      },
+    });
     setIsCalc(true);
   };
 
@@ -112,6 +127,7 @@ export default function Invoice(props) {
         setOpen={setInputModalOpen}
         user={user}
         getInvoiceData={getInvoiceData}
+        setIsCalc={setIsCalc}
       />
       <InvoiceEviModal
         open={eviModalopen}

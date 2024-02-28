@@ -45,13 +45,15 @@ public class AccountingSlipService {
     }
     //1. 인보이스 만들기
     private List<AccountingSlipInvoiceNumEntity> createInvoiceList(String ovsCd, String month) {
+        accountingSlipRepository.deleteAllByOvsCdAndFiscalMonth(ovsCd, month);
+        invoiceNumRepository.deleteAllByOvsCdAndFiscalMonth(ovsCd, month);
         List<AccountingSlipInvoiceNumEntity> invoiceNumEntityList = new ArrayList<>(); // 리턴값
         List<InvoiceDataEntity> findedInvoiceDataList = getInvoicedataList(ovsCd, month); // 거래내역
 
         for (int i = 0; i < findedInvoiceDataList.size(); i++) {
             InvoiceDataEntity invoiceData = findedInvoiceDataList.get(i);
-            Long count = invoiceNumRepository.countByFiscalMonthIs(invoiceData.getFiscalMonth()) + 1;
-            String invoice = "OAM" + "-" + invoiceData.getOvsCd() + "-" + String.format("%04d", count);
+            //if(invoiceData.getAccountingSlipInvoiceNum() != null) continue;
+            String invoice = "OAM" + "-" + invoiceData.getOvsCd() + "-" + String.format("%04d", i + 1);
 
             // 이미 같은 식별자를 가진 엔터티가 있는지 확인
             Optional<AccountingSlipInvoiceNumEntity> existingInvoiceNumEntity = invoiceNumRepository.findByInvoiceNum(invoice);
@@ -130,13 +132,13 @@ public class AccountingSlipService {
                 .ovsCd(invoiceDataEntity.getOvsCd())
                 .description(invoiceDataEntity.getDescription())
                 .txDate(invoiceDataEntity.getTxDate())
-                .txCd(invoiceDataEntity.getTranCd())
+                .tranCd(invoiceDataEntity.getTranCd())
                 .fiscalMonth(invoiceDataEntity.getFiscalMonth())
                 .build();
 
         accountingSlip2 = AccountingSlipEntity.builder()
                 .account(account2)
-                .txCd(txCd2)
+                .tranCd(txCd2)
                 .amount(amount1.negate())
                 .drCr(1L)
                 .txNum(invoiceDataEntity.getAccountingSlipInvoiceNum().getTxNum()+1)
@@ -154,7 +156,7 @@ public class AccountingSlipService {
         accountingSlip3 = AccountingSlipEntity.builder()
                 .account("210301-0000") //전도금 받는 건지 나가는 건지 확인
                 .amount(BigDecimal.valueOf(0))
-                .txCd(invoiceDataEntity.getTranCd())
+                .tranCd(invoiceDataEntity.getTranCd())
                 .drCr(0L)
                 .txNum(invoiceDataEntity.getAccountingSlipInvoiceNum().getTxNum()+1)
                 .currCode(currCode)

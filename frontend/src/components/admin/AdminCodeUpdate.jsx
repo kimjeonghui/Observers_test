@@ -15,6 +15,8 @@ import CustomButton from '../global/Button';
 import ModalInput from '../global/ModalInput';
 
 function AdminCodeUpdate(props) {
+  const Swal = require('sweetalert2');
+
   const { open, setOpen, glCodeId, fetchData } = props;
 
   const handleClose = () => {
@@ -67,13 +69,29 @@ function AdminCodeUpdate(props) {
       .put(requests.PUT_GLCODE_BY_ID(glCodeId), referenceData)
       .then((response) => {
         console.log(response.data);
-        alert('업데이트 되었습니다.');
+        // alert('업데이트 되었습니다.');
+        Swal.fire({
+          title: '수정완료',
+          text: '식별코드가 업데이트 되었습니다.',
+          icon: 'success',
+          customClass: {
+            container: 'my-swal',
+          },
+        });
         setOpen(false);
         fetchData(); // Refresh data
       })
       .catch((error) => {
         console.error('Error updating reference:', error);
-        alert('Error updating reference. Please try again.');
+        // alert('Error updating reference. Please try again.');
+        Swal.fire({
+          title: '수정실패',
+          text: '모달 값을 전부 입력해주세요.',
+          icon: 'error',
+          customClass: {
+            container: 'my-swal',
+          },
+        });
       });
   };
 

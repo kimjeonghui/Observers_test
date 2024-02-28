@@ -19,6 +19,8 @@ import ModalInput from '../global/ModalInput';
 import 'react-datepicker/dist/react-datepicker.css';
 
 function AdminCodeModal(props) {
+  const Swal = require('sweetalert2');
+
   const { open, setOpen, fetchData } = props;
   const [steps, setSteps] = useState(1);
   const handleClose = () => {
@@ -108,7 +110,15 @@ function AdminCodeModal(props) {
       .post(requests.POST_GLCODE(), referenceData)
       .then((response) => {
         console.log(response.data); // Log response for debugging
-        alert('생성 되었습니다.'); // Alert user for successful creation
+        // alert('생성 되었습니다.'); // Alert user for successful creation
+        Swal.fire({
+          title: '생성완료',
+          text: '식별코드가 생성되었습니다.',
+          icon: 'success',
+          customClass: {
+            container: 'my-swal',
+          },
+        });
         setReferenceData({
           // Reset referenceData state 생성 후 입력값 비우기
           tranCd: '',

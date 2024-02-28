@@ -120,7 +120,13 @@ function Sidebar(props) {
           </div>
           <Box sx={{ display: 'flex' }}>
             {role === 'admin' && (
-              <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  display: { xs: 'none', md: 'flex' },
+                  alignItems: 'center',
+                }}
+              >
                 {adminPages.map((page) =>
                   page.status ? (
                     <Link
@@ -163,16 +169,34 @@ function Sidebar(props) {
                 )}
               </Box>
             )}
-            <Typography sx={{ color: theme.palette.posco_gray_500 }}>
-              {user.name}
-            </Typography>
-            <AccountCircleIcon
-              sx={{ color: theme.palette.posco_gray_500, cursor: 'pointer' }}
-              aria-controls={menuOpen}
-              aria-haspopup='true'
-              aria-expanded={menuOpen}
-              onClick={handleClick}
-            />
+            <Box
+              sx={{
+                flexGrow: 1,
+                display: { xs: 'none', md: 'flex' },
+                alignItems: 'center',
+              }}
+            >
+              <Typography
+                sx={{
+                  color: theme.palette.posco_gray_500,
+                  marginRight: '10px',
+                  marginLeft: '25px',
+                }}
+              >
+                {user.description}님
+              </Typography>
+              <AccountCircleIcon
+                sx={{
+                  color: theme.palette.posco_gray_500,
+                  cursor: 'pointer',
+                }}
+                aria-controls={menuOpen}
+                aria-haspopup='true'
+                aria-expanded={menuOpen}
+                onClick={handleClick}
+              />
+            </Box>
+
             <Menu
               id='demo-positioned-menu'
               aria-labelledby='demo-positioned-button'

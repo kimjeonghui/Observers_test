@@ -25,7 +25,7 @@ import ocrRq from '../../api/ocrConfig';
 import exchangeRq from '../../api/exchangeRateConfig';
 
 export default function InvoiceModal(props) {
-  const { open, setOpen, user, getInvoiceData } = props;
+  const { open, setOpen, user, getInvoiceData, setIsCalc } = props;
   const theme = useTheme();
   const Swal = require('sweetalert2');
   const [steps, setSteps] = useState(1);
@@ -142,6 +142,29 @@ export default function InvoiceModal(props) {
       description,
     };
     if (checkInvoiceForm(data)) {
+      axios
+        .post(invoiceRq.POST_INVOICE(), {
+          ...data,
+        })
+        .then((response) => {
+          if (response.status === 200) {
+            Swal.fire({
+              title: '등록성공',
+              text: '거래 내역이 등록되었습니다.',
+              icon: 'success',
+              customClass: {
+                container: 'my-swal',
+              },
+            });
+            getInvoiceData();
+            setIsCalc(false);
+            handleClose();
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+      console.log(data);
       axios
         .post(invoiceRq.POST_INVOICE(), {
           ...data,

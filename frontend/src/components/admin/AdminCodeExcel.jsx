@@ -11,6 +11,8 @@ import axios from 'axios';
 import requests from '../../api/glcodeConfig';
 
 export default function AdminCodeExcel(props) {
+  const Swal = require('sweetalert2');
+
   // const { user } = props;
   const columnLabels = [
     // '거래일자',
@@ -183,7 +185,15 @@ export default function AdminCodeExcel(props) {
       .post(requests.POST_GLCODE_LIST(), newData)
       .then((response) => {
         console.log(response);
-        alert('식별코드가 추가되었습니다.');
+        // alert('식별코드가 추가되었습니다.');
+        Swal.fire({
+          title: '엘셀 입력 성공',
+          text: '식별코드 정보가 추가되었습니다.',
+          icon: 'sucess',
+          customClass: {
+            container: 'my-swal',
+          },
+        });
       })
       .catch((err) => {
         console.error(err);

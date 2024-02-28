@@ -9,4 +9,6 @@ import java.util.List;
 public interface AccountingSlipRepository extends JpaRepository<AccountingSlipEntity, Long> {
 
     List<AccountingSlipEntity> findByOvsCdIsAndFiscalMonthIs(String ovsCd, String fiscalMonth);
+
+    void deleteAllByOvsCdAndFiscalMonth(String ovsCd, String fiscalMonth);
 }
