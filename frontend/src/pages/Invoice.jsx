@@ -208,7 +208,11 @@ export default function Invoice(props) {
           />
         </div>
       ) : (
-        <InvoiceExcel user={user} />
+        <InvoiceExcel
+          user={user}
+          getInvoiceData={getInvoiceData}
+          setIsCalc={setIsCalc}
+        />
       )}
     </div>
   );

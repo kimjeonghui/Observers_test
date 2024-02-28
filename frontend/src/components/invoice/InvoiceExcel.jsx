@@ -11,7 +11,7 @@ import axios from 'axios';
 import requests from '../../api/invoiceConfig';
 
 export default function InvoiceExcel(props) {
-  const { user } = props;
+  const { user, getInvoiceData, setIsCalc } = props;
   const columnLabels = [
     '거래일자',
     '거래처명',
@@ -26,7 +26,7 @@ export default function InvoiceExcel(props) {
   const selectFile = useRef();
   // submit state
   const [excelData, setExcelData] = useState(null);
-
+  const Swal = require('sweetalert2');
   useEffect(() => {
     tableImportData();
   }, [excelData]);
@@ -170,10 +170,29 @@ export default function InvoiceExcel(props) {
     axios
       .post(requests.POST_INVOICE_LIST(), newData)
       .then((response) => {
-        console.log(response);
+        if (response.status === 200) {
+          Swal.fire({
+            title: '등록성공',
+            text: '거래 내역이 등록되었습니다.',
+            icon: 'success',
+            customClass: {
+              container: 'my-swal',
+            },
+          });
+          getInvoiceData();
+          setIsCalc(false);
+        }
       })
       .catch((err) => {
         console.error(err);
+        Swal.fire({
+          title: '등록실패',
+          text: '거래 내역 등록에 실패하였습니다.',
+          icon: 'error',
+          customClass: {
+            container: 'my-swal',
+          },
+        });
       });
   };
 
