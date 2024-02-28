@@ -130,13 +130,13 @@ public class AccountingSlipService {
                 .ovsCd(invoiceDataEntity.getOvsCd())
                 .description(invoiceDataEntity.getDescription())
                 .txDate(invoiceDataEntity.getTxDate())
-                .txCd(invoiceDataEntity.getTranCd())
+                .tranCd(invoiceDataEntity.getTranCd())
                 .fiscalMonth(invoiceDataEntity.getFiscalMonth())
                 .build();
 
         accountingSlip2 = AccountingSlipEntity.builder()
                 .account(account2)
-                .txCd(txCd2)
+                .tranCd(txCd2)
                 .amount(amount1.negate())
                 .drCr(1L)
                 .txNum(invoiceDataEntity.getAccountingSlipInvoiceNum().getTxNum()+1)
@@ -154,7 +154,7 @@ public class AccountingSlipService {
         accountingSlip3 = AccountingSlipEntity.builder()
                 .account("210301-0000") //전도금 받는 건지 나가는 건지 확인
                 .amount(BigDecimal.valueOf(0))
-                .txCd(invoiceDataEntity.getTranCd())
+                .tranCd(invoiceDataEntity.getTranCd())
                 .drCr(0L)
                 .txNum(invoiceDataEntity.getAccountingSlipInvoiceNum().getTxNum()+1)
                 .currCode(currCode)
