@@ -25,7 +25,7 @@ import ocrRq from '../../api/ocrConfig';
 import exchangeRq from '../../api/exchangeRateConfig';
 
 export default function InvoiceModal(props) {
-  const { open, setOpen, user, getInvoiceData } = props;
+  const { open, setOpen, user, getInvoiceData, setIsCalc } = props;
   const theme = useTheme();
   const Swal = require('sweetalert2');
   const [steps, setSteps] = useState(1);
@@ -157,6 +157,7 @@ export default function InvoiceModal(props) {
               },
             });
             getInvoiceData();
+            setIsCalc(false);
             handleClose();
           }
         })

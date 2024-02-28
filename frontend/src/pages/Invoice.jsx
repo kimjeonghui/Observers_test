@@ -127,6 +127,7 @@ export default function Invoice(props) {
         setOpen={setInputModalOpen}
         user={user}
         getInvoiceData={getInvoiceData}
+        setIsCalc={setIsCalc}
       />
       <InvoiceEviModal
         open={eviModalopen}
