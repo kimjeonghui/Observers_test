@@ -20,6 +20,7 @@ import { ModalStrokeBtn, FlexDiv } from './InvoiceStyles';
 import CustomButton from '../global/Button';
 import ModalInput from '../global/ModalInput';
 import invoiceRq from '../../api/invoiceConfig';
+import summaryRq from '../../api/summaryConfig';
 import ocrRq from '../../api/ocrConfig';
 import exchangeRq from '../../api/exchangeRateConfig';
 
@@ -141,18 +142,26 @@ export default function InvoiceModal(props) {
       description,
     };
     if (checkInvoiceForm(data)) {
+      // axios
+      //   .post(invoiceRq.POST_INVOICE(), {
+      //     ...data,
+      //   })
+      //   .then((response) => {
+      //     if (response.status === 200) {
+      //       getInvoiceData();
+      //       handleClose();
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     console.error(err);
+      //   });
+      console.log(data);
       axios
-        .post(invoiceRq.POST_INVOICE(), {
+        .post(summaryRq.POST_SUMMARY(), {
           ...data,
         })
-        .then((response) => {
-          if (response.status === 200) {
-            getInvoiceData();
-            handleClose();
-          }
-        })
         .catch((err) => {
-          console.error(err);
+          console.log(err);
         });
     }
   };

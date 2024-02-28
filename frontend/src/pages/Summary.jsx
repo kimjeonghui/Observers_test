@@ -14,7 +14,7 @@ import {
 import { useReactToPrint } from 'react-to-print';
 import OfficeSelector from '../components/global/OfficeSelector';
 import SummaryCalendar from '../components/summary/SummaryCalendar';
-import requests from '../api/summaryConfig';
+import summaryRq from '../api/summaryConfig';
 import { userState } from '../state/UserState';
 import axios from 'axios';
 const TAX_RATE = 0.07;
@@ -91,7 +91,7 @@ export default function Summary(props) {
   });
   const handleGetSummary = () => {
     axios
-      .get(requests.GET_SUMMARY(ovsCd, fiscalMonth))
+      .get(summaryRq.GET_SUMMARY(ovsCd, fiscalMonth))
       .then((res) => {
         console.log(res);
         setSummary(res.data.summary);
