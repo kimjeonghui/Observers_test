@@ -1,14 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CustomButton from '../components/global/Button';
 import { useTheme } from '@mui/material/styles';
 import FolderIcon from '@mui/icons-material/Folder';
 import { Box } from '@mui/material';
+import OfficeSelector from '../components/global/OfficeSelector';
 import axios from 'axios';
 
 export default function Evidence() {
   const theme = useTheme();
   const navigate = useNavigate();
+  const [ovsCd, setOvsCd] = useState();
 
   const dateButtons = [
     '2023-07',
@@ -42,7 +44,11 @@ export default function Evidence() {
   };
 
   return (
-    <div>
+    <div style={{ padding: '10px 36px' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <h2>월 총괄표</h2>
+        <OfficeSelector curV={ovsCd} setCurV={setOvsCd} />
+      </div>
       <Box sx={{ display: 'flex', gap: '20px', padding: '20px' }}>
         {dateButtons.map((date) => (
           <CustomButton
