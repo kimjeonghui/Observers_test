@@ -7,6 +7,9 @@ const summaryRq = {
   POST_SUMMARY() {
     return this.base_url + `/summary`;
   },
+  POST_SUMMARY_LIST() {
+    return this.base_url + `/summary/list`;
+  },
   GET_SUMMARY(ovsCd, fiscalMonth) {
     return this.base_url + `/summary/${ovsCd}/${fiscalMonth}`;
   },
