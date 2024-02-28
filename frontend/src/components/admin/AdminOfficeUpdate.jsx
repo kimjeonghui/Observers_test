@@ -15,6 +15,8 @@ import CustomButton from '../global/Button';
 import ModalInput from '../global/ModalInput';
 
 function AdminOfficeUpdate(props) {
+  const Swal = require('sweetalert2');
+
   const { open, setOpen, ovsCd, fetchData } = props;
 
   const handleClose = () => {
@@ -81,7 +83,15 @@ function AdminOfficeUpdate(props) {
       .put(requests.PUT_OFFICE(), referenceData)
       .then((response) => {
         console.log(response.data);
-        alert('업데이트 되었습니다.');
+        // alert('업데이트 되었습니다.');
+        Swal.fire({
+          title: '수정완료',
+          text: '사무소코드가 업데이트 되었습니다.',
+          icon: 'success',
+          customClass: {
+            container: 'my-swal',
+          },
+        });
         setOpen(false);
         fetchData(); // Refresh data
       })
