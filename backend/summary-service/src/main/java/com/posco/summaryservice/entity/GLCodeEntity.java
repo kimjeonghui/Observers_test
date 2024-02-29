@@ -33,7 +33,7 @@ public class GLCodeEntity extends BaseEntity{
     private Long depositCd;             // 입출금 구분
 
     @Column(nullable = false)
-    private Long deptReqFlag;           // 부서 코드 필수 여부
+    private String deptReqFlag;           // 부서 코드 필수 여부
 
     @Column
     private String description;         // 적요 설명

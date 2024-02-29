@@ -38,7 +38,7 @@ public class QGLCodeEntity extends EntityPathBase<GLCodeEntity> {
 
     public final NumberPath<Long> depositCd = createNumber("depositCd", Long.class);
 
-    public final NumberPath<Long> deptReqFlag = createNumber("deptReqFlag", Long.class);
+    public final StringPath deptReqFlag = createString("deptReqFlag");
 
     public final StringPath description = createString("description");
 

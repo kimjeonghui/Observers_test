@@ -28,7 +28,7 @@ public class QAccountingSlipInvoiceNumEntity extends EntityPathBase<AccountingSl
 
     public final NumberPath<Long> invoiceDataId = createNumber("invoiceDataId", Long.class);
 
-    public final NumberPath<Long> invoiceNum = createNumber("invoiceNum", Long.class);
+    public final StringPath invoiceNum = createString("invoiceNum");
 
     public QAccountingSlipInvoiceNumEntity(String variable) {
         this(AccountingSlipInvoiceNumEntity.class, forVariable(variable), INITS);
@@ -48,7 +48,7 @@ public class QAccountingSlipInvoiceNumEntity extends EntityPathBase<AccountingSl
 
     public QAccountingSlipInvoiceNumEntity(Class<? extends AccountingSlipInvoiceNumEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.invoiceDataEntity = inits.isInitialized("invoiceDataEntity") ? new QInvoiceDataEntity(forProperty("invoiceDataEntity")) : null;
+        this.invoiceDataEntity = inits.isInitialized("invoiceDataEntity") ? new QInvoiceDataEntity(forProperty("invoiceDataEntity"), inits.get("invoiceDataEntity")) : null;
     }
 
 }

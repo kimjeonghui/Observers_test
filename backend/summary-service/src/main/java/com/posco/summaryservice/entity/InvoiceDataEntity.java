@@ -1,12 +1,10 @@
 package com.posco.summaryservice.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,7 +20,7 @@ public class InvoiceDataEntity extends BaseEntity{
     private Long invoiceDataId;
 
     @Column
-    private LocalDateTime txDate;       //
+    private LocalDate txDate;       // 거래 일자
 
     @Column
     private String store;               // 거래처명
@@ -52,13 +50,20 @@ public class InvoiceDataEntity extends BaseEntity{
     private String ovsCd;               // 사무소 코드
 
     @Column
-    private LocalDateTime fiscalMonth;  // 회계 년월
+    private String fiscalMonth;         // 회계 년월
 
     @Column
+    @Setter
     private String status;              // 상태
 
     @Column
     private Long ocrId;                 // OCR ID
+
+    @Column
+    private Float exchangeRate;         // 환율;
+
+    @OneToOne(mappedBy = "invoiceDataEntity", cascade = CascadeType.ALL, orphanRemoval = true)
+    private AccountingSlipInvoiceNumEntity accountingSlipInvoiceNum;                                // 송장 번호(one to one 이라 필요)
 
     @OneToMany(mappedBy = "invoiceDataEntity", cascade = CascadeType.REMOVE)
     private List<EvidenceDataEntity> evidenceDataEntityList;

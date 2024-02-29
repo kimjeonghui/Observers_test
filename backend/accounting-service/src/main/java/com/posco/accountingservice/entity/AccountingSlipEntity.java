@@ -28,7 +28,7 @@ public class AccountingSlipEntity extends BaseEntity{
     private Long drCr; //차대
 
     @Column(nullable = false)
-    private Long txNum; //거래순번
+    private Long tranNum; //거래순번
 
     @Column(nullable = false)
     private BigDecimal amount; //금액

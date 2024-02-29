@@ -28,5 +28,5 @@ public class AccountingSlipInvoiceNumEntity extends BaseEntity{
     @OneToMany(mappedBy = "accountingSlipInvoiceNumEntity", cascade = CascadeType.ALL)
     private List<AccountingSlipEntity> accountingSlipEntityList;
     @Column(nullable = false)
-    private Long txNum;
+    private Long tranNum;
 }
