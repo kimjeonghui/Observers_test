@@ -28,7 +28,7 @@ public class QSummaryEntity extends EntityPathBase<SummaryEntity> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdDate = _super.createdDate;
 
-    public final DateTimePath<java.time.LocalDateTime> fiscalMonth = createDateTime("fiscalMonth", java.time.LocalDateTime.class);
+    public final StringPath fiscalMonth = createString("fiscalMonth");
 
     //inherited
     public final StringPath lastModifiedBy = _super.lastModifiedBy;
@@ -36,13 +36,15 @@ public class QSummaryEntity extends EntityPathBase<SummaryEntity> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> lastUpdatedDate = _super.lastUpdatedDate;
 
-    public final StringPath ovsCd = createString("ovsCd");
+    public final StringPath locCurr = createString("locCurr");
 
-    public final StringPath ovsName = createString("ovsName");
+    public final StringPath ovsCd = createString("ovsCd");
 
     public final ListPath<SummaryContentsEntity, QSummaryContentsEntity> summaryContentsEntityList = this.<SummaryContentsEntity, QSummaryContentsEntity>createList("summaryContentsEntityList", SummaryContentsEntity.class, QSummaryContentsEntity.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> summaryId = createNumber("summaryId", Long.class);
+
+    public final StringPath transCurr = createString("transCurr");
 
     public QSummaryEntity(String variable) {
         super(SummaryEntity.class, forVariable(variable));

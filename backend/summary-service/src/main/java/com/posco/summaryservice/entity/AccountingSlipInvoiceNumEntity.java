@@ -17,7 +17,7 @@ import java.util.List;
 public class AccountingSlipInvoiceNumEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long invoiceNum;
+    private String invoiceNum;
 
     @Column(name = "invoice_data_id", insertable = false, updatable = false)
     private Long invoiceDataId;

@@ -22,7 +22,7 @@ public class QAccountingSlipEntity extends EntityPathBase<AccountingSlipEntity> 
 
     public static final QAccountingSlipEntity accountingSlipEntity = new QAccountingSlipEntity("accountingSlipEntity");
 
-    public final NumberPath<Long> account = createNumber("account", Long.class);
+    public final StringPath account = createString("account");
 
     public final QAccountingSlipInvoiceNumEntity accountingSlipInvoiceNumEntity;
 
@@ -38,7 +38,7 @@ public class QAccountingSlipEntity extends EntityPathBase<AccountingSlipEntity> 
 
     public final NumberPath<Float> exchangeRate = createNumber("exchangeRate", Float.class);
 
-    public final NumberPath<Long> invoiceNum = createNumber("invoiceNum", Long.class);
+    public final StringPath invoiceNum = createString("invoiceNum");
 
     public final NumberPath<java.math.BigDecimal> krwAmount = createNumber("krwAmount", java.math.BigDecimal.class);
 

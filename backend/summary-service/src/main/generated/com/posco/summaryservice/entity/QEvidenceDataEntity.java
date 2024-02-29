@@ -62,7 +62,7 @@ public class QEvidenceDataEntity extends EntityPathBase<EvidenceDataEntity> {
 
     public QEvidenceDataEntity(Class<? extends EvidenceDataEntity> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.invoiceDataEntity = inits.isInitialized("invoiceDataEntity") ? new QInvoiceDataEntity(forProperty("invoiceDataEntity")) : null;
+        this.invoiceDataEntity = inits.isInitialized("invoiceDataEntity") ? new QInvoiceDataEntity(forProperty("invoiceDataEntity"), inits.get("invoiceDataEntity")) : null;
     }
 
 }

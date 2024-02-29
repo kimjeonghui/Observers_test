@@ -45,13 +45,13 @@ public class AccountingSlipEntity {
     private String ovsCd;
 
     @Column(nullable = false)
-    private Long account;
+    private String account;
 
     @Column(columnDefinition = "TEXT", nullable = false)
     private String description;
 
     @Column(name = "invoice_num", insertable = false, updatable = false, nullable = false)
-    private Long invoiceNum;
+    private String invoiceNum;
 
     @Column
     private LocalDateTime txDate;

@@ -39,7 +39,7 @@ public class AccountingSlipDTO {
                 .accountSlipId(accountingSlip.getAccountSlipId())
                 .txCd(accountingSlip.getTranCd())
                 .drCr(accountingSlip.getDrCr())
-                .txNum(accountingSlip.getTxNum())
+                .txNum(accountingSlip.getTranNum())
                 .amount(accountingSlip.getAmount())
                 .currCode(accountingSlip.getCurrCode())
                 .krwAmount(accountingSlip.getKrwAmount())

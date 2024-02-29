@@ -64,7 +64,7 @@ public class AccountingSlipService {
                             .ovsCd(ovsCd)
                             .fiscalMonth(month)
                             .invoiceDataEntity(invoiceData)
-                            .txNum(invoiceNumRepository.countByFiscalMonthIs(invoiceData.getFiscalMonth()))
+                            .tranNum(invoiceNumRepository.countByFiscalMonthIs(invoiceData.getFiscalMonth()))
                             .build();
 
                     invoiceNumEntity.setInvoiceDataEntity(invoiceData);
@@ -124,7 +124,7 @@ public class AccountingSlipService {
                         String.valueOf(GLcodeEnum.getValuesByCode(invoiceDataEntity.getTranCd()).get(1)))
                 .amount(amount1)
                 .drCr(1L)
-                .txNum(invoiceDataEntity.getAccountingSlipInvoiceNum().getTxNum()+1)
+                .tranNum(invoiceDataEntity.getAccountingSlipInvoiceNum().getTranNum()+1)
                 .currCode(currCode)
                 //.krwAmount(invoiceDataEntity.getTransAmount())
                 .krwAmount(transAmount1)
@@ -141,7 +141,7 @@ public class AccountingSlipService {
                 .tranCd(txCd2)
                 .amount(amount1.negate())
                 .drCr(1L)
-                .txNum(invoiceDataEntity.getAccountingSlipInvoiceNum().getTxNum()+1)
+                .tranNum(invoiceDataEntity.getAccountingSlipInvoiceNum().getTranNum()+1)
                 .currCode(currCode)
                 //.krwAmount(invoiceDataEntity.getTransAmount().negate())
                 .krwAmount(transAmount1.negate())
@@ -158,7 +158,7 @@ public class AccountingSlipService {
                 .amount(BigDecimal.valueOf(0))
                 .tranCd(invoiceDataEntity.getTranCd())
                 .drCr(0L)
-                .txNum(invoiceDataEntity.getAccountingSlipInvoiceNum().getTxNum()+1)
+                .tranNum(invoiceDataEntity.getAccountingSlipInvoiceNum().getTranNum()+1)
                 .currCode(currCode)
                 .krwAmount(BigDecimal.valueOf(0))
                 .exchangeRate((float) 0)

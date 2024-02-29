@@ -18,9 +18,13 @@ public class QInvoiceDataEntity extends EntityPathBase<InvoiceDataEntity> {
 
     private static final long serialVersionUID = -982321485L;
 
+    private static final PathInits INITS = PathInits.DIRECT2;
+
     public static final QInvoiceDataEntity invoiceDataEntity = new QInvoiceDataEntity("invoiceDataEntity");
 
     public final QBaseEntity _super = new QBaseEntity(this);
+
+    public final QAccountingSlipInvoiceNumEntity accountingSlipInvoiceNum;
 
     //inherited
     public final StringPath createdBy = _super.createdBy;
@@ -36,7 +40,9 @@ public class QInvoiceDataEntity extends EntityPathBase<InvoiceDataEntity> {
 
     public final ListPath<EvidenceDataEntity, QEvidenceDataEntity> evidenceDataEntityList = this.<EvidenceDataEntity, QEvidenceDataEntity>createList("evidenceDataEntityList", EvidenceDataEntity.class, QEvidenceDataEntity.class, PathInits.DIRECT2);
 
-    public final DateTimePath<java.time.LocalDateTime> fiscalMonth = createDateTime("fiscalMonth", java.time.LocalDateTime.class);
+    public final NumberPath<Float> exchangeRate = createNumber("exchangeRate", Float.class);
+
+    public final StringPath fiscalMonth = createString("fiscalMonth");
 
     public final NumberPath<Long> invoiceDataId = createNumber("invoiceDataId", Long.class);
 
@@ -58,22 +64,31 @@ public class QInvoiceDataEntity extends EntityPathBase<InvoiceDataEntity> {
 
     public final NumberPath<java.math.BigDecimal> transAmount = createNumber("transAmount", java.math.BigDecimal.class);
 
-    public final DateTimePath<java.time.LocalDateTime> txDate = createDateTime("txDate", java.time.LocalDateTime.class);
+    public final DatePath<java.time.LocalDate> txDate = createDate("txDate", java.time.LocalDate.class);
 
     public final StringPath wdCurr = createString("wdCurr");
 
     public final NumberPath<java.math.BigDecimal> withdrawal = createNumber("withdrawal", java.math.BigDecimal.class);
 
     public QInvoiceDataEntity(String variable) {
-        super(InvoiceDataEntity.class, forVariable(variable));
+        this(InvoiceDataEntity.class, forVariable(variable), INITS);
     }
 
     public QInvoiceDataEntity(Path<? extends InvoiceDataEntity> path) {
-        super(path.getType(), path.getMetadata());
+        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
     }
 
     public QInvoiceDataEntity(PathMetadata metadata) {
-        super(InvoiceDataEntity.class, metadata);
+        this(metadata, PathInits.getFor(metadata, INITS));
+    }
+
+    public QInvoiceDataEntity(PathMetadata metadata, PathInits inits) {
+        this(InvoiceDataEntity.class, metadata, inits);
+    }
+
+    public QInvoiceDataEntity(Class<? extends InvoiceDataEntity> type, PathMetadata metadata, PathInits inits) {
+        super(type, metadata, inits);
+        this.accountingSlipInvoiceNum = inits.isInitialized("accountingSlipInvoiceNum") ? new QAccountingSlipInvoiceNumEntity(forProperty("accountingSlipInvoiceNum"), inits.get("accountingSlipInvoiceNum")) : null;
     }
 
 }
